@@ -113,8 +113,10 @@ public class Andie {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     System.exit(1);
+                    
                 }
             }
         });
     }
+
 }
