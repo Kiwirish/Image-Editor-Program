@@ -20,8 +20,7 @@ import javax.imageio.*;
  * 
  * @author Steven Mills
  * @version 1.0
- * 
- * This is a commit 
+ *
  * 
  */
 public class Andie {
@@ -51,7 +50,7 @@ public class Andie {
      */
     private static void createAndShowGUI() throws Exception {
         // Set up the main GUI frame
-        JFrame frame = new JFrame("ANDIE");
+        JFrame frame = new JFrame("Piebe649");
 
         Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
@@ -117,4 +116,5 @@ public class Andie {
             }
         });
     }
+
 }
