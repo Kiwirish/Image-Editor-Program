@@ -20,6 +20,9 @@ import javax.imageio.*;
  * 
  * @author Steven Mills
  * @version 1.0
+ * 
+ * This is a commit 
+ * 
  */
 public class Andie {
 
@@ -114,5 +117,4 @@ public class Andie {
             }
         });
     }
-    public static void myMethod(){}
 }
