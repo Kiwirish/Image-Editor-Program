@@ -103,6 +103,7 @@ public class FileActions {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     target.getImage().open(imageFilepath);
+										target.resetZoom();
                 } catch (Exception ex) {
                     System.exit(1);
                 }
