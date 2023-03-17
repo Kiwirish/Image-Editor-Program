@@ -1,8 +1,12 @@
-package cosc202.andie;
+package cosc202.andie.actions;
 
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import cosc202.andie.EditableImage;
+import cosc202.andie.ImageAction;
+import cosc202.andie.ImageOperation;
 
  /**
  * <p>
