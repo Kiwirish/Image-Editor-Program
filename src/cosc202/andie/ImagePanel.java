@@ -90,14 +90,26 @@ public class ImagePanel extends JPanel {
      * @param zoomPercent The new zoom level as a percentage.
      */
     public void setZoom(double zoomPercent) {
-        if (zoomPercent < 50) {
+        if (zoomPercent < 10) {
             zoomPercent = 50;
         }
-        if (zoomPercent > 200) {
+        if (zoomPercent > 500) {
             zoomPercent = 200;
         }
         scale = zoomPercent / 100;
     }
+
+		public void resetZoom() {
+			int imageWidth = image.getCurrentImage().getWidth();
+			int imageHeight = image.getCurrentImage().getHeight();
+			int panelWidth = this.getWidth();
+			int panelHeight = this.getHeight();
+			double scaleWidth = (double) panelWidth / imageWidth;
+			double scaleHeight = (double) panelHeight / imageHeight;
+			double newScale = Math.min(scaleWidth, scaleHeight);
+			scale = newScale;
+			repaint();
+		}
 
 
     /**
@@ -117,7 +129,7 @@ public class ImagePanel extends JPanel {
             return new Dimension((int) Math.round(image.getCurrentImage().getWidth()*scale), 
                                  (int) Math.round(image.getCurrentImage().getHeight()*scale));
         } else {
-            return new Dimension(450, 450);
+            return new Dimension(600, 450);
         }
     }
 
