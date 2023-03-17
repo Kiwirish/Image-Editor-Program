@@ -31,7 +31,7 @@ import javax.imageio.*;
  * @author Steven Mills
  * @version 1.0
  */
-class EditableImage {
+public class EditableImage {
 
     /** The original image. This should never be altered by ANDIE. */
     private BufferedImage original;

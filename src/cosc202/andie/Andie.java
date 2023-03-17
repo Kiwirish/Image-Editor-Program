@@ -2,6 +2,13 @@ package cosc202.andie;
 
 import java.awt.*;
 import javax.swing.*;
+
+import cosc202.andie.actions.ColourActions;
+import cosc202.andie.actions.EditActions;
+import cosc202.andie.actions.FileActions;
+import cosc202.andie.actions.FilterActions;
+import cosc202.andie.actions.ViewActions;
+
 import javax.imageio.*;
 
 /**
