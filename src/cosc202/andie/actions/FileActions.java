@@ -1,8 +1,11 @@
-package cosc202.andie;
+package cosc202.andie.actions;
 
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import cosc202.andie.EditableImage;
+import cosc202.andie.ImageAction;
 
 /**
  * <p>
@@ -100,6 +103,7 @@ public class FileActions {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     target.getImage().open(imageFilepath);
+										target.resetZoom();
                 } catch (Exception ex) {
                     System.exit(1);
                 }
