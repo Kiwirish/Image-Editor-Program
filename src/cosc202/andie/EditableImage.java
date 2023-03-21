@@ -5,6 +5,9 @@ import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
+import cosc202.andie.operations.colour.ConvertToGrey;
+import cosc202.andie.operations.transform.Resize;
+
 /**
  * <p>
  * An image with a set of operations applied to it.
@@ -218,11 +221,11 @@ public class EditableImage {
      * Apply an {@link ImageOperation} to this image.
      * </p>
      * 
-     * @param op The operation to apply.
+     * @param imageOperation The operation to apply.
      */
-    public void apply(ImageOperation op) {
-        current = op.apply(current);
-        ops.add(op);
+    public void apply(ImageOperation imageOperation) {
+        current = imageOperation.apply(current);
+        ops.add(imageOperation);
     }
 
     /**
