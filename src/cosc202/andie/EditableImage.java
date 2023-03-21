@@ -139,13 +139,12 @@ public class EditableImage {
         imageFilename = filePath;
         opsFilename = imageFilename + ".ops";
         File imageFile = new File(imageFilename);
-        original = ImageIO.read(imageFile);
-        current = deepCopy(original);
+        BufferedImage newImage = ImageIO.read(imageFile);
+				Stack<ImageOperation> newOps = new Stack<ImageOperation>();
         
         try {
             FileInputStream fileIn = new FileInputStream(this.opsFilename);
             ObjectInputStream objIn = new ObjectInputStream(fileIn);
-
             // Silence the Java compiler warning about type casting.
             // Understanding the cause of the warning is way beyond
             // the scope of COSC202, but if you're interested, it has
@@ -153,17 +152,21 @@ public class EditableImage {
             // produce code that fails at this point in all cases in
             // which there is actually a type mismatch for one of the
             // elements within the Stack, i.e., a non-ImageOperation.
-            @SuppressWarnings("unchecked")
+						@SuppressWarnings("unchecked")
             Stack<ImageOperation> opsFromFile = (Stack<ImageOperation>) objIn.readObject();
-            ops = opsFromFile;
-            redoOps.clear();
+						newOps = opsFromFile;
             objIn.close();
             fileIn.close();
-        } catch (Exception ex) {
-            // Could be no file or something else. Carry on for now.
-        }
-        this.refresh();
+        } catch (Exception ex) { }
+				//newOps will be empty unless there existed a valid .ops file.
+				openNewImage(newImage, newOps);
     }
+		public void openNewImage(BufferedImage image, Stack<ImageOperation> ops) {
+			original = image;
+			this.ops = ops;
+			redoOps.clear();
+			this.refresh();
+		}
 
     /**
      * <p>
