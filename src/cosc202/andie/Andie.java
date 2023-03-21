@@ -7,6 +7,7 @@ import cosc202.andie.actions.ColourActions;
 import cosc202.andie.actions.EditActions;
 import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
+import cosc202.andie.actions.SizeActions;
 import cosc202.andie.actions.ViewActions;
 
 import javax.imageio.*;
@@ -27,6 +28,8 @@ import javax.imageio.*;
  * 
  * @author Steven Mills
  * @version 1.0
+ *
+ * 
  */
 public class Andie {
 
@@ -82,6 +85,11 @@ public class Andie {
         ViewActions viewActions = new ViewActions();
         menuBar.add(viewActions.createMenu());
 
+        // Size actions transform the image 
+        SizeActions sizeActions = new SizeActions();
+        menuBar.add(sizeActions.createMenu());
+
+
         // Filters apply a per-pixel operation to the image, generally based on a local window
         FilterActions filterActions = new FilterActions();
         menuBar.add(filterActions.createMenu());
@@ -117,8 +125,11 @@ public class Andie {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     System.exit(1);
+                    
                 }
             }
         });
     }
+
+
 }
