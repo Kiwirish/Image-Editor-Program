@@ -99,18 +99,19 @@ public class FileActions {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(target);
 
+
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     target.getImage().open(imageFilepath);
-										target.resetZoom();
+                    target.resetZoom();
                 } catch (Exception ex) {
                     System.exit(1);
                 }
+                target.repaint();
+                target.getParent().revalidate();
             }
 
-            target.repaint();
-            target.getParent().revalidate();
         }
 
     }

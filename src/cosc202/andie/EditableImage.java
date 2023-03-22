@@ -140,7 +140,7 @@ public class EditableImage {
         opsFilename = imageFilename + ".ops";
         File imageFile = new File(imageFilename);
         BufferedImage newImage = ImageIO.read(imageFile);
-				Stack<ImageOperation> newOps = new Stack<ImageOperation>();
+        Stack<ImageOperation> newOps = new Stack<ImageOperation>();
         
         try {
             FileInputStream fileIn = new FileInputStream(this.opsFilename);
@@ -152,21 +152,22 @@ public class EditableImage {
             // produce code that fails at this point in all cases in
             // which there is actually a type mismatch for one of the
             // elements within the Stack, i.e., a non-ImageOperation.
-						@SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked")
             Stack<ImageOperation> opsFromFile = (Stack<ImageOperation>) objIn.readObject();
-						newOps = opsFromFile;
+            newOps = opsFromFile;
             objIn.close();
             fileIn.close();
         } catch (Exception ex) { }
-				//newOps will be empty unless there existed a valid .ops file.
-				openNewImage(newImage, newOps);
+        //newOps will be empty unless there existed a valid .ops file.
+        openNewImage(newImage, newOps);
     }
-		public void openNewImage(BufferedImage image, Stack<ImageOperation> ops) {
-			original = image;
-			this.ops = ops;
-			redoOps.clear();
-			this.refresh();
-		}
+
+    public void openNewImage(BufferedImage image, Stack<ImageOperation> ops) {
+        original = image;
+        this.ops = ops;
+        redoOps.clear();
+        this.refresh();
+    }
 
     /**
      * <p>

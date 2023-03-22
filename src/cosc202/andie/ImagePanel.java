@@ -99,17 +99,17 @@ public class ImagePanel extends JPanel {
         scale = zoomPercent / 100;
     }
 
-		public void resetZoom() {
-			int imageWidth = image.getCurrentImage().getWidth();
-			int imageHeight = image.getCurrentImage().getHeight();
-			int panelWidth = this.getWidth();
-			int panelHeight = this.getHeight();
-			double scaleWidth = (double) panelWidth / imageWidth;
-			double scaleHeight = (double) panelHeight / imageHeight;
-			double newScale = Math.min(scaleWidth, scaleHeight);
-			scale = newScale;
-			repaint();
-		}
+    public void resetZoom() {
+        int imageWidth = image.getCurrentImage().getWidth();
+        int imageHeight = image.getCurrentImage().getHeight();
+        int panelWidth = this.getWidth();
+        int panelHeight = this.getHeight();
+        double scaleWidth = (double) panelWidth / imageWidth;
+        double scaleHeight = (double) panelHeight / imageHeight;
+        double newScale = Math.min(scaleWidth, scaleHeight);
+        scale = newScale;
+        repaint();
+    }
 
 
     /**
