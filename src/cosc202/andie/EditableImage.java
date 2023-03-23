@@ -5,9 +5,6 @@ import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
-import cosc202.andie.operations.colour.ConvertToGrey;
-import cosc202.andie.operations.transform.Resize;
-
 /**
  * <p>
  * An image with a set of operations applied to it.
@@ -48,6 +45,8 @@ public class EditableImage {
     private String imageFilename;
     /** The file where the operation sequence is stored. */
     private String opsFilename;
+    /** Whether the image has been modified since it was last saved/opened */
+    private boolean modified;
 
     /**
      * <p>
@@ -65,6 +64,7 @@ public class EditableImage {
         redoOps = new Stack<ImageOperation>();
         imageFilename = null;
         opsFilename = null;
+        modified = false;
     }
 
     /**
@@ -76,6 +76,15 @@ public class EditableImage {
      */
     public boolean hasImage() {
         return current != null;
+    }
+
+    /**
+     * <p>
+     * Get the current image's file path.
+     * @return The current image's file path, or null if there is no image.
+     */
+    public String getFilepath() {
+        return imageFilename;
     }
 
     /**
@@ -133,13 +142,14 @@ public class EditableImage {
      * </p>
      * 
      * @param filePath The file to open the image from.
-     * @throws Exception If something goes wrong.
+     * @throws IOException The image cannot be read
      */
-    public void open(String filePath) throws Exception {
+    public void open(String filePath) throws IOException {
         imageFilename = filePath;
         opsFilename = imageFilename + ".ops";
         File imageFile = new File(imageFilename);
         BufferedImage newImage = ImageIO.read(imageFile);
+        if (newImage == null) throw new IOException("Could not read image file.");
         Stack<ImageOperation> newOps = new Stack<ImageOperation>();
         
         try {
@@ -181,21 +191,25 @@ public class EditableImage {
      * the current operations to <code>some/path/to/image.png.ops</code>.
      * </p>
      * 
-     * @throws Exception If something goes wrong.
+     * @throws IOException If the immage cannot be written
+     * @throws ExtensionException If the file extension is not a valid image file format
      */
-    public void save() throws Exception {
+    public void save() throws IOException, ExtensionException {
         if (this.opsFilename == null) {
             this.opsFilename = this.imageFilename + ".ops";
         }
         // Write image file based on file extension
         String extension = imageFilename.substring(1+imageFilename.lastIndexOf(".")).toLowerCase();
-        ImageIO.write(original, extension, new File(imageFilename));
+        if (!ImageIO.write(original, extension, new File(imageFilename))) {
+            throw new ExtensionException("Unsupported file extension: " + extension);
+        };
         // Write operations file
         FileOutputStream fileOut = new FileOutputStream(this.opsFilename);
         ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
         objOut.writeObject(this.ops);
         objOut.close();
         fileOut.close();
+        modified = false;
     }
 
 
@@ -212,9 +226,9 @@ public class EditableImage {
      * </p>
      * 
      * @param imageFilename The file location to save the image to.
-     * @throws Exception If something goes wrong.
+     * @throws IOException If The image cannot be written
      */
-    public void saveAs(String imageFilename) throws Exception {
+    public void saveAs(String imageFilename) throws IOException, ExtensionException {
         this.imageFilename = imageFilename;
         this.opsFilename = imageFilename + ".ops";
         save();
@@ -230,6 +244,7 @@ public class EditableImage {
     public void apply(ImageOperation imageOperation) {
         current = imageOperation.apply(current);
         ops.add(imageOperation);
+        modified = true;
     }
 
     /**
@@ -281,4 +296,19 @@ public class EditableImage {
         }
     }
 
+    /**
+     * Whether the image has been modified
+     * @return True if the image has been modified since the last save / open, otherwise false.
+     */
+    public boolean getModified() {
+        return modified;
+    }
+    /**
+     * A checked Exception for when a file extension is not supported.
+     */
+    public static class ExtensionException extends Exception {
+        public ExtensionException(String message) {
+            super(message);
+        }
+    }
 }

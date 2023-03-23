@@ -4,3 +4,6 @@ doc
 
 # Ignore VSCode settings
 .vscode/settings.json
+
+# Ignore .DS_Store files
+.DS_Store
