@@ -142,21 +142,31 @@ public class ColourActions {
 
 
         public void actionPerformed(ActionEvent e) {
+
+            int brightness = 0;
+            int contrast = 0;
+
+
             SpinnerNumberModel brightnessModel = new SpinnerNumberModel(0, -100, 100, 25);
             SpinnerNumberModel contrastModel = new SpinnerNumberModel(0, -100, 100, 25);
             JSpinner brightnessSpinner = new JSpinner(brightnessModel);
             JSpinner contrastSpinner = new JSpinner(contrastModel);
             Object[] arrayOfShit = new Object[]{brightnessSpinner, contrastSpinner};
-            int option = JOptionPane.showOptionDialog(null, "Brightness and Contrast", "Brightness and Constrast Adjustment", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, arrayOfShit, null);
-            //int option2 = JOptionPane.showOptionDialog(contrastSpinner, e, ACCELERATOR_KEY, option, option, null, getKeys(), e);
-
+            int option = JOptionPane.showOptionDialog(null, "                Brightness       Contrast", "Brightness and Constrast Adjustment", 
+            JOptionPane.OK_CANCEL_OPTION, 
+            //JOptionPane.QUESTION_MESSAGE, null, arrayOfShit, null);
+            JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {
                 return;
-            } else if (option == JOptionPane.OK_OPTION) {
-                //contrast = radiusModel.getNumber().intValue();
-            }            
+            } else if (option == JOptionPane.OK_OPTION) {       
+                brightness = brightnessModel.getNumber().intValue();
+                contrast = contrastModel.getNumber().intValue();
+            }   
+            
+            System.out.println(brightness);
+            System.out.println(contrast);
 
 
 
