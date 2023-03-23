@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import cosc202.andie.ImageAction;
 import cosc202.andie.operations.colour.ConvertToGrey;
+//import cosc202.andie.operations.colour.Brightenssetcadjustment
 
 /**
  * <p>
@@ -37,7 +38,8 @@ public class ColourActions {
      */
     public ColourActions() {
         actions = new ArrayList<Action>();
-        actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale", Integer.valueOf(KeyEvent.VK_G)));
+        actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale ('G')", Integer.valueOf(KeyEvent.VK_G))); 
+        actions.add(new BrightnessAndContrastAdjustment("BrightnessAndContrastAdjustment ('B')", null,"Adjust Image Brightness and Contrrast", Integer.valueOf(KeyEvent.VK_B)));
     }
 
     /**
@@ -94,6 +96,71 @@ public class ColourActions {
          */
         public void actionPerformed(ActionEvent e) {
             target.getImage().apply(new ConvertToGrey());
+            target.repaint();
+            target.getParent().revalidate();
+        }
+
+    }
+
+    /**
+     * <p>
+     * Action to adjust an images brightness and contrast.
+     * </p>
+     * 
+     * @see BrightnessAndContrastAdjustment
+     */
+    public class BrightnessAndContrastAdjustment extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new convert-to-grey action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+        BrightnessAndContrastAdjustment(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the convert-to-grey action is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the ConvertToGreyAction is triggered.
+         * It changes the image to greyscale.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        
+
+
+
+        public void actionPerformed(ActionEvent e) {
+            SpinnerNumberModel brightnessModel = new SpinnerNumberModel(0, -100, 100, 25);
+            SpinnerNumberModel contrastModel = new SpinnerNumberModel(0, -100, 100, 25);
+            JSpinner brightnessSpinner = new JSpinner(brightnessModel);
+            JSpinner contrastSpinner = new JSpinner(contrastModel);
+            Object[] arrayOfShit = new Object[]{brightnessSpinner, contrastSpinner};
+            int option = JOptionPane.showOptionDialog(null, "Brightness and Contrast", "Brightness and Constrast Adjustment", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, arrayOfShit, null);
+            //int option2 = JOptionPane.showOptionDialog(contrastSpinner, e, ACCELERATOR_KEY, option, option, null, getKeys(), e);
+
+
+            // Check the return value from the dialog box.
+            if (option == JOptionPane.CANCEL_OPTION) {
+                return;
+            } else if (option == JOptionPane.OK_OPTION) {
+                //contrast = radiusModel.getNumber().intValue();
+            }            
+
+
+
+            //target.getImage().apply(new BrightnessAndContrastAdjustment()); 
             target.repaint();
             target.getParent().revalidate();
         }
