@@ -5,6 +5,9 @@ import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
+import cosc202.andie.operations.colour.ConvertToGrey;
+import cosc202.andie.operations.transform.Resize;
+
 /**
  * <p>
  * An image with a set of operations applied to it.
@@ -31,7 +34,7 @@ import javax.imageio.*;
  * @author Steven Mills
  * @version 1.0
  */
-class EditableImage {
+public class EditableImage {
 
     /** The original image. This should never be altered by ANDIE. */
     private BufferedImage original;
@@ -136,13 +139,12 @@ class EditableImage {
         imageFilename = filePath;
         opsFilename = imageFilename + ".ops";
         File imageFile = new File(imageFilename);
-        original = ImageIO.read(imageFile);
-        current = deepCopy(original);
+        BufferedImage newImage = ImageIO.read(imageFile);
+        Stack<ImageOperation> newOps = new Stack<ImageOperation>();
         
         try {
             FileInputStream fileIn = new FileInputStream(this.opsFilename);
             ObjectInputStream objIn = new ObjectInputStream(fileIn);
-
             // Silence the Java compiler warning about type casting.
             // Understanding the cause of the warning is way beyond
             // the scope of COSC202, but if you're interested, it has
@@ -152,13 +154,18 @@ class EditableImage {
             // elements within the Stack, i.e., a non-ImageOperation.
             @SuppressWarnings("unchecked")
             Stack<ImageOperation> opsFromFile = (Stack<ImageOperation>) objIn.readObject();
-            ops = opsFromFile;
-            redoOps.clear();
+            newOps = opsFromFile;
             objIn.close();
             fileIn.close();
-        } catch (Exception ex) {
-            // Could be no file or something else. Carry on for now.
-        }
+        } catch (Exception ex) { }
+        //newOps will be empty unless there existed a valid .ops file.
+        openNewImage(newImage, newOps);
+    }
+
+    public void openNewImage(BufferedImage image, Stack<ImageOperation> ops) {
+        original = image;
+        this.ops = ops;
+        redoOps.clear();
         this.refresh();
     }
 
@@ -218,11 +225,11 @@ class EditableImage {
      * Apply an {@link ImageOperation} to this image.
      * </p>
      * 
-     * @param op The operation to apply.
+     * @param imageOperation The operation to apply.
      */
-    public void apply(ImageOperation op) {
-        current = op.apply(current);
-        ops.add(op);
+    public void apply(ImageOperation imageOperation) {
+        current = imageOperation.apply(current);
+        ops.add(imageOperation);
     }
 
     /**
