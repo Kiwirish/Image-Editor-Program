@@ -2,10 +2,15 @@ package cosc202.andie.actions;
 
 import java.util.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
+import javax.imageio.*;
 
 /**
  * <p>
@@ -29,6 +34,7 @@ public class FileActions {
     
     /** A list of actions for the File menu. */
     protected ArrayList<Action> actions;
+    protected FileSaveAsAction fileSaveAsAction;//re-used by other actions
 
     /**
      * <p>
@@ -39,7 +45,8 @@ public class FileActions {
         actions = new ArrayList<Action>();
         actions.add(new FileOpenAction("Open", null, "Open a file", Integer.valueOf(KeyEvent.VK_O)));
         actions.add(new FileSaveAction("Save", null, "Save the file", Integer.valueOf(KeyEvent.VK_S)));
-        actions.add(new FileSaveAsAction("Save As", null, "Save a copy", Integer.valueOf(KeyEvent.VK_A)));
+        fileSaveAsAction = new FileSaveAsAction("Save As", null, "Save a copy", Integer.valueOf(KeyEvent.VK_A));
+        actions.add(fileSaveAsAction);
         actions.add(new FileExitAction("Exit", null, "Exit the program", Integer.valueOf(0)));
     }
 
@@ -97,6 +104,11 @@ public class FileActions {
          */
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
+
+            //Only allow files with image extensions that ImageIO can parse to be opened
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", ImageIO.getReaderFileSuffixes()); 
+            fileChooser.setFileFilter(filter);
+
             int result = fileChooser.showOpenDialog(target);
 
 
@@ -105,11 +117,11 @@ public class FileActions {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     target.getImage().open(imageFilepath);
                     target.resetZoom();
-                } catch (Exception ex) {
-                    System.exit(1);
+                    target.repaint();
+                    target.getParent().revalidate();
+                } catch (IOException err) {
+                    JOptionPane.showMessageDialog(null, "Error Opening image. Please choose a valid image file.");
                 }
-                target.repaint();
-                target.getParent().revalidate();
             }
 
         }
@@ -154,8 +166,10 @@ public class FileActions {
         public void actionPerformed(ActionEvent e) {
             try {
                 target.getImage().save();           
-            } catch (Exception ex) {
-                System.exit(1);
+            } catch (EditableImage.ExtensionException err) {
+                JOptionPane.showMessageDialog(null, "Unable to save image with this extension. Please use the \"Save As...\" menu to choose a different file path.\nSupported image formats: " + String.join(", ", ImageIO.getWriterFileSuffixes()));
+            } catch (IOException err) {
+                JOptionPane.showMessageDialog(null, "An error occured while saving. Please ensure you have permission to write to this file location.");
             }
         }
 
@@ -197,16 +211,41 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
+            saveAs();
+        }
+        public void saveAs() {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", ImageIO.getWriterFileSuffixes()); 
             JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(filter);
+
+            String filepath = target.getImage().getFilepath();
+            if (filepath == null)
+                System.out.println("TEST");
+            if (filepath != null) fileChooser.setCurrentDirectory(new File(filepath));
             int result = fileChooser.showSaveDialog(target);
 
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    target.getImage().saveAs(imageFilepath);
-                } catch (Exception ex) {
-                    System.exit(1);
+                    String validFilepath = withValidFileExtension(imageFilepath);
+                    target.getImage().saveAs(validFilepath);
+                } catch (EditableImage.ExtensionException err) {
+                    JOptionPane.showMessageDialog(null, "Unable to save image with this extension.\nSupported image formats: " + String.join(", ", ImageIO.getWriterFileSuffixes()));
+                } catch (IOException err) {
+                    JOptionPane.showMessageDialog(null, "An error occured while saving. Please ensure you have permission to write to this file location.");
                 }
+            }
+        }
+
+        private static String withValidFileExtension(String filePath) throws EditableImage.ExtensionException {
+            int lastIndexOfDot = filePath.lastIndexOf('.');
+            if (lastIndexOfDot == -1) return filePath + ".png";
+            String extension = filePath.substring(lastIndexOfDot + 1);
+            Set<String> validExtensions = new HashSet<String>(Arrays.asList(ImageIO.getWriterFileSuffixes()));
+            if (validExtensions.contains(extension)) {
+                return filePath;
+            } else {
+                throw new EditableImage.ExtensionException("Invalid extension");
             }
         }
 
@@ -217,7 +256,7 @@ public class FileActions {
      * Action to quit the ANDIE application.
      * </p>
      */
-    public class FileExitAction extends AbstractAction {
+    public class FileExitAction extends ImageAction {
 
         /**
          * <p>
@@ -230,9 +269,7 @@ public class FileActions {
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
         FileExitAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon);
-            putValue(SHORT_DESCRIPTION, desc);
-            putValue(MNEMONIC_KEY, mnemonic);
+            super(name, icon, desc, mnemonic);
         }
 
          /**
@@ -248,7 +285,20 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            System.exit(0);
+            //Ask the user if they want to save their image before quitting
+            if (!target.getImage().getModified()) System.exit(0);
+
+            int result = JOptionPane.showConfirmDialog(null, "You have unsaved work. Save before quitting?", "Save Image?", JOptionPane.YES_NO_CANCEL_OPTION);
+            switch (result) {
+                case JOptionPane.CANCEL_OPTION:
+                    return;
+                case JOptionPane.NO_OPTION:
+                    System.exit(0);
+                    break;
+                case JOptionPane.YES_OPTION:
+                    fileSaveAsAction.saveAs();
+                    break;
+            }
         }
 
     }

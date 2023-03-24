@@ -1,5 +1,6 @@
 package cosc202.andie;
-
+// blakes comment 
+// blakes second change 
 import java.awt.*;
 import javax.swing.*;
 
@@ -130,6 +131,7 @@ public class Andie {
             }
         });
     }
+    public static void myMethod(){}
 
 
 }
