@@ -214,21 +214,38 @@ public class FileActions {
             saveAs();
         }
         public void saveAs() {
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", ImageIO.getWriterFileSuffixes()); 
             JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(filter);
+
             String filepath = target.getImage().getFilepath();
-            //BUG: Sometimes filepath *is* null?
+            if (filepath == null)
+                System.out.println("TEST");
             if (filepath != null) fileChooser.setCurrentDirectory(new File(filepath));
             int result = fileChooser.showSaveDialog(target);
 
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    target.getImage().saveAs(imageFilepath);
+                    String validFilepath = withValidFileExtension(imageFilepath);
+                    target.getImage().saveAs(validFilepath);
                 } catch (EditableImage.ExtensionException err) {
                     JOptionPane.showMessageDialog(null, "Unable to save image with this extension.\nSupported image formats: " + String.join(", ", ImageIO.getWriterFileSuffixes()));
                 } catch (IOException err) {
                     JOptionPane.showMessageDialog(null, "An error occured while saving. Please ensure you have permission to write to this file location.");
                 }
+            }
+        }
+
+        private static String withValidFileExtension(String filePath) throws EditableImage.ExtensionException {
+            int lastIndexOfDot = filePath.lastIndexOf('.');
+            if (lastIndexOfDot == -1) return filePath + ".png";
+            String extension = filePath.substring(lastIndexOfDot + 1);
+            Set<String> validExtensions = new HashSet<String>(Arrays.asList(ImageIO.getWriterFileSuffixes()));
+            if (validExtensions.contains(extension)) {
+                return filePath;
+            } else {
+                throw new EditableImage.ExtensionException("Invalid extension");
             }
         }
 
