@@ -5,8 +5,7 @@ import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
-import cosc202.andie.operations.colour.ConvertToGrey;
-import cosc202.andie.operations.transform.Resize;
+
 
 /**
  * <p>
