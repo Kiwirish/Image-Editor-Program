@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import cosc202.andie.ImageAction;
 import cosc202.andie.operations.colour.ConvertToGrey;
-//import cosc202.andie.operations.colour.Brightenssetcadjustment
+import cosc202.andie.operations.colour.BrightnessAndContrast;
 
 /**
  * <p>
@@ -39,7 +39,7 @@ public class ColourActions {
     public ColourActions() {
         actions = new ArrayList<Action>();
         actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale ('G')", Integer.valueOf(KeyEvent.VK_G))); 
-        actions.add(new BrightnessAndContrastAdjustment("BrightnessAndContrastAdjustment ('B')", null,"Adjust Image Brightness and Contrrast", Integer.valueOf(KeyEvent.VK_B)));
+        actions.add(new BrightnessAndContrastAdjustment("BrightnessAndContrastAdjustment", null,"Adjust Image Brightness and Contrrast ('B')", Integer.valueOf(KeyEvent.VK_B)));
     }
 
     /**
@@ -121,6 +121,10 @@ public class ColourActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
+        private int brightness;
+        private int contrast;
+
+
         BrightnessAndContrastAdjustment(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
@@ -143,34 +147,29 @@ public class ColourActions {
 
         public void actionPerformed(ActionEvent e) {
 
-            int brightness = 0;
-            int contrast = 0;
 
-
-            SpinnerNumberModel brightnessModel = new SpinnerNumberModel(0, -100, 100, 25);
-            SpinnerNumberModel contrastModel = new SpinnerNumberModel(0, -100, 100, 25);
+            SpinnerNumberModel brightnessModel = new SpinnerNumberModel(brightness, -100, 100, 25);
+            SpinnerNumberModel contrastModel = new SpinnerNumberModel(contrast, -100, 100, 25);
             JSpinner brightnessSpinner = new JSpinner(brightnessModel);
             JSpinner contrastSpinner = new JSpinner(contrastModel);
             Object[] arrayOfShit = new Object[]{brightnessSpinner, contrastSpinner};
             int option = JOptionPane.showOptionDialog(null, "                Brightness       Contrast", "Brightness and Constrast Adjustment", 
             JOptionPane.OK_CANCEL_OPTION, 
             //JOptionPane.QUESTION_MESSAGE, null, arrayOfShit, null);
-            JOptionPane.QUESTION_MESSAGE, null, null, null);
+            JOptionPane.PLAIN_MESSAGE, null, arrayOfShit, null);
 
             // Check the return value from the dialog box.
-            if (option == JOptionPane.CANCEL_OPTION) {
-                return;
-            } else if (option == JOptionPane.OK_OPTION) {       
+            
+            //need to update this so their is a OK and CANCEL option?????
+            if (option == JOptionPane.CLOSED_OPTION) {
+
                 brightness = brightnessModel.getNumber().intValue();
                 contrast = contrastModel.getNumber().intValue();
-            }   
-            
-            System.out.println(brightness);
-            System.out.println(contrast);
-
-
-
-            //target.getImage().apply(new BrightnessAndContrastAdjustment()); 
+                System.out.println(brightness);
+                System.out.println(contrast);
+                return;
+            } 
+            target.getImage().apply(new BrightnessAndContrast(brightness,contrast)); 
             target.repaint();
             target.getParent().revalidate();
         }
