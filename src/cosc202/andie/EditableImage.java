@@ -2,6 +2,7 @@ package cosc202.andie;
 
 import java.util.*;
 import java.io.*;
+import java.security.MessageDigest;
 import java.awt.image.*;
 import javax.imageio.*;
 
@@ -46,7 +47,7 @@ public class EditableImage {
     /** The file where the operation sequence is stored. */
     private String opsFilename;
     /** Whether the image has been modified since it was last saved/opened */
-    private boolean modified;
+    private BufferedImage lastSavedImage;
 
     /**
      * <p>
@@ -64,7 +65,7 @@ public class EditableImage {
         redoOps = new Stack<ImageOperation>();
         imageFilename = null;
         opsFilename = null;
-        modified = false;
+        lastSavedImage = null;
     }
 
     /**
@@ -177,6 +178,7 @@ public class EditableImage {
         this.ops = ops;
         redoOps.clear();
         this.refresh();
+        lastSavedImage = deepCopy(current);
     }
 
     /**
@@ -209,7 +211,7 @@ public class EditableImage {
         objOut.writeObject(this.ops);
         objOut.close();
         fileOut.close();
-        modified = false;
+        lastSavedImage = deepCopy(current);
     }
 
 
@@ -257,7 +259,6 @@ public class EditableImage {
     public void apply(ImageOperation imageOperation) {
         current = imageOperation.apply(current);
         ops.add(imageOperation);
-        modified = true;
     }
 
     /**
@@ -304,7 +305,6 @@ public class EditableImage {
      */
     private void refresh()  {
         current = deepCopy(original);
-        modified = true;
         for (ImageOperation op: ops) {
             current = op.apply(current);
         }
@@ -315,7 +315,7 @@ public class EditableImage {
      * @return True if the image has been modified since the last save / open, otherwise false.
      */
     public boolean getModified() {
-        return modified;
+        return  !bufferedImagesAreEqual(lastSavedImage, current);
     }
     /**
      * A checked Exception for when a file extension is not supported.
@@ -324,5 +324,24 @@ public class EditableImage {
         public ExtensionException(String message) {
             super(message);
         }
+    }
+
+    /**
+     * <p>
+     * Are two {@link BufferedImage}s equal, pixel for pixel?
+     * </p>
+     * @param image1 The first {@link BufferedImage} to compare
+     * @param image2 The second {@link BufferedImage} to compare
+     * @return True if the images are equal, otherwise false.
+     */
+    static boolean bufferedImagesAreEqual(BufferedImage image1, BufferedImage image2) {
+        if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) return false;
+        for (int x = 0; x < image1.getWidth(); x++) {
+            for (int y = 0; y < image1.getHeight(); y++) {
+                if (image1.getRGB(x, y) != image1.getRGB(x, y))
+                    return false;
+            }
+        }
+        return true;
     }
 }
