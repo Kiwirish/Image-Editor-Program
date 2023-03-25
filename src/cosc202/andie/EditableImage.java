@@ -236,6 +236,19 @@ public class EditableImage {
 
     /**
      * <p>
+     * Export the image to a file.
+     * </p>
+     * @param exportFilePath The file to export the image to.
+     * @param format The format to export the image as.
+     * @throws IOException If the image cannot be written
+     */
+    public void export(String exportFilePath, String format) throws IOException {
+        File exportFile = new File(exportFilePath);
+        ImageIO.write(current, format, exportFile);
+    }
+
+    /**
+     * <p>
      * Apply an {@link ImageOperation} to this image.
      * </p>
      * 
@@ -291,6 +304,7 @@ public class EditableImage {
      */
     private void refresh()  {
         current = deepCopy(original);
+        modified = true;
         for (ImageOperation op: ops) {
             current = op.apply(current);
         }

@@ -34,7 +34,7 @@ public class FileActions {
     
     /** A list of actions for the File menu. */
     protected ArrayList<Action> actions;
-    protected FileSaveAsAction fileSaveAsAction;//re-used by other actions
+    private FileSaveAction saveAction;
 
     /**
      * <p>
@@ -44,9 +44,11 @@ public class FileActions {
     public FileActions() {
         actions = new ArrayList<Action>();
         actions.add(new FileOpenAction("Open", null, "Open a file", Integer.valueOf(KeyEvent.VK_O)));
-        actions.add(new FileSaveAction("Save", null, "Save the file", Integer.valueOf(KeyEvent.VK_S)));
-        fileSaveAsAction = new FileSaveAsAction("Save As", null, "Save a copy", Integer.valueOf(KeyEvent.VK_A));
-        actions.add(fileSaveAsAction);
+        // actions.add(new FileSaveAction("Save", null, "Save the file", Integer.valueOf(KeyEvent.VK_S)));
+        saveAction = new FileSaveAction("Save", null, "Save the file", Integer.valueOf(KeyEvent.VK_S));
+        actions.add(saveAction);
+        actions.add(new FileSaveAsAction("Save As", null, "Save a copy", Integer.valueOf(KeyEvent.VK_A)));
+        actions.add(new FileExportAction("Export...", null, "Export modified image to new file", Integer.valueOf(KeyEvent.VK_E)));
         actions.add(new FileExitAction("Exit", null, "Exit the program", Integer.valueOf(0)));
     }
 
@@ -65,6 +67,40 @@ public class FileActions {
         }
 
         return fileMenu;
+    }
+
+    /**
+     * Gets a new file path, with the extension of the file set to the given extension.
+     * If the given file path already has an image extension, it is replaced with the given extension, otherwise the given extension is appended to the file path.
+     * @param filePath A string representing the path to a file
+     * @param extension A string representing an image extension (e.g. "png")
+     * @return A string representing the path to a file with the given extension
+     */
+    private static String getPathWithImageExtension(String filePath, String extension) {
+        String currentExtension = getImageExtension(filePath);
+        if (currentExtension.equals("")) {
+            return filePath + "." + extension;
+        } else {
+            return filePath.substring(0, filePath.length() - currentExtension.length()) + extension;
+        }
+    }
+
+    /**
+     * Gets the extension of the given file path, if it is a valid image extension.
+     * If the given file path does not have an image extension, or if the extension is not a valid image extension, an empty string is returned.
+     * @param filePath A string representing the path to a file
+     * @return A string representing the extension of the given file path, or an empty string if the given file path does not have a valid image extension
+     */
+    private static String getImageExtension(String filePath) {
+        int lastIndexOfDot = filePath.lastIndexOf('.');
+        if (lastIndexOfDot == -1) return "";
+        String extension = filePath.substring(lastIndexOfDot + 1);
+        Set<String> validExtensions = new HashSet<String>(Arrays.asList(ImageIO.getWriterFileSuffixes()));
+        if (validExtensions.contains(extension)) {
+            return extension;
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -164,13 +200,26 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
+            save();
+        }
+
+        /**
+         * <p>
+         * Saves the image to its original filepath.
+         * </p>
+         * @returns true if the image was saved successfully, false otherwise
+         */
+        public boolean save() {
+            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,"No image to save"); return false; }
             try {
                 target.getImage().save();           
+                return true;
             } catch (EditableImage.ExtensionException err) {
                 JOptionPane.showMessageDialog(null, "Unable to save image with this extension. Please use the \"Save As...\" menu to choose a different file path.\nSupported image formats: " + String.join(", ", ImageIO.getWriterFileSuffixes()));
             } catch (IOException err) {
                 JOptionPane.showMessageDialog(null, "An error occured while saving. Please ensure you have permission to write to this file location.");
             }
+            return false;
         }
 
     }
@@ -211,24 +260,22 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            saveAs();
-        }
-        public void saveAs() {
+            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,"No image to save"); return; }
+
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", ImageIO.getWriterFileSuffixes()); 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileFilter(filter);
 
             String filepath = target.getImage().getFilepath();
-            if (filepath == null)
-                System.out.println("TEST");
             if (filepath != null) fileChooser.setCurrentDirectory(new File(filepath));
             int result = fileChooser.showSaveDialog(target);
 
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    String validFilepath = withValidFileExtension(imageFilepath);
-                    target.getImage().saveAs(validFilepath);
+                    String givenImageExtension = getImageExtension(imageFilepath);
+                    if (givenImageExtension.equals("")) throw new EditableImage.ExtensionException("Not an image extension");
+                    target.getImage().saveAs(givenImageExtension);
                 } catch (EditableImage.ExtensionException err) {
                     JOptionPane.showMessageDialog(null, "Unable to save image with this extension.\nSupported image formats: " + String.join(", ", ImageIO.getWriterFileSuffixes()));
                 } catch (IOException err) {
@@ -236,19 +283,6 @@ public class FileActions {
                 }
             }
         }
-
-        private static String withValidFileExtension(String filePath) throws EditableImage.ExtensionException {
-            int lastIndexOfDot = filePath.lastIndexOf('.');
-            if (lastIndexOfDot == -1) return filePath + ".png";
-            String extension = filePath.substring(lastIndexOfDot + 1);
-            Set<String> validExtensions = new HashSet<String>(Arrays.asList(ImageIO.getWriterFileSuffixes()));
-            if (validExtensions.contains(extension)) {
-                return filePath;
-            } else {
-                throw new EditableImage.ExtensionException("Invalid extension");
-            }
-        }
-
     }
 
     /**
@@ -296,11 +330,95 @@ public class FileActions {
                     System.exit(0);
                     break;
                 case JOptionPane.YES_OPTION:
-                    fileSaveAsAction.saveAs();
+                    if(saveAction.save()) {
+                        JOptionPane.showMessageDialog(null,"Image saved successfully");
+                        System.exit(0);
+                    }
                     break;
             }
         }
 
+    }
+
+    /**
+     * <p>
+     * Action to export the image
+     * </p>
+     */
+    public class FileExportAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new file-exit action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+        FileExportAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+         /**
+         * <p>
+         * Callback for when the file-exit action is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the FileExitAction is triggered.
+         * It quits the program.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        public void actionPerformed(ActionEvent e) {
+            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,"No image to export"); return; }
+
+            String[] writerFormatNames = ImageIO.getWriterFileSuffixes();
+
+            JPanel panel = new JPanel();
+            JComboBox<String> imageFormatChooser = new JComboBox<String>(writerFormatNames);
+            JLabel label = new JLabel("Choose Image Format to export: ");
+            SpringLayout layout = new SpringLayout();
+            panel.setLayout(layout);
+            panel.add(label);
+            panel.add(imageFormatChooser);
+
+            layout.putConstraint(SpringLayout.WEST, label, 5, SpringLayout.WEST, panel);
+            layout.putConstraint(SpringLayout.NORTH, label, 5, SpringLayout.NORTH, panel);
+            layout.putConstraint(SpringLayout.NORTH, imageFormatChooser, 10, SpringLayout.SOUTH, label);
+            layout.putConstraint(SpringLayout.WEST, imageFormatChooser, 0, SpringLayout.WEST, label);
+            layout.putConstraint(SpringLayout.EAST, imageFormatChooser, 0, SpringLayout.EAST, label);
+            layout.putConstraint(SpringLayout.EAST, panel, 5, SpringLayout.EAST, label);
+            layout.putConstraint(SpringLayout.SOUTH, panel, 10, SpringLayout.SOUTH, imageFormatChooser);
+
+
+            int dialogResult = JOptionPane.showOptionDialog(null,panel, "Export Image", JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, new Object[]{"Export", "Cancel"}, "Export...");
+            if (dialogResult != JOptionPane.OK_OPTION ) return;
+            String imageFormat = (String) imageFormatChooser.getSelectedItem();
+            
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Images", imageFormat));
+            fileChooser.setCurrentDirectory(new File(target.getImage().getFilepath()));
+            fileChooser.setDialogTitle("Export...");
+
+            String filepathWithNewExt = getPathWithImageExtension(target.getImage().getFilepath(), imageFormat);
+            fileChooser.setSelectedFile(new File(filepathWithNewExt));
+            int fileChooserResult = fileChooser.showDialog(null, "Export");
+            if (fileChooserResult != JFileChooser.APPROVE_OPTION) return;
+
+            try {
+                String exportFilepath = fileChooser.getSelectedFile().getCanonicalPath();
+                String validExportFilepath = getPathWithImageExtension(exportFilepath, imageFormat);
+                target.getImage().export(validExportFilepath, imageFormat);
+            } catch (IOException err) {
+                JOptionPane.showMessageDialog(null, "An error occured while exporting. Please ensure you have permission to write to this file location.");
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "Image exported!");
+        }
     }
 
 }
