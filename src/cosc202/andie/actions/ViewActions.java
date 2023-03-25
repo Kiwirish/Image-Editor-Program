@@ -40,6 +40,7 @@ public class ViewActions {
         actions.add(new ZoomInAction("Zoom In", null, "Zoom In", Integer.valueOf(KeyEvent.VK_PLUS)));
         actions.add(new ZoomOutAction("Zoom Out", null, "Zoom Out", Integer.valueOf(KeyEvent.VK_MINUS)));
         actions.add(new ZoomFullAction("Zoom Full", null, "Zoom Full", Integer.valueOf(KeyEvent.VK_1)));
+        actions.add(new ResetZoomAction("Reset Zoom", null, "Reset Zoom to fit window", Integer.valueOf(KeyEvent.VK_2)));
     }
 
     /**
@@ -188,6 +189,42 @@ public class ViewActions {
          */
         public void actionPerformed(ActionEvent e) {
             target.setZoom(100);
+            target.revalidate();
+            target.getParent().revalidate();
+        }
+
+    }
+
+    public class ResetZoomAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new reset-zoom action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+        ResetZoomAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the reset-zoom action is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the ResetZoomAction is triggered.
+         * It resets the Zoom level to fill the panel.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        public void actionPerformed(ActionEvent e) {
+            target.resetZoom();
             target.revalidate();
             target.getParent().revalidate();
         }

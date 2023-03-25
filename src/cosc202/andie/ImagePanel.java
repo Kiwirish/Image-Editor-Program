@@ -102,8 +102,8 @@ public class ImagePanel extends JPanel {
     public void resetZoom() {
         int imageWidth = image.getCurrentImage().getWidth();
         int imageHeight = image.getCurrentImage().getHeight();
-        int panelWidth = this.getWidth();
-        int panelHeight = this.getHeight();
+        int panelWidth = (int)this.getParent().getWidth();
+        int panelHeight = (int)this.getParent().getHeight();
         double scaleWidth = (double) panelWidth / imageWidth;
         double scaleHeight = (double) panelHeight / imageHeight;
         double newScale = Math.min(scaleWidth, scaleHeight);
