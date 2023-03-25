@@ -2,6 +2,10 @@ package cosc202.andie;
 // blakes comment 
 // blakes second change 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.*;
 
 import cosc202.andie.actions.ColourActions;
@@ -63,7 +67,6 @@ public class Andie {
 
         Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // The main content area is an ImagePanel
         ImagePanel imagePanel = new ImagePanel();
@@ -102,6 +105,15 @@ public class Andie {
         frame.setJMenuBar(menuBar);
         frame.pack();
         frame.setVisible(true);
+
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                fileActions.exitAction.exit();
+            }
+        };
+        frame.addWindowListener(exitListener);
     }
 
     /**

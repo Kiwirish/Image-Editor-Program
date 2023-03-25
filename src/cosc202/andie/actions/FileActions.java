@@ -35,6 +35,7 @@ public class FileActions {
     /** A list of actions for the File menu. */
     protected ArrayList<Action> actions;
     private FileSaveAction saveAction;
+    public FileExitAction exitAction;
 
     /**
      * <p>
@@ -42,14 +43,17 @@ public class FileActions {
      * </p>
      */
     public FileActions() {
-        actions = new ArrayList<Action>();
-        actions.add(new FileOpenAction("Open", null, "Open a file", Integer.valueOf(KeyEvent.VK_O)));
-        // actions.add(new FileSaveAction("Save", null, "Save the file", Integer.valueOf(KeyEvent.VK_S)));
         saveAction = new FileSaveAction("Save", null, "Save the file", Integer.valueOf(KeyEvent.VK_S));
+        exitAction = new FileExitAction("Exit", null, "Exit the program", Integer.valueOf(0));
+
+        actions = new ArrayList<Action>();
+
+        actions.add(new FileOpenAction("Open", null, "Open a file", Integer.valueOf(KeyEvent.VK_O)));
         actions.add(saveAction);
         actions.add(new FileSaveAsAction("Save As", null, "Save a copy", Integer.valueOf(KeyEvent.VK_A)));
         actions.add(new FileExportAction("Export...", null, "Export modified image to new file", Integer.valueOf(KeyEvent.VK_E)));
-        actions.add(new FileExitAction("Exit", null, "Exit the program", Integer.valueOf(0)));
+        actions.add(exitAction);
+
     }
 
     /**
@@ -147,19 +151,13 @@ public class FileActions {
 
             int result = fileChooser.showOpenDialog(target);
 
-
-            if (result == JFileChooser.APPROVE_OPTION) {
-                try {
-                    String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    target.getImage().open(imageFilepath);
-                    target.resetZoom();
-                    target.repaint();
-                    target.getParent().revalidate();
-                } catch (IOException err) {
-                    JOptionPane.showMessageDialog(null, "Error Opening image. Please choose a valid image file.");
-                }
+            if (result != JFileChooser.APPROVE_OPTION) return;
+            try {
+                String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
+                target.attemptImageOpen(imageFilepath);
+            } catch (IOException e1) {
+                JOptionPane.showMessageDialog(null, "Error reading file");
             }
-
         }
 
     }
@@ -319,6 +317,13 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
+            exit();
+        }
+
+        /**
+         * Exit the program, asking the user if they want to save their image first.
+         */
+        public void exit() {
             //Ask the user if they want to save their image before quitting
             if (!target.getImage().getModified()) System.exit(0);
 

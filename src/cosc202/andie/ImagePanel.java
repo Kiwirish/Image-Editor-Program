@@ -1,6 +1,14 @@
 package cosc202.andie;
 
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import javax.swing.*;
 
 /**
@@ -46,11 +54,44 @@ public class ImagePanel extends JPanel {
      * 
      * <p>
      * Newly created ImagePanels have a default zoom level of 100%
+     * ImagePanels are also set up to accept dropped files, and will attempt to open them as images. 
      * </p>
      */
     public ImagePanel() {
         image = new EditableImage();
         scale = 1.0;
+
+        //Open dropped image files
+        setDropTarget(new DropTarget() {
+            public void drop(DropTargetDropEvent evt) {
+                if (getImage().hasImage()) return; //Don't allow dropping if an image is already open
+                try {
+                    evt.acceptDrop(DnDConstants.ACTION_COPY);
+                    if (!evt.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) 
+                        return;
+
+                    List<?> list = (List<?>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    String filepath = ((File)list.get(0)).getCanonicalPath();
+                    attemptImageOpen(filepath);
+
+                    evt.getDropTargetContext().dropComplete(true);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error opening file");
+                }
+            }
+        });
+
+    }
+
+    public void attemptImageOpen(String filepath) {
+        try {
+            getImage().open(filepath);
+            resetZoom();
+            repaint();
+            getParent().revalidate();
+        } catch (IOException err) {
+            JOptionPane.showMessageDialog(null, "Error Opening image. Please choose a valid image file.");
+        }
     }
 
     /**
@@ -143,11 +184,28 @@ public class ImagePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2  = (Graphics2D) g.create();
         if (image.hasImage()) {
-            Graphics2D g2  = (Graphics2D) g.create();
             g2.scale(scale, scale);
             g2.drawImage(image.getCurrentImage(), null, 0, 0);
-            g2.dispose();
+        } else {
+            drawWelcomeImage(g2);
         }
+        g2.dispose();
+
     }
+
+    private void drawWelcomeImage(Graphics2D g) {
+            String message = "Welcome to ANDIE";
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.setColor(Color.GRAY);
+            int messageWidth = g.getFontMetrics().stringWidth(message);
+            g.drawString(message, (int) Math.round((this.getWidth() - messageWidth) / 2), (int) Math.round(this.getHeight() / 2));
+            String subMessage = "Drag an image in to get started";
+            g.setFont(new Font("Arial", Font.PLAIN, 15));
+            int subMessageWidth = g.getFontMetrics().stringWidth(subMessage);
+            int subMessageHeight = g.getFontMetrics().getHeight();
+            g.drawString(subMessage, (int) Math.round((this.getWidth() - subMessageWidth) / 2), (int) Math.round(this.getHeight() / 2 + subMessageHeight + 15));
+    }
+
 }
