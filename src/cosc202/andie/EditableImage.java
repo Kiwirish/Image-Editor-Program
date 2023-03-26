@@ -315,7 +315,7 @@ public class EditableImage {
      * @return True if the image has been modified since the last save / open, otherwise false.
      */
     public boolean getModified() {
-        return  !bufferedImagesAreEqual(lastSavedImage, current);
+        return !bufferedImagesAreEqual(lastSavedImage, current);
     }
     /**
      * A checked Exception for when a file extension is not supported.
@@ -338,7 +338,7 @@ public class EditableImage {
         if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) return false;
         for (int x = 0; x < image1.getWidth(); x++) {
             for (int y = 0; y < image1.getHeight(); y++) {
-                if (image1.getRGB(x, y) != image1.getRGB(x, y))
+                if (image1.getRGB(x, y) != image2.getRGB(x, y))
                     return false;
             }
         }
