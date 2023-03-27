@@ -5,9 +5,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.*;
-import java.util.prefs.Preferences;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -68,7 +65,7 @@ public class FileActions {
      * @return The File menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(LanguageActions.englishLanguage("File_Tile"));
+        JMenu fileMenu = new JMenu(LanguageActions.englishLanguage("File_Title"));
 
         for(Action action: actions) {
             fileMenu.add(new JMenuItem(action));
