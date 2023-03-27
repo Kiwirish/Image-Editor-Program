@@ -15,6 +15,7 @@ import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
 import cosc202.andie.actions.SizeActions;
 import cosc202.andie.actions.ViewActions;
+import cosc202.andie.actions.LanguageActions;
 
 import javax.imageio.*;
 
@@ -103,6 +104,9 @@ public class Andie {
         // Actions that affect the representation of colour in the image
         ColourActions colourActions = new ColourActions();
         menuBar.add(colourActions.createMenu());
+        //Actions that change the language of the code
+        //LanguageActions languageActions = new LanguageActions();
+        //menuBar.add(languageActions.createMenu());
         
         frame.setJMenuBar(menuBar);
         frame.pack();
