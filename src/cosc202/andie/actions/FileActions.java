@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.*;
 import java.util.prefs.Preferences;
 
 import javax.swing.*;
@@ -14,6 +13,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
 import javax.imageio.*;
+
+import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>
@@ -47,15 +48,15 @@ public class FileActions {
      */
     public FileActions() {
 
-        saveAction = new FileSaveAction(LanguageActions.englishLanguage("File_Save"), null, LanguageActions.englishLanguage("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S));
-        exitAction = new FileExitAction(LanguageActions.englishLanguage("File_Exit"), null, LanguageActions.englishLanguage("File_Exit_Desc"), Integer.valueOf(0));
+        saveAction = new FileSaveAction(msg("File_Save"), null, msg("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S));
+        exitAction = new FileExitAction(msg("File_Exit"), null, msg("File_Exit_Desc"), Integer.valueOf(0));
 
         actions = new ArrayList<Action>();
 
-        actions.add(new FileOpenAction(LanguageActions.englishLanguage("File_Open"), null, LanguageActions.englishLanguage("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O)));
+        actions.add(new FileOpenAction(msg("File_Open"), null, msg("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O)));
         actions.add(saveAction);
-        actions.add(new FileSaveAsAction(LanguageActions.englishLanguage("File_Save_As"), null, LanguageActions.englishLanguage("File_Save_As_Desc"), Integer.valueOf(KeyEvent.VK_A)));
-        actions.add(new FileExportAction(LanguageActions.englishLanguage("File_Export"), null, LanguageActions.englishLanguage("File_Export_Desc"), Integer.valueOf(KeyEvent.VK_E)));
+        actions.add(new FileSaveAsAction(msg("File_Save_As"), null, msg("File_Save_As_Desc"), Integer.valueOf(KeyEvent.VK_A)));
+        actions.add(new FileExportAction(msg("File_Export"), null, msg("File_Export_Desc"), Integer.valueOf(KeyEvent.VK_E)));
         actions.add(exitAction);
 
     }
@@ -68,7 +69,7 @@ public class FileActions {
      * @return The File menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(LanguageActions.englishLanguage("File_Tile"));
+        JMenu fileMenu = new JMenu(msg("File_Title"));
 
         for(Action action: actions) {
             fileMenu.add(new JMenuItem(action));

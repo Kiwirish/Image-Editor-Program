@@ -64,6 +64,9 @@ public class Andie {
      * @throws Exception if something goes wrong.
      */
     private static void createAndShowGUI() throws Exception {
+        //Initialise the language
+        LanguageConfig.init();
+
         // Set up the main GUI frame
         JFrame frame = new JFrame("ANDIE");
         frame.setPreferredSize(new Dimension(700, 550));
@@ -105,8 +108,8 @@ public class Andie {
         ColourActions colourActions = new ColourActions();
         menuBar.add(colourActions.createMenu());
         //Actions that change the language of the code
-        //LanguageActions languageActions = new LanguageActions();
-        //menuBar.add(languageActions.createMenu());
+        LanguageActions languageActions = new LanguageActions();
+        menuBar.add(languageActions.createMenu());
         
         frame.setJMenuBar(menuBar);
         frame.pack();
@@ -150,7 +153,5 @@ public class Andie {
             }
         });
     }
-    public static void myMethod(){}
-
 
 }
