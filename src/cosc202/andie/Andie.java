@@ -64,6 +64,9 @@ public class Andie {
      * @throws Exception if something goes wrong.
      */
     private static void createAndShowGUI() throws Exception {
+        //Initialise the language
+        LanguageConfig.init();
+
         // Set up the main GUI frame
         JFrame frame = new JFrame("ANDIE");
         frame.setPreferredSize(new Dimension(700, 550));
@@ -150,7 +153,5 @@ public class Andie {
             }
         });
     }
-    public static void myMethod(){}
-
 
 }

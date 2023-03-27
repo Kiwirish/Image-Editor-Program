@@ -335,6 +335,8 @@ public class EditableImage {
      * @return True if the images are equal, otherwise false.
      */
     static boolean bufferedImagesAreEqual(BufferedImage image1, BufferedImage image2) {
+        if (image1 == null && image2 == null) return true;
+        if (image1 == null || image2 == null) return false;
         if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) return false;
         for (int x = 0; x < image1.getWidth(); x++) {
             for (int y = 0; y < image1.getHeight(); y++) {
