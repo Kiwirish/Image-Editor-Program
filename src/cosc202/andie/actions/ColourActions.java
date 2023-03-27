@@ -121,8 +121,9 @@ public class ColourActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-        private int brightness;
-        private int contrast;
+        
+        // private int brightness;
+        //private int contrast;
 
 
         BrightnessAndContrastAdjustment(String name, ImageIcon icon, String desc, Integer mnemonic) {
@@ -146,9 +147,11 @@ public class ColourActions {
 
 
         public void actionPerformed(ActionEvent e) {
+            int brightness = 0;
+            int contrast = 0;
 
 
-            SpinnerNumberModel brightnessModel = new SpinnerNumberModel(brightness, -100, 100, 25);
+            /*SpinnerNumberModel brightnessModel = new SpinnerNumberModel(brightness, -100, 100, 25);
             SpinnerNumberModel contrastModel = new SpinnerNumberModel(contrast, -100, 100, 25);
             JSpinner brightnessSpinner = new JSpinner(brightnessModel);
             JSpinner contrastSpinner = new JSpinner(contrastModel);
@@ -156,19 +159,29 @@ public class ColourActions {
             int option = JOptionPane.showOptionDialog(null, "                Brightness       Contrast", "Brightness and Constrast Adjustment", 
             JOptionPane.OK_CANCEL_OPTION, 
             //JOptionPane.QUESTION_MESSAGE, null, arrayOfShit, null);
-            JOptionPane.PLAIN_MESSAGE, null, arrayOfShit, null);
-
+            JOptionPane.PLAIN_MESSAGE, null, arrayOfShit, null); */
+            SpinnerNumberModel brightnessModel = new SpinnerNumberModel(0, -100, 100, 1);
+            JSpinner brightnessSpinner = new JSpinner(brightnessModel);
+            int brightnessOption = JOptionPane.showOptionDialog(null, brightnessSpinner, "Enter Brightness Adjustment", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
             // Check the return value from the dialog box.
+            SpinnerNumberModel contrastModel = new SpinnerNumberModel(0, -100, 100, 1);
+            JSpinner contrastSpinner = new JSpinner(contrastModel);
+            int contrastOption = JOptionPane.showOptionDialog(null, contrastSpinner, "Enter Contrast Adjustment", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
             
             //need to update this so their is a OK and CANCEL option?????
-            if (option == JOptionPane.CLOSED_OPTION) {
-
-                brightness = brightnessModel.getNumber().intValue();
-                contrast = contrastModel.getNumber().intValue();
-                System.out.println(brightness);
-                System.out.println(contrast);
+            if (brightnessOption == JOptionPane.CANCEL_OPTION) {
                 return;
-            } 
+            } else if (brightnessOption == JOptionPane.OK_OPTION) {
+                brightness = brightnessModel.getNumber().intValue();
+            }
+
+            if (contrastOption == JOptionPane.CANCEL_OPTION) {
+                return;
+            } else if (contrastOption == JOptionPane.OK_OPTION) {
+                contrast = contrastModel.getNumber().intValue();
+            }
+
+
             target.getImage().apply(new BrightnessAndContrast(brightness,contrast)); 
             target.repaint();
             target.getParent().revalidate();

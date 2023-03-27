@@ -1,6 +1,7 @@
 package cosc202.andie.operations.colour;
 
 import java.awt.image.*;
+import java.awt.Color;
 
 import cosc202.andie.ImageOperation;
 
@@ -12,7 +13,12 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
         this.brightness = brightness;
         this.contrast = contrast;
     }
-
+    //Construct with default size
+    BrightnessAndContrast(){
+        this(0, 0);
+    }
+    
+    
     public BufferedImage apply(BufferedImage input) {
 
         //brightness change b
@@ -23,23 +29,27 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
 
         for (int y = 0; y < input.getHeight(); ++y) {
             for (int x = 0; x < input.getWidth(); ++x) {
-                int rgb = input.getRGB(x, y);
-                System.out.print(rgb);
-                double editedV = (1 + contrast / 100) * (rgb - 127.5) + 127.5 * (1 + brightness /100);
 
-                //int a = (argb & 0xFF000000) >> 24;
-                int r = input.getRed();
-                int g = input.getRed();
-                int b = (rgb & 0x000000FF);
+                int pixel = input.getRGB(x, y);
+                int a = (pixel & 0xFF000000) >> 24;
+                int r = (pixel & 0x00FF0000) >> 16;
+                int g = (pixel & 0x0000FF00) >> 8;
+                int b = (pixel & 0x000000FF);
 
-                //int adjusted = (int) Math.round(0.3*r + 0.6*g + 0.1*b);
+                int red = (int)((1 + (contrast / 100.0)) * (r - 127.5) + 127.5 * (1 + (brightness/100.0)));   
+                int green = (int)((1 + (contrast / 100.0 )) * (g - 127.5) + 127.5 * (1 + (brightness/100.0)));
+                int blue = (int)((1 + (contrast / 100.0 )) * (b - 127.5) + 127.5 * (1 + (brightness/100.0)));
+                    //need it to be witin 0-255 for red,green,blue .
+                red = (int)Math.max(0, Math.min(255, red));
+                green = (int)Math.max(0, Math.min(255, green));
+                blue = (int)Math.max(0, Math.min(255, blue));
 
-                //rgb = (a << 24) | (grey << 16) | (grey << 8) | grey;
-                //input.setRGB(x, y, rgb); 
+                pixel = (a << 24) | (red << 16) | (green << 8) | blue;
+                input.setRGB(x, y, pixel);
             }
-            System.out.println();
         }
-        
+                    
         return input;
+        
     }   
 }
