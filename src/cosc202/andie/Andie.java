@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 import cosc202.andie.actions.ColourActions;
 import cosc202.andie.actions.EditActions;
@@ -64,46 +65,48 @@ public class Andie {
     private static void createAndShowGUI() throws Exception {
         // Set up the main GUI frame
         JFrame frame = new JFrame("ANDIE");
-
+        frame.setPreferredSize(new Dimension(700, 550));
         Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
+
+        JPanel contentPane = new JPanel();
+        frame.setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout());
 
         // The main content area is an ImagePanel
         ImagePanel imagePanel = new ImagePanel();
         ImageAction.setTarget(imagePanel);
-        JScrollPane scrollPane = new JScrollPane(imagePanel);
-        frame.add(scrollPane, BorderLayout.CENTER);
-        
+        // Inside a scroll pane
+        JScrollPane scrollPane = new JScrollPane(imagePanel); 
+        scrollPane.setBorder(null);
+
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+
         // Add in menus for various types of action the user may perform.
         JMenuBar menuBar = new JMenuBar();
 
         // File menus are pretty standard, so things that usually go in File menus go here.
         FileActions fileActions = new FileActions();
         menuBar.add(fileActions.createMenu());
-
         // Likewise Edit menus are very common, so should be clear what might go here.
         EditActions editActions = new EditActions();
         menuBar.add(editActions.createMenu());
-
         // View actions control how the image is displayed, but do not alter its actual content
         ViewActions viewActions = new ViewActions();
         menuBar.add(viewActions.createMenu());
-
         // Size actions transform the image 
         SizeActions sizeActions = new SizeActions();
         menuBar.add(sizeActions.createMenu());
-
-
         // Filters apply a per-pixel operation to the image, generally based on a local window
         FilterActions filterActions = new FilterActions();
         menuBar.add(filterActions.createMenu());
-
         // Actions that affect the representation of colour in the image
         ColourActions colourActions = new ColourActions();
         menuBar.add(colourActions.createMenu());
         
         frame.setJMenuBar(menuBar);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
