@@ -63,7 +63,6 @@ public class LanguageActions {
             } 
             public void actionPerformed(ActionEvent e) {
                 prefs.put("language", "en");
-                System.out.println("Enlgish Buttonsasdas");
             }
     }
 
@@ -72,9 +71,9 @@ public class LanguageActions {
             super(name, icon, desc, mnemonic);
         } 
         public void actionPerformed(ActionEvent e) {
+            
             prefs.put("language", "mi");
             //frame.revalidate();
-            System.out.println("Maori Buttosnasas");
         }
 }
 
