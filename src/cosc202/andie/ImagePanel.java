@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>
@@ -82,7 +82,7 @@ public class ImagePanel extends JPanel implements MouseWheelListener {
 
                     evt.getDropTargetContext().dropComplete(true);
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error opening file");
+                    JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
                 }
             }
         });
@@ -96,7 +96,7 @@ public class ImagePanel extends JPanel implements MouseWheelListener {
             repaint();
             getParent().revalidate();
         } catch (IOException err) {
-            JOptionPane.showMessageDialog(null, "Error Opening image. Please choose a valid image file.");
+            JOptionPane.showMessageDialog(null,msg("Invalid_Image_Error_Message"));
         }
     }
 
@@ -209,12 +209,12 @@ public class ImagePanel extends JPanel implements MouseWheelListener {
     }
 
     private void drawNothingOpenImage(Graphics2D g) {
-        String message = "Welcome to ANDIE";
+        String message = msg("Andie_Welcome_Message");
         g.setFont(new Font("Arial", Font.BOLD, 20));
         g.setColor(Color.GRAY);
         int messageWidth = g.getFontMetrics().stringWidth(message);
         g.drawString(message, (int) Math.round((this.getWidth() - messageWidth) / 2), (int) Math.round(this.getHeight() / 2));
-        String subMessage = "Drag an image in to get started";
+        String subMessage = msg("Andie_Welcome_Submessage");
         g.setFont(new Font("Arial", Font.PLAIN, 15));
         int subMessageWidth = g.getFontMetrics().stringWidth(subMessage);
         int subMessageHeight = g.getFontMetrics().getHeight();

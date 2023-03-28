@@ -38,7 +38,7 @@ public class LanguageConfig {
 				break;
 		}
 
-		JOptionPane.showMessageDialog(null, msg("LANGUAGE_CHANGE_RESTART_ALERT"), msg("LANGUAGE_CHANGE_RESTART_TITLE"), JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, msg("Language_Change_Restart_Alert"), msg("Language_Change_Restart_Title"), JOptionPane.INFORMATION_MESSAGE);
 
 	}
 
