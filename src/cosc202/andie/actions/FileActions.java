@@ -389,7 +389,7 @@ public class FileActions {
 
             JPanel panel = new JPanel();
             JComboBox<String> imageFormatChooser = new JComboBox<String>(writerFormatNames);
-            JLabel label = new JLabel("Choose Image Format to export: ");
+            JLabel label = new JLabel(msg("File_Exit_Action_label"));
             SpringLayout layout = new SpringLayout();
             panel.setLayout(layout);
             panel.add(label);
@@ -404,18 +404,18 @@ public class FileActions {
             layout.putConstraint(SpringLayout.SOUTH, panel, 10, SpringLayout.SOUTH, imageFormatChooser);
 
 
-            int dialogResult = JOptionPane.showOptionDialog(null,panel, "Export Image", JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, new Object[]{"Export", "Cancel"}, "Export...");
+            int dialogResult = JOptionPane.showOptionDialog(null,panel, msg("File_Exit_Action_Export_Title"), JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, new Object[]{msg("File_Export"), msg("File_Cancel")}, msg("File_Export") + "...");
             if (dialogResult != JOptionPane.OK_OPTION ) return;
             String imageFormat = (String) imageFormatChooser.getSelectedItem();
             
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Images", imageFormat));
+            fileChooser.setFileFilter(new FileNameExtensionFilter(msg("File_filter"), imageFormat));
             fileChooser.setCurrentDirectory(new File(target.getImage().getFilepath()));
-            fileChooser.setDialogTitle("Export...");
+            fileChooser.setDialogTitle(msg("File_Export") + "...");
 
             String filepathWithNewExt = getPathWithImageExtension(target.getImage().getFilepath(), imageFormat);
             fileChooser.setSelectedFile(new File(filepathWithNewExt));
-            int fileChooserResult = fileChooser.showDialog(null, "Export");
+            int fileChooserResult = fileChooser.showDialog(null, msg("File_Export"));
             if (fileChooserResult != JFileChooser.APPROVE_OPTION) return;
 
             try {
@@ -423,10 +423,10 @@ public class FileActions {
                 String validExportFilepath = getPathWithImageExtension(exportFilepath, imageFormat);
                 target.getImage().export(validExportFilepath, imageFormat);
             } catch (IOException err) {
-                JOptionPane.showMessageDialog(null, "An error occured while exporting. Please ensure you have permission to write to this file location.");
+                JOptionPane.showMessageDialog(null, msg("File_Exit_Action_IOException"));
                 return;
             }
-            JOptionPane.showMessageDialog(null, "Image exported!");
+            JOptionPane.showMessageDialog(null, msg("File_Exit_Action_JPane"));
         }
     }
 
