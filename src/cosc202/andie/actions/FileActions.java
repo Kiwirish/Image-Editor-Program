@@ -151,7 +151,7 @@ public class FileActions {
             JFileChooser fileChooser = new JFileChooser();
 
             //Only allow files with image extensions that ImageIO can parse to be opened
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", ImageIO.getReaderFileSuffixes()); 
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(msg("File_filter"), ImageIO.getReaderFileSuffixes()); 
             fileChooser.setFileFilter(filter);
 
             int result = fileChooser.showOpenDialog(target);
@@ -161,7 +161,7 @@ public class FileActions {
                 String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                 target.attemptImageOpen(imageFilepath);
             } catch (IOException e1) {
-                JOptionPane.showMessageDialog(null, "Error reading file");
+                JOptionPane.showMessageDialog(null, msg("File_Exception_e1"));
             }
         }
 
@@ -213,14 +213,14 @@ public class FileActions {
          * @returns true if the image was saved successfully, false otherwise
          */
         public boolean save() {
-            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,"No image to save"); return false; }
+            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,msg("File_save_error")); return false; }
             try {
                 target.getImage().save();           
                 return true;
             } catch (EditableImage.ExtensionException err) {
-                JOptionPane.showMessageDialog(null, "Unable to save image with this extension. Please use the \"Save As...\" menu to choose a different file path.\nSupported image formats: " + String.join(", ", ImageIO.getWriterFileSuffixes()));
+                JOptionPane.showMessageDialog(null, msg("File_save_extension_exception") + String.join(", ", ImageIO.getWriterFileSuffixes()));
             } catch (IOException err) {
-                JOptionPane.showMessageDialog(null, "An error occured while saving. Please ensure you have permission to write to this file location.");
+                JOptionPane.showMessageDialog(null, msg("File_save_exception_err"));
             }
             return false;
         }
@@ -263,9 +263,9 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,"No image to save"); return; }
+            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,msg("File_save_error")); return; }
 
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", ImageIO.getWriterFileSuffixes()); 
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(msg("File_filter"), ImageIO.getWriterFileSuffixes()); 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileFilter(filter);
 
@@ -277,12 +277,12 @@ public class FileActions {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
                     String givenImageExtension = getImageExtension(imageFilepath);
-                    if (givenImageExtension.equals("")) throw new EditableImage.ExtensionException("Not an image extension");
+                    if (givenImageExtension.equals("")) throw new EditableImage.ExtensionException(msg("File_Extension_Exception"));
                     target.getImage().saveAs(givenImageExtension);
                 } catch (EditableImage.ExtensionException err) {
-                    JOptionPane.showMessageDialog(null, "Unable to save image with this extension.\nSupported image formats: " + String.join(", ", ImageIO.getWriterFileSuffixes()));
+                    JOptionPane.showMessageDialog(null, msg("File_Extension_Exception_err") + String.join(", ", ImageIO.getWriterFileSuffixes()));
                 } catch (IOException err) {
-                    JOptionPane.showMessageDialog(null, "An error occured while saving. Please ensure you have permission to write to this file location.");
+                    JOptionPane.showMessageDialog(null, msg("File_save_exception_err"));
                 }
             }
         }
@@ -332,7 +332,7 @@ public class FileActions {
             //Ask the user if they want to save their image before quitting
             if (!target.getImage().getModified()) System.exit(0);
 
-            int result = JOptionPane.showConfirmDialog(null, "You have unsaved work. Save before quitting?", "Save Image?", JOptionPane.YES_NO_CANCEL_OPTION);
+            int result = JOptionPane.showConfirmDialog(null, msg("File_Exit_JPane_Desc"), msg("File_Exit_JPane"), JOptionPane.YES_NO_CANCEL_OPTION);
             switch (result) {
                 case JOptionPane.CANCEL_OPTION:
                     return;
@@ -341,7 +341,7 @@ public class FileActions {
                     break;
                 case JOptionPane.YES_OPTION:
                     if(saveAction.save()) {
-                        JOptionPane.showMessageDialog(null,"Image saved successfully");
+                        JOptionPane.showMessageDialog(null,msg("File_Exit_JPane_YES"));
                         System.exit(0);
                     }
                     break;
@@ -384,7 +384,7 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,"No image to export"); return; }
+            if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,msg("File_Exit_Action_hasImage")); return; }
 
             String[] writerFormatNames = ImageIO.getWriterFileSuffixes();
 
