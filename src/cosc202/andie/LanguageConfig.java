@@ -13,6 +13,7 @@ public class LanguageConfig {
 
 	private static Preferences prefs;
 	private static ResourceBundle bundle;
+	private static ResourceBundle fallbackBundle;
 
 	public LanguageConfig() {}
 
@@ -21,6 +22,7 @@ public class LanguageConfig {
 
 		Locale.setDefault(new Locale(prefs.get("language", "en"),prefs.get("country", "NZ")));
 		LanguageConfig.bundle = ResourceBundle.getBundle("MessageBundle");
+		LanguageConfig.fallbackBundle = ResourceBundle.getBundle("MessageBundle", new Locale("en", "NZ"));
 	}
 	public static void setLanguage(int lang) {  
 		switch(lang) {
@@ -41,7 +43,9 @@ public class LanguageConfig {
 	}
 
 	public static String msg(String key) {
-		return bundle.getString(key);
+		if (bundle.containsKey(key)) return bundle.getString(key);
+		else if (fallbackBundle.containsKey(key)) return fallbackBundle.getString(key);
+		else return key;
 	}
 
 }

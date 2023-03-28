@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.prefs.Preferences;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
