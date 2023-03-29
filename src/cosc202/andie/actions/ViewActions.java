@@ -6,6 +6,8 @@ import javax.swing.*;
 
 import cosc202.andie.ImageAction;
 
+import static cosc202.andie.LanguageConfig.msg;
+
 /**
  * <p>
  * Actions provided by the View menu.
@@ -37,10 +39,10 @@ public class ViewActions {
      */
     public ViewActions() {
         actions = new ArrayList<Action>();
-        actions.add(new ZoomInAction("Zoom In", null, "Zoom In", Integer.valueOf(KeyEvent.VK_PLUS)));
-        actions.add(new ZoomOutAction("Zoom Out", null, "Zoom Out", Integer.valueOf(KeyEvent.VK_MINUS)));
-        actions.add(new ZoomFullAction("Zoom Full", null, "Zoom Full", Integer.valueOf(KeyEvent.VK_1)));
-        actions.add(new ResetZoomAction("Reset Zoom", null, "Reset Zoom to fit window", Integer.valueOf(KeyEvent.VK_2)));
+        actions.add(new ZoomInAction(msg("ZoomIn_Title"), null, msg("ZoomIn_Desc"), Integer.valueOf(KeyEvent.VK_PLUS)));
+        actions.add(new ZoomOutAction(msg("ZoomOut_Title"), null, msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS)));
+        actions.add(new ZoomFullAction(msg("ZoomFull_Title"), null, msg("ZoomFull_Desc"), Integer.valueOf(KeyEvent.VK_1)));
+        actions.add(new ResetZoomAction(msg("ZoomReset_Title"), null, msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2)));
     }
 
     /**
@@ -51,7 +53,7 @@ public class ViewActions {
      * @return The view menu UI element.
      */
     public JMenu createMenu() {
-        JMenu viewMenu = new JMenu("View");
+        JMenu viewMenu = new JMenu(msg("View_Title"));
 
         for (Action action: actions) {
             viewMenu.add(new JMenuItem(action));

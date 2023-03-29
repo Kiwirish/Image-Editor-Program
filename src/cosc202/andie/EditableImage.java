@@ -2,9 +2,11 @@ package cosc202.andie;
 
 import java.util.*;
 import java.io.*;
-import java.security.MessageDigest;
+//import java.security.MessageDigest;
 import java.awt.image.*;
 import javax.imageio.*;
+
+import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>
@@ -150,7 +152,7 @@ public class EditableImage {
         opsFilename = imageFilename + ".ops";
         File imageFile = new File(imageFilename);
         BufferedImage newImage = ImageIO.read(imageFile);
-        if (newImage == null) throw new IOException("Could not read image file.");
+        if (newImage == null) throw new IOException(msg("Open_Exception"));
         Stack<ImageOperation> newOps = new Stack<ImageOperation>();
         
         try {
@@ -203,7 +205,7 @@ public class EditableImage {
         // Write image file based on file extension
         String extension = imageFilename.substring(1+imageFilename.lastIndexOf(".")).toLowerCase();
         if (!ImageIO.write(original, extension, new File(imageFilename))) {
-            throw new ExtensionException("Unsupported file extension: " + extension);
+            throw new ExtensionException(msg("Save_Exception") + extension);
         };
         // Write operations file
         FileOutputStream fileOut = new FileOutputStream(this.opsFilename);

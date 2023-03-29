@@ -57,7 +57,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
         //find middle value to use in output image        
         
 
-    }
+    } 
 
 
 }

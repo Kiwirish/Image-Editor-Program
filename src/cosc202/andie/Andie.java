@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+//import javax.swing.border.LineBorder;
 
 import cosc202.andie.actions.ColourActions;
 import cosc202.andie.actions.EditActions;

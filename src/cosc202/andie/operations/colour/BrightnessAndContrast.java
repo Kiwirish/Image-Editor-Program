@@ -1,7 +1,6 @@
 package cosc202.andie.operations.colour;
 
 import java.awt.image.*;
-import java.awt.Color;
 
 import cosc202.andie.ImageOperation;
 
@@ -24,8 +23,6 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
         //brightness change b
         //contrast change c
         //if pixel v is in range [0,255], this gets updated to new value v'
-  
-        
 
         for (int y = 0; y < input.getHeight(); ++y) {
             for (int x = 0; x < input.getWidth(); ++x) {
@@ -39,7 +36,7 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
                 int red = (int)((1 + (contrast / 100.0)) * (r - 127.5) + 127.5 * (1 + (brightness/100.0)));   
                 int green = (int)((1 + (contrast / 100.0 )) * (g - 127.5) + 127.5 * (1 + (brightness/100.0)));
                 int blue = (int)((1 + (contrast / 100.0 )) * (b - 127.5) + 127.5 * (1 + (brightness/100.0)));
-                    //need it to be witin 0-255 for red,green,blue .
+                //need it to be witin 0-255 for red,green,blue. (hence code below)
                 red = (int)Math.max(0, Math.min(255, red));
                 green = (int)Math.max(0, Math.min(255, green));
                 blue = (int)Math.max(0, Math.min(255, blue));

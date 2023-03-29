@@ -4,20 +4,22 @@ import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import cosc202.andie.EditableImage;
+//import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
 import cosc202.andie.operations.transform.Resize;
+
+import static cosc202.andie.LanguageConfig.msg;
 
 public class SizeActions {
     protected ArrayList<Action> actions;
 
     public SizeActions(){
             actions = new ArrayList<Action>();
-            actions.add(new SizeTestAction("Test" , null , "Testing", Integer.valueOf(KeyEvent.VK_T)));
-            actions.add(new SizeResizeAction("Resize", null, "Scale", Integer.valueOf(KeyEvent.VK_R)));
+            actions.add(new SizeTestAction(msg("SizeTest_Title") , null , msg("SizeTest_Desc"), Integer.valueOf(KeyEvent.VK_T)));
+            actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
     }
     public JMenu createMenu() {
-        JMenu sizeMenu = new JMenu("Size");
+        JMenu sizeMenu = new JMenu(msg("Size_Title"));
 
         for(Action action: actions) {
             sizeMenu.add(new JMenuItem(action));
@@ -31,7 +33,7 @@ public class SizeActions {
                 super(name, icon, desc, mnemonic);
             } 
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Test worked");
+                System.out.println(msg("SizeTest_Action"));
             }
     }
 
