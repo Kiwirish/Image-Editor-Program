@@ -18,13 +18,13 @@ public class FlipVertical implements ImageOperation, java.io.Serializable{
             }
         }
         int x = 0;
-        int y = 0;
-        for(int i = input.getWidth(); i > 0; i--){
-            for(int j = input.getHeight(); j > 0; j--){
+        for(int i = 0; i < input.getWidth(); i++){
+            int y = 0;
+            for(int j = input.getHeight()-1; j >= 0; j--){
                 input.setRGB(x, y, pixels[i][j]);
-                x++;
                 y++;
             }
+            x++;
         }
 
         return input;

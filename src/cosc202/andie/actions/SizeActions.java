@@ -74,7 +74,7 @@ public class SizeActions {
 
                 SpinnerNumberModel ResizeModel = new SpinnerNumberModel(0, 0, 100, 1);
                 JSpinner brightnessSpinner = new JSpinner(ResizeModel);
-                int percentageOption = JOptionPane.showOptionDialog(null, brightnessSpinner, msg("Brightness_Action"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
+                int percentageOption = JOptionPane.showOptionDialog(null, brightnessSpinner, msg("SizeResize_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
                 
                 if (percentageOption == JOptionPane.CANCEL_OPTION) {
                     return;
