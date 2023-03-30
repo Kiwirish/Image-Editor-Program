@@ -1,69 +1,156 @@
 package cosc202.andie.operations.filter;
+
 import java.awt.image.*;
-import java.util.*;
 
 import cosc202.andie.ImageOperation;
 
+/**
+ * <p>
+ * ImageOperation to apply a Sharpen filter.
+ * </p>
+ * 
+ * <p>
+ * A Mean filter blurs an image by replacing each pixel by the average of the
+ * pixels in a surrounding neighbourhood, and can be implemented by a convoloution.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @see java.awt.image.ConvolveOp
+ * @author Blake Leahy
+ * @version 1.0
+ */
 public class SharpenFilter implements ImageOperation, java.io.Serializable {
     
-    //data field declaration
-    private int radius; 
+    //construct a sharpenFilter 
+    public SharpenFilter(){ }
 
 
-    //constructor to choose radius to operate on 
-    SharpenFilter(int radius){
-        this.radius = radius; 
-    }
-
-    //constructor to set default 
-    //radius to 1 so the image operation is 
-    // done on a 3x3 space 
-    SharpenFilter(){
-        this(1);
-    }
-
-
-    /* 
-     * Image operation to apply a sharpen filter
+    /**
+     * <p>
+     * Apply a sharpen filter to an image.
+     * </p>
      * 
-     * A sharpen filter sharpens the image by replacing each pixel  
-     * with 
+     * <p>
+     * As with many filters, the sharpen filter is implemented via convolution.
+     * The size of the convolution kernel is 3x3 as given.  
+     * </p>
+     * 
+     * @param input The image to apply the Sharpen filter to.
+     * @return The resulting (sharpened)) image.
      */
+    public BufferedImage apply(BufferedImage input) {
 
-     /* The sharpen filter is implemented via convolution alike to the MeanFilter
-      * The size of the convolution kernal is 
-      @param input the image to apply the sharpen filter to 
-      @return the sharpened image result 
-      A different convolution kernel is to be appleid to this
-      as it is manipluating the matrix values separateely
-     */
-    public BufferedImage apply(BufferedImage input){ 
+        //check for illegal argument 
+        if (input == null){
+            throw new IllegalArgumentException("Image to apply Sharpen filter to does not exist");
+        }
+        //set radius to 1 
+        int r = 1; 
         
-        //
-        int size = (2*radius+1) * (2*radius+1);
-        float [] array = new float[size];
+        //create enlarged image with all existing argb pixel values of old image set to the new images values 
+        BufferedImage enlargedImage = new BufferedImage(input.getWidth() + r * 2, input.getHeight() + r * 2, input.getType());
+        
+        for(int y = 0; y <input.getHeight(); ++y){
+            for(int x = 0 ; x < input.getWidth(); x++){
+                enlargedImage.setRGB((x + r), (y + r), input.getRGB(x,y));
+            }
+        }
 
-        //-1.0 used as it is sharpening - bluring used +
-        Arrays.fill(array, -1.0f/size);
+        int h = input.getHeight(); // set height variable for easy access in corner/edge loops
+        int w = input.getWidth(); // set height variable for easy access in corner/edge loops
 
-        //set central element to higher value for sharpen 
-        // etc 
-        array[size/2] = size-1; 
-        // create kernel and set height and width to 
-        // 2radius+1 and pass in array of image matrix values 
-        Kernel kernel = new Kernel(2*radius+1, 2*radius+1, array);
-        // Convolve the kernel 
+        //Padding:
+
+        // set the corner pixels of the enlarged image's argb values
+        
+        //top left corner padding 
+        for(int y = -r; y < 0; ++y){
+            for(int x = -r ; x < 0 ; ++x){
+                enlargedImage.setRGB((x + r), (y + r), input.getRGB(0,0));
+            }
+        }
+
+        //top right corner padding 
+        for(int y = -r; y < 0; ++y){
+            for(int x = 0; x < r; ++x){
+                enlargedImage.setRGB((w + x + r), (y + r), input.getRGB((w - 1), 0));
+            }
+        }
+
+        //Bottom left corner padding
+        for(int y = 0; y < r; ++y){
+            for(int x = -r; x < 0; ++x){
+                enlargedImage.setRGB((x + r), (h + y + r), input.getRGB(0, (h - 1)));
+            }
+        }
+
+        //Bottom right corner padding
+        for(int y = 0; y < r; ++y){
+            for(int x = 0; x < r; ++x){
+                enlargedImage.setRGB((w + x + r), (h + y + r), input.getRGB((w - 1), (h - 1)));
+            }
+        }
+
+        // set the enlarged image's edges to the argb values 
+
+        // top edge 
+        for(int y = 0 ; y < r; y++){
+            for(int x = 0; x < w ; ++x){
+                enlargedImage.setRGB((x + r), y, input.getRGB(x,0)); 
+            }
+        }
+
+        // bottom edge 
+        for(int y = 0 ; y < r; ++y){
+            for(int x = 0; x < w ; ++x){
+                enlargedImage.setRGB((x + r), (y + r + h) , input.getRGB(x, (h - 1))); 
+            }
+        }
+
+        // Left edge 
+        for(int y = 0 ; y < h; ++y){
+            for(int x = 0; x < r ; ++x){
+                enlargedImage.setRGB((x + r), y, input.getRGB(0, y)); 
+            }
+        }
+
+        // right edge 
+        for(int y = 0 ; y < h; ++y){
+            for(int x = 0; x < r ; ++x){
+                enlargedImage.setRGB((x + r + w), (y + r), input.getRGB((w - 1), y)); 
+            }
+        }
+
+        // Implement convolution on new enlargedImage from input 
+        // below is supplied code
+
+        // kernel values in 3x3 array 
+        float[] array = { 0, -1 / 2.0f, 0,
+                        -1 / 2.0f, 3, -1 / 2.0f,
+                        0, -1 / 2.0f, 0 };
+
+        Kernel kernel = new Kernel(3 ,3 , array);
         ConvolveOp convOp = new ConvolveOp(kernel);
-        // create new image which is a copy of the inputted image
-        // taking all the data
-        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-        // perform a convolution on the two images which have a set 
-        // size to apply the filter to depending on the kernel previously passed in 
-        convOp.filter(input, output);
+        BufferedImage enlargedOutput = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
+        convOp.filter(enlargedImage, enlargedOutput);
 
-        return output;
+        // Trim enlarged image and return this trimmed output as the final output of the meanFilter method
+        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
+
+        for(int y = 0 ; y < input.getHeight(); ++y){
+            for(int x = 0; x < input.getWidth(); ++x){
+                output.setRGB(x, y, enlargedOutput.getRGB(x, y)); 
+            }
+        }
+        // return final MeanFiltered output iamge
+        return output; 
+
 
 
     }
     
+
 }
