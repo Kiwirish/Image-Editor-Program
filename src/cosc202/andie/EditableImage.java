@@ -5,7 +5,6 @@ import java.io.*;
 //import java.security.MessageDigest;
 import java.awt.image.*;
 import javax.imageio.*;
-
 import static cosc202.andie.LanguageConfig.msg;
 
 /**
