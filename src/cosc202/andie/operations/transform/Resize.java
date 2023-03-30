@@ -2,10 +2,14 @@ package cosc202.andie.operations.transform;
 
 import java.awt.Graphics2D;
 import java.awt.image.*;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 import cosc202.andie.ImageOperation;
 
+
 public class Resize implements ImageOperation, java.io.Serializable{
+    private int percentage;
 
     private int option;
 

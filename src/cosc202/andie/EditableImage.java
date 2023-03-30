@@ -2,10 +2,10 @@ package cosc202.andie;
 
 import java.util.*;
 import java.io.*;
+//import java.security.MessageDigest;
 import java.awt.image.*;
 import javax.imageio.*;
-
-
+import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>
@@ -47,6 +47,8 @@ public class EditableImage {
     private String imageFilename;
     /** The file where the operation sequence is stored. */
     private String opsFilename;
+    /** Whether the image has been modified since it was last saved/opened */
+    private BufferedImage lastSavedImage;
 
     /**
      * <p>
@@ -64,6 +66,7 @@ public class EditableImage {
         redoOps = new Stack<ImageOperation>();
         imageFilename = null;
         opsFilename = null;
+        lastSavedImage = null;
     }
 
     /**
@@ -75,6 +78,15 @@ public class EditableImage {
      */
     public boolean hasImage() {
         return current != null;
+    }
+
+    /**
+     * <p>
+     * Get the current image's file path.
+     * @return The current image's file path, or null if there is no image.
+     */
+    public String getFilepath() {
+        return imageFilename;
     }
 
     /**
@@ -132,13 +144,14 @@ public class EditableImage {
      * </p>
      * 
      * @param filePath The file to open the image from.
-     * @throws Exception If something goes wrong.
+     * @throws IOException The image cannot be read
      */
-    public void open(String filePath) throws Exception {
+    public void open(String filePath) throws IOException {
         imageFilename = filePath;
         opsFilename = imageFilename + ".ops";
         File imageFile = new File(imageFilename);
         BufferedImage newImage = ImageIO.read(imageFile);
+        if (newImage == null) throw new IOException(msg("Open_Exception"));
         Stack<ImageOperation> newOps = new Stack<ImageOperation>();
         
         try {
@@ -166,6 +179,7 @@ public class EditableImage {
         this.ops = ops;
         redoOps.clear();
         this.refresh();
+        lastSavedImage = deepCopy(current);
     }
 
     /**
@@ -180,21 +194,25 @@ public class EditableImage {
      * the current operations to <code>some/path/to/image.png.ops</code>.
      * </p>
      * 
-     * @throws Exception If something goes wrong.
+     * @throws IOException If the immage cannot be written
+     * @throws ExtensionException If the file extension is not a valid image file format
      */
-    public void save() throws Exception {
+    public void save() throws IOException, ExtensionException {
         if (this.opsFilename == null) {
             this.opsFilename = this.imageFilename + ".ops";
         }
         // Write image file based on file extension
         String extension = imageFilename.substring(1+imageFilename.lastIndexOf(".")).toLowerCase();
-        ImageIO.write(original, extension, new File(imageFilename));
+        if (!ImageIO.write(original, extension, new File(imageFilename))) {
+            throw new ExtensionException(msg("Save_Exception") + extension);
+        };
         // Write operations file
         FileOutputStream fileOut = new FileOutputStream(this.opsFilename);
         ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
         objOut.writeObject(this.ops);
         objOut.close();
         fileOut.close();
+        lastSavedImage = deepCopy(current);
     }
 
 
@@ -211,12 +229,25 @@ public class EditableImage {
      * </p>
      * 
      * @param imageFilename The file location to save the image to.
-     * @throws Exception If something goes wrong.
+     * @throws IOException If The image cannot be written
      */
-    public void saveAs(String imageFilename) throws Exception {
+    public void saveAs(String imageFilename) throws IOException, ExtensionException {
         this.imageFilename = imageFilename;
         this.opsFilename = imageFilename + ".ops";
         save();
+    }
+
+    /**
+     * <p>
+     * Export the image to a file.
+     * </p>
+     * @param exportFilePath The file to export the image to.
+     * @param format The format to export the image as.
+     * @throws IOException If the image cannot be written
+     */
+    public void export(String exportFilePath, String format) throws IOException {
+        File exportFile = new File(exportFilePath);
+        ImageIO.write(current, format, exportFile);
     }
 
     /**
@@ -280,4 +311,40 @@ public class EditableImage {
         }
     }
 
+    /**
+     * Whether the image has been modified
+     * @return True if the image has been modified since the last save / open, otherwise false.
+     */
+    public boolean getModified() {
+        return !bufferedImagesAreEqual(lastSavedImage, current);
+    }
+    /**
+     * A checked Exception for when a file extension is not supported.
+     */
+    public static class ExtensionException extends Exception {
+        public ExtensionException(String message) {
+            super(message);
+        }
+    }
+
+    /**
+     * <p>
+     * Are two {@link BufferedImage}s equal, pixel for pixel?
+     * </p>
+     * @param image1 The first {@link BufferedImage} to compare
+     * @param image2 The second {@link BufferedImage} to compare
+     * @return True if the images are equal, otherwise false.
+     */
+    static boolean bufferedImagesAreEqual(BufferedImage image1, BufferedImage image2) {
+        if (image1 == null && image2 == null) return true;
+        if (image1 == null || image2 == null) return false;
+        if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) return false;
+        for (int x = 0; x < image1.getWidth(); x++) {
+            for (int y = 0; y < image1.getHeight(); y++) {
+                if (image1.getRGB(x, y) != image2.getRGB(x, y))
+                    return false;
+            }
+        }
+        return true;
+    }
 }

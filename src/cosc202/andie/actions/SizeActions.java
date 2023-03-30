@@ -4,22 +4,30 @@ import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
+//import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
 import cosc202.andie.operations.transform.Flip;
+import cosc202.andie.operations.transform.FlipHorizontal;
+import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
+import cosc202.andie.operations.transform.Rotate;
+
+import static cosc202.andie.LanguageConfig.msg;
 
 public class SizeActions {
     protected ArrayList<Action> actions;
 
     public SizeActions(){
             actions = new ArrayList<Action>();
-            actions.add(new SizeTestAction("Test" , null , "Testing", Integer.valueOf(KeyEvent.VK_T)));
-            actions.add(new SizeResizeAction("Resize", null, "Scale", Integer.valueOf(KeyEvent.VK_R)));
-            actions.add(new SizeFlipAction("Flip", null, "Rotate vertical or horizontal", Integer.valueOf(KeyEvent.VK_F)));
+            actions.add(new SizeTestAction(msg("SizeTest_Title") , null , msg("SizeTest_Desc"), Integer.valueOf(KeyEvent.VK_T)));
+            actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
+            actions.add(new SizeRotateAction(msg("SizeRotate_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+            actions.add(new SizeFlipHorizontalAction(msg("SizeFlipHorizontalAction_Title"), null, msg("SizeFlipHorizontalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+            actions.add(new SizeFlipVerticalAction(msg("SizeFlipVerticalAction_Title"), null, msg("SizeFlipVerticalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+
     }
     public JMenu createMenu() {
-        JMenu sizeMenu = new JMenu("Size");
+        JMenu sizeMenu = new JMenu(msg("Size_Title"));
 
         for(Action action: actions) {
             sizeMenu.add(new JMenuItem(action));
@@ -33,9 +41,30 @@ public class SizeActions {
                 super(name, icon, desc, mnemonic);
             } 
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Test worked");
+                System.out.println(msg("SizeTest_Action"));
             }
     }
+
+    public class SizeFlipVerticalAction extends ImageAction{
+        SizeFlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        } 
+        public void actionPerformed(ActionEvent e) {
+            target.getImage().apply(new FlipVertical());
+            target.repaint();
+            target.getParent().revalidate();
+    }
+}
+    public class SizeFlipHorizontalAction extends ImageAction{
+        SizeFlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        } 
+        public void actionPerformed(ActionEvent e) {
+            target.getImage().apply(new FlipHorizontal());
+            target.repaint();
+            target.getParent().revalidate();
+    }
+}
 
     public class SizeResizeAction extends ImageAction{
             SizeResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic){
@@ -53,18 +82,4 @@ public class SizeActions {
             }
     }
 
-    public class SizeFlipAction extends ImageAction{
-        SizeFlipAction(String name, ImageIcon icon, String desc, Integer mnemonic){
-            super(name, icon, desc, mnemonic);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-        
-        String option = "left";
-        
-                target.getImage().apply(new Flip(option));
-                target.repaint();
-                target.getParent().revalidate();
-        }
-}
 }

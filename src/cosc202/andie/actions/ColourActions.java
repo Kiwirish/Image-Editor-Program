@@ -6,7 +6,9 @@ import javax.swing.*;
 
 import cosc202.andie.ImageAction;
 import cosc202.andie.operations.colour.ConvertToGrey;
-//import cosc202.andie.operations.colour.Brightenssetcadjustment
+import cosc202.andie.operations.colour.BrightnessAndContrast;
+
+import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>
@@ -38,8 +40,9 @@ public class ColourActions {
      */
     public ColourActions() {
         actions = new ArrayList<Action>();
-        actions.add(new ConvertToGreyAction("Greyscale", null, "Convert to greyscale ('G')", Integer.valueOf(KeyEvent.VK_G))); 
-        actions.add(new BrightnessAndContrastAdjustment("BrightnessAndContrastAdjustment ('B')", null,"Adjust Image Brightness and Contrrast", Integer.valueOf(KeyEvent.VK_B)));
+        actions.add(new ConvertToGreyAction(msg("ConvertToGrey_Title"), null, msg("ConvertToGrey_Desc"), Integer.valueOf(KeyEvent.VK_G))); 
+        actions.add(new BrightnessAction(msg("Brightness_Title"), null,msg("Brightness_Desc"), Integer.valueOf(KeyEvent.VK_B)));
+        actions.add(new ContrastAction(msg("Contrast_Title"), null,msg("Contrast_Desc"), null));
     }
 
     /**
@@ -50,7 +53,7 @@ public class ColourActions {
      * @return The colour menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu("Colour");
+        JMenu fileMenu = new JMenu(msg("Colour_Title"));
 
         for(Action action: actions) {
             fileMenu.add(new JMenuItem(action));
@@ -107,13 +110,13 @@ public class ColourActions {
      * Action to adjust an images brightness and contrast.
      * </p>
      * 
-     * @see BrightnessAndContrastAdjustment
+     * @see BrightnessAction
      */
-    public class BrightnessAndContrastAdjustment extends ImageAction {
+    public class BrightnessAction extends ImageAction {
 
         /**
          * <p>
-         * Create a new convert-to-grey action.
+         * Create a new brightness adjustment action.
          * </p>
          * 
          * @param name The name of the action (ignored if null).
@@ -121,18 +124,19 @@ public class ColourActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-        BrightnessAndContrastAdjustment(String name, ImageIcon icon, String desc, Integer mnemonic) {
+
+        BrightnessAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
         /**
          * <p>
-         * Callback for when the convert-to-grey action is triggered.
+         * Callback for when the brightness adjustment action is triggered.
          * </p>
          * 
          * <p>
-         * This method is called whenever the ConvertToGreyAction is triggered.
-         * It changes the image to greyscale.
+         * This method is called whenever the BrightnessAction is triggered.
+         * It adjusts the images brightness.
          * </p>
          * 
          * @param e The event triggering this callback.
@@ -144,37 +148,74 @@ public class ColourActions {
         public void actionPerformed(ActionEvent e) {
 
             int brightness = 0;
-            int contrast = 0;
 
-
-            SpinnerNumberModel brightnessModel = new SpinnerNumberModel(0, -100, 100, 25);
-            SpinnerNumberModel contrastModel = new SpinnerNumberModel(0, -100, 100, 25);
+            SpinnerNumberModel brightnessModel = new SpinnerNumberModel(0, -100, 100, 1);
             JSpinner brightnessSpinner = new JSpinner(brightnessModel);
-            JSpinner contrastSpinner = new JSpinner(contrastModel);
-            Object[] arrayOfShit = new Object[]{brightnessSpinner, contrastSpinner};
-            int option = JOptionPane.showOptionDialog(null, "                Brightness       Contrast", "Brightness and Constrast Adjustment", 
-            JOptionPane.OK_CANCEL_OPTION, 
-            //JOptionPane.QUESTION_MESSAGE, null, arrayOfShit, null);
-            JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-            // Check the return value from the dialog box.
-            if (option == JOptionPane.CANCEL_OPTION) {
-                return;
-            } else if (option == JOptionPane.OK_OPTION) {       
-                brightness = brightnessModel.getNumber().intValue();
-                contrast = contrastModel.getNumber().intValue();
-            }   
+            int brightnessOption = JOptionPane.showOptionDialog(null, brightnessSpinner, msg("Brightness_Action"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
             
-            System.out.println(brightness);
-            System.out.println(contrast);
+            if (brightnessOption == JOptionPane.CANCEL_OPTION) {
+                return;
+            } else if (brightnessOption == JOptionPane.OK_OPTION) {
+                brightness = brightnessModel.getNumber().intValue();
+            }
 
-
-
-            //target.getImage().apply(new BrightnessAndContrastAdjustment()); 
+            target.getImage().apply(new BrightnessAndContrast(brightness,0)); 
             target.repaint();
             target.getParent().revalidate();
         }
 
+    }
+    public class ContrastAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new brightness adjustment action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+
+        ContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the Contrast adjustment action is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the ContrastAction is triggered.
+         * It adjusts the images contrast.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        
+
+
+
+        public void actionPerformed(ActionEvent e) {
+
+            int contrast = 0;
+
+            SpinnerNumberModel contrastModel = new SpinnerNumberModel(0, -100, 100, 1);
+            JSpinner contrastSpinner = new JSpinner(contrastModel);
+            int contrastOption = JOptionPane.showOptionDialog(null, contrastSpinner, msg("Contrast_Action"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
+            
+            if (contrastOption == JOptionPane.CANCEL_OPTION) {
+                return;
+            } else if (contrastOption == JOptionPane.OK_OPTION) {
+                contrast = contrastModel.getNumber().intValue();
+            }
+
+            target.getImage().apply(new BrightnessAndContrast(0,contrast)); 
+            target.repaint();
+            target.getParent().revalidate();
+        }
     }
 
 }
