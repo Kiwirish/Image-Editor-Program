@@ -6,7 +6,10 @@ import javax.swing.*;
 
 //import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
+import cosc202.andie.operations.transform.FlipHorizontal;
+import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
+import cosc202.andie.operations.transform.Rotate;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -17,6 +20,10 @@ public class SizeActions {
             actions = new ArrayList<Action>();
             actions.add(new SizeTestAction(msg("SizeTest_Title") , null , msg("SizeTest_Desc"), Integer.valueOf(KeyEvent.VK_T)));
             actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
+            actions.add(new SizeRotateAction(msg("SizeRotate_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+            actions.add(new SizeFlipHorizontalAction(msg("SizeFlipHorizontalAction_Title"), null, msg("SizeFlipHorizontalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+            actions.add(new SizeFlipVerticalAction(msg("SizeFlipVerticalAction_Title"), null, msg("SizeFlipVerticalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+
     }
     public JMenu createMenu() {
         JMenu sizeMenu = new JMenu(msg("Size_Title"));
@@ -37,14 +44,57 @@ public class SizeActions {
             }
     }
 
+    public class SizeFlipVerticalAction extends ImageAction{
+        SizeFlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        } 
+        public void actionPerformed(ActionEvent e) {
+            target.getImage().apply(new FlipVertical());
+            target.repaint();
+            target.getParent().revalidate();
+    }
+}
+    public class SizeFlipHorizontalAction extends ImageAction{
+        SizeFlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        } 
+        public void actionPerformed(ActionEvent e) {
+            target.getImage().apply(new FlipHorizontal());
+            target.repaint();
+            target.getParent().revalidate();
+    }
+}
+
     public class SizeResizeAction extends ImageAction{
             SizeResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic){
                 super(name, icon, desc, mnemonic);
             }
             public void actionPerformed(ActionEvent e) {
-                    target.getImage().apply(new Resize());
+                int percentage = 100;
+
+                SpinnerNumberModel ResizeModel = new SpinnerNumberModel(0, 0, 100, 1);
+                JSpinner brightnessSpinner = new JSpinner(ResizeModel);
+                int percentageOption = JOptionPane.showOptionDialog(null, brightnessSpinner, msg("Brightness_Action"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
+                
+                if (percentageOption == JOptionPane.CANCEL_OPTION) {
+                    return;
+                } else if (percentageOption == JOptionPane.OK_OPTION) {
+                    percentage = ResizeModel.getNumber().intValue();
+                }
+                    target.getImage().apply(new Resize(percentage));
                     target.repaint();
                     target.getParent().revalidate();
             }
     }
+
+    public class SizeRotateAction extends ImageAction{
+        SizeRotateAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        }
+        public void actionPerformed(ActionEvent e) {
+                target.getImage().apply(new Rotate());
+                target.repaint();
+                target.getParent().revalidate();
+        }
+}
 }
