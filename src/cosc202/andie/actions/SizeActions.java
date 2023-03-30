@@ -6,6 +6,7 @@ import javax.swing.*;
 
 //import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
+import cosc202.andie.operations.transform.Flip;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
@@ -69,32 +70,16 @@ public class SizeActions {
             SizeResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic){
                 super(name, icon, desc, mnemonic);
             }
-            public void actionPerformed(ActionEvent e) {
-                int percentage = 100;
 
-                SpinnerNumberModel ResizeModel = new SpinnerNumberModel(0, 0, 100, 1);
-                JSpinner brightnessSpinner = new JSpinner(ResizeModel);
-                int percentageOption = JOptionPane.showOptionDialog(null, brightnessSpinner, msg("Brightness_Action"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null); 
-                
-                if (percentageOption == JOptionPane.CANCEL_OPTION) {
-                    return;
-                } else if (percentageOption == JOptionPane.OK_OPTION) {
-                    percentage = ResizeModel.getNumber().intValue();
-                }
-                    target.getImage().apply(new Resize(percentage));
+            public void actionPerformed(ActionEvent e) {
+            SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 1000, 1);
+            JSpinner radiusSpinner = new JSpinner(radiusModel);
+            int invalid = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter new size (Percentage)", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = radiusModel.getNumber().intValue();
+                    target.getImage().apply(new Resize(option));
                     target.repaint();
                     target.getParent().revalidate();
             }
     }
 
-    public class SizeRotateAction extends ImageAction{
-        SizeRotateAction(String name, ImageIcon icon, String desc, Integer mnemonic){
-            super(name, icon, desc, mnemonic);
-        }
-        public void actionPerformed(ActionEvent e) {
-                target.getImage().apply(new Rotate());
-                target.repaint();
-                target.getParent().revalidate();
-        }
-}
 }
