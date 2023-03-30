@@ -8,6 +8,8 @@ import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
 import cosc202.andie.ImageOperation;
 
+import static cosc202.andie.LanguageConfig.msg;
+
  /**
  * <p>
  * Actions provided by the Edit menu.
@@ -38,8 +40,8 @@ public class EditActions {
      */
     public EditActions() {
         actions = new ArrayList<Action>();
-        actions.add(new UndoAction("Undo", null, "Undo", Integer.valueOf(KeyEvent.VK_Z)));
-        actions.add(new RedoAction("Redo", null, "Redo", Integer.valueOf(KeyEvent.VK_Y)));
+        actions.add(new UndoAction(msg("Undo_Title"), null, msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z)));
+        actions.add(new RedoAction(msg("Redo_Title"), null, msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y)));
     }
 
     /**
@@ -50,7 +52,7 @@ public class EditActions {
      * @return The edit menu UI element.
      */
     public JMenu createMenu() {
-        JMenu editMenu = new JMenu("Edit");
+        JMenu editMenu = new JMenu(msg("Edit_Title"));
 
         for (Action action: actions) {
             editMenu.add(new JMenuItem(action));

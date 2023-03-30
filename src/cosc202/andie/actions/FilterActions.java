@@ -7,6 +7,8 @@ import javax.swing.*;
 import cosc202.andie.ImageAction;
 import cosc202.andie.operations.filter.MeanFilter;
 
+import static cosc202.andie.LanguageConfig.msg;
+
 /**
  * <p>
  * Actions provided by the Filter menu.
@@ -45,6 +47,7 @@ public class FilterActions {
         // add medianFilterAction to the actions arrayList, setting the mnumonic key to 'E'
         actions.add(new SharpenFilterAction("Median Filter", null, "apply a median filter", Integer.valueOf(KeyEvent.VK_E)));
 
+        actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
     }
 
     /**
@@ -55,7 +58,7 @@ public class FilterActions {
      * @return The filter menu UI element.
      */
     public JMenu createMenu() {
-        JMenu fileMenu = new JMenu("Filter");
+        JMenu fileMenu = new JMenu(msg("Filter_Title"));
 
         for(Action action: actions) {
             fileMenu.add(new JMenuItem(action));
@@ -107,7 +110,7 @@ public class FilterActions {
             // Pop-up dialog box to ask for the radius value.
             SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
             JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("MeanFilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {

@@ -1,7 +1,19 @@
 package cosc202.andie;
 
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import javax.swing.*;
+import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>
@@ -20,7 +32,7 @@ import javax.swing.*;
  * @author Steven Mills
  * @version 1.0
  */
-public class ImagePanel extends JPanel {
+public class ImagePanel extends JPanel implements MouseWheelListener {
     
     /**
      * The image to display in the ImagePanel.
@@ -46,11 +58,46 @@ public class ImagePanel extends JPanel {
      * 
      * <p>
      * Newly created ImagePanels have a default zoom level of 100%
+     * ImagePanels are also set up to accept dropped files, and will attempt to open them as images. 
      * </p>
      */
     public ImagePanel() {
         image = new EditableImage();
         scale = 1.0;
+
+        addMouseWheelListener(this);
+
+        //Open dropped image files
+        setDropTarget(new DropTarget() {
+            public void drop(DropTargetDropEvent evt) {
+                if (getImage().hasImage()) return; //Don't allow dropping if an image is already open
+                try {
+                    evt.acceptDrop(DnDConstants.ACTION_COPY);
+                    if (!evt.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) 
+                        return;
+
+                    List<?> list = (List<?>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    String filepath = ((File)list.get(0)).getCanonicalPath();
+                    attemptImageOpen(filepath);
+
+                    evt.getDropTargetContext().dropComplete(true);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
+                }
+            }
+        });
+
+    }
+
+    public void attemptImageOpen(String filepath) {
+        try {
+            getImage().open(filepath);
+            resetZoom();
+            repaint();
+            getParent().revalidate();
+        } catch (IOException err) {
+            JOptionPane.showMessageDialog(null,msg("Invalid_Image_Error_Message"));
+        }
     }
 
     /**
@@ -91,24 +138,26 @@ public class ImagePanel extends JPanel {
      */
     public void setZoom(double zoomPercent) {
         if (zoomPercent < 10) {
-            zoomPercent = 50;
+            zoomPercent = 10;
         }
         if (zoomPercent > 500) {
-            zoomPercent = 200;
+            zoomPercent = 500;
         }
         scale = zoomPercent / 100;
+        repaint();
+        revalidate();
     }
 
     public void resetZoom() {
         int imageWidth = image.getCurrentImage().getWidth();
         int imageHeight = image.getCurrentImage().getHeight();
-        int panelWidth = this.getWidth();
-        int panelHeight = this.getHeight();
+        int panelWidth = (int)this.getParent().getWidth();
+        int panelHeight = (int)this.getParent().getHeight();
         double scaleWidth = (double) panelWidth / imageWidth;
         double scaleHeight = (double) panelHeight / imageHeight;
         double newScale = Math.min(scaleWidth, scaleHeight);
-        scale = newScale;
-        repaint();
+        double newZoom = newScale * 100;
+        setZoom(newZoom);
     }
 
 
@@ -125,12 +174,15 @@ public class ImagePanel extends JPanel {
      */
     @Override
     public Dimension getPreferredSize() {
-        if (image.hasImage()) {
-            return new Dimension((int) Math.round(image.getCurrentImage().getWidth()*scale), 
-                                 (int) Math.round(image.getCurrentImage().getHeight()*scale));
-        } else {
-            return new Dimension(600, 450);
-        }
+        Dimension containerSize = getParent().getSize();
+        if (!image.hasImage()) return containerSize;
+        Dimension imageSize = new Dimension((int)Math.round(image.getCurrentImage().getWidth()*scale), (int)Math.round(image.getCurrentImage().getHeight()*scale));
+
+        // Preferred size should take the largest width and height of the image and the container
+        int width = Math.max(containerSize.width, imageSize.width);
+        int height = Math.max(containerSize.height, imageSize.height);
+        return new Dimension(width, height);
+        // }
     }
 
     /**
@@ -143,11 +195,55 @@ public class ImagePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Graphics2D g2  = (Graphics2D) g.create();
+        g2.setColor(new Color(0x1a1b1c));
+        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+
         if (image.hasImage()) {
-            Graphics2D g2  = (Graphics2D) g.create();
-            g2.scale(scale, scale);
-            g2.drawImage(image.getCurrentImage(), null, 0, 0);
-            g2.dispose();
+            drawCurrentImage(g2);
+        } else {
+            drawNothingOpenImage(g2);
         }
+
+        g2.dispose();
+    }
+
+    private void drawNothingOpenImage(Graphics2D g) {
+        String message = msg("Andie_Welcome_Message");
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.setColor(Color.GRAY);
+        int messageWidth = g.getFontMetrics().stringWidth(message);
+        g.drawString(message, (int) Math.round((this.getWidth() - messageWidth) / 2), (int) Math.round(this.getHeight() / 2));
+        String subMessage = msg("Andie_Welcome_Submessage");
+        g.setFont(new Font("Arial", Font.PLAIN, 15));
+        int subMessageWidth = g.getFontMetrics().stringWidth(subMessage);
+        int subMessageHeight = g.getFontMetrics().getHeight();
+        g.drawString(subMessage, (int) Math.round((this.getWidth() - subMessageWidth) / 2), (int) Math.round(this.getHeight() / 2 + subMessageHeight + 15));
+    }
+    private void drawCurrentImage(Graphics2D g) {
+        AffineTransform oldTransform = g.getTransform();
+        g.scale(scale, scale);
+        //reset g transform to 1,1  
+        //Draw the image centered in the panel
+        double imageWidth = image.getCurrentImage().getWidth();
+        double imageHeight = image.getCurrentImage().getHeight();
+        double drawableWidth = this.getWidth()/scale;
+        double drawableHeight = this.getHeight()/scale;
+        int x = (int) Math.round((drawableWidth - imageWidth) / 2);
+        int y = (int) Math.round((drawableHeight - imageHeight) / 2);
+
+        g.drawImage(image.getCurrentImage(), null, x, y);
+
+        g.setTransform(oldTransform);
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if (!e.isMetaDown()) {getParent().dispatchEvent(e); return;}
+        double rotation = e.getPreciseWheelRotation();
+        double currentLog = Math.log(getZoom()/100);
+        currentLog += rotation*0.02;
+        double newZoom = Math.exp(currentLog)*100;
+        setZoom(newZoom);
     }
 }

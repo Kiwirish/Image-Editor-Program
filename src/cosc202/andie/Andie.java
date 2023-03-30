@@ -2,7 +2,12 @@ package cosc202.andie;
 // blakes comment 
 // blakes second change 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.*;
+//import javax.swing.border.LineBorder;
 
 import cosc202.andie.actions.ColourActions;
 import cosc202.andie.actions.EditActions;
@@ -10,6 +15,7 @@ import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
 import cosc202.andie.actions.SizeActions;
 import cosc202.andie.actions.ViewActions;
+import cosc202.andie.actions.LanguageActions;
 
 import javax.imageio.*;
 
@@ -58,50 +64,66 @@ public class Andie {
      * @throws Exception if something goes wrong.
      */
     private static void createAndShowGUI() throws Exception {
+        //Initialise the language
+        LanguageConfig.init();
+
         // Set up the main GUI frame
         JFrame frame = new JFrame("ANDIE");
-
+        frame.setPreferredSize(new Dimension(700, 550));
         Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel contentPane = new JPanel();
+        frame.setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout());
 
         // The main content area is an ImagePanel
         ImagePanel imagePanel = new ImagePanel();
         ImageAction.setTarget(imagePanel);
-        JScrollPane scrollPane = new JScrollPane(imagePanel);
-        frame.add(scrollPane, BorderLayout.CENTER);
-        
+        // Inside a scroll pane
+        JScrollPane scrollPane = new JScrollPane(imagePanel); 
+        scrollPane.setBorder(null);
+
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+
         // Add in menus for various types of action the user may perform.
         JMenuBar menuBar = new JMenuBar();
 
         // File menus are pretty standard, so things that usually go in File menus go here.
         FileActions fileActions = new FileActions();
         menuBar.add(fileActions.createMenu());
-
         // Likewise Edit menus are very common, so should be clear what might go here.
         EditActions editActions = new EditActions();
         menuBar.add(editActions.createMenu());
-
         // View actions control how the image is displayed, but do not alter its actual content
         ViewActions viewActions = new ViewActions();
         menuBar.add(viewActions.createMenu());
-
         // Size actions transform the image 
         SizeActions sizeActions = new SizeActions();
         menuBar.add(sizeActions.createMenu());
-
-
         // Filters apply a per-pixel operation to the image, generally based on a local window
         FilterActions filterActions = new FilterActions();
         menuBar.add(filterActions.createMenu());
-
         // Actions that affect the representation of colour in the image
         ColourActions colourActions = new ColourActions();
         menuBar.add(colourActions.createMenu());
+        //Actions that change the language of the code
+        LanguageActions languageActions = new LanguageActions();
+        menuBar.add(languageActions.createMenu());
         
         frame.setJMenuBar(menuBar);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                fileActions.exitAction.exit();
+            }
+        };
+        frame.addWindowListener(exitListener);
     }
 
     /**
@@ -131,7 +153,5 @@ public class Andie {
             }
         });
     }
-    public static void myMethod(){}
-
 
 }
