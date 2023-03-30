@@ -6,7 +6,6 @@ import javax.swing.*;
 
 //import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
-import cosc202.andie.operations.transform.Flip;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
@@ -21,7 +20,7 @@ public class SizeActions {
             actions = new ArrayList<Action>();
             actions.add(new SizeTestAction(msg("SizeTest_Title") , null , msg("SizeTest_Desc"), Integer.valueOf(KeyEvent.VK_T)));
             actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
-            actions.add(new SizeRotateAction(msg("SizeRotate_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+            //actions.add(new SizeRotateAction(msg("SizeRotate_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
             actions.add(new SizeFlipHorizontalAction(msg("SizeFlipHorizontalAction_Title"), null, msg("SizeFlipHorizontalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
             actions.add(new SizeFlipVerticalAction(msg("SizeFlipVerticalAction_Title"), null, msg("SizeFlipVerticalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
 
