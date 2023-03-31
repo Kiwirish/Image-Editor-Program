@@ -42,14 +42,13 @@ public class FilterActions {
      */
     public FilterActions() {
         actions = new ArrayList<Action>();
-        actions.add(new MeanFilterAction("Mean filter", null, "Apply a mean filter", Integer.valueOf(KeyEvent.VK_M)));
         // add SharpenFilterAction to the actions arrayList, setting the mnumonic key to 'S'
-        actions.add(new SharpenFilterAction("Sharpen Filter", null, "apply a sharpen filter", Integer.valueOf(KeyEvent.VK_S)));
+        actions.add(new SharpenFilterAction(msg("SharpenFilter_Title"), null, msg("SharpenFilter_Desc"), Integer.valueOf(KeyEvent.VK_S)));
         // add GaussianBlurFilterAction to the actions arrayList, setting the mnumonic key to 'G'
-        actions.add(new GaussianBlurFilterAction("Gaussian Blur Filter", null, "apply a Gaussian Blur filter", Integer.valueOf(KeyEvent.VK_G)));
-        // add medianFilterAction to the actions arrayList, setting the mnumonic key to 'E'
-        actions.add(new SharpenFilterAction("Median Filter", null, "apply a median filter", Integer.valueOf(KeyEvent.VK_E)));
-
+        actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G)));
+        // add MedianFilterAction to the actions arrayList, setting the mnumonic key to 'E'
+        actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
+        // add MeanFilterAction to the actions arrayList, setting the mnumonic key to 'M'
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
     }
 
@@ -113,7 +112,7 @@ public class FilterActions {
             // Pop-up dialog box to ask for the radius value.
             SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
             JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("MeanFilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("FilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {
@@ -205,7 +204,7 @@ public class GaussianBlurFilterAction extends ImageAction {
         // Pop-up dialog box to ask for the radius value.
         SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
         JSpinner radiusSpinner = new JSpinner(radiusModel);
-        int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("FilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
         // Check the return value from the dialog box.
         if (option == JOptionPane.CANCEL_OPTION) {
@@ -265,7 +264,7 @@ public class GaussianBlurFilterAction extends ImageAction {
             // Pop-up dialog box to ask for the radius value.
             SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
             JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter filter radius", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("FilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
             // Check the return value from the dialog box.
             if (option == JOptionPane.CANCEL_OPTION) {
