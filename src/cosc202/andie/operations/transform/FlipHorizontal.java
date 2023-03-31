@@ -12,16 +12,20 @@ public class FlipHorizontal implements ImageOperation, java.io.Serializable{
 
     public BufferedImage apply(BufferedImage input){
     
-    
-        
-        for(int i = input.getWidth(); i > 0; i--){
-            for(int j = input.getHeight(); j > 0; j--){
-                int left = input.getRGB(i,j);
-                int right = input.getRGB(input.getWidth()-(i-1),j);
-
-                input.setRGB(i, j, right);
-                input.setRGB(input.getWidth()-(i-1), j, left);
+    int pixels [][] = new int [input.getWidth()][input.getHeight()];
+        for(int i = 0; i < input.getWidth(); i++){
+            for(int j = 0; j < input.getHeight(); j++){
+                pixels[i][j] = input.getRGB(i, j);
             }
+        }
+        int x = 0;
+        for(int i = input.getWidth()-1; i >=0; i--){
+            int y = 0;
+            for(int j = 0; j < input.getHeight(); j++){
+                input.setRGB(x, y, pixels[i][j]);
+                y++;
+            }
+            x++;
         }
 
         return input;

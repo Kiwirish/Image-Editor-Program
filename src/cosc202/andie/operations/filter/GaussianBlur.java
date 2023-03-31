@@ -1,18 +1,16 @@
 package cosc202.andie.operations.filter;
 
 import java.awt.image.*;
-import java.util.*;
 
 import cosc202.andie.ImageOperation;
 
 /**
  * <p>
- * ImageOperation to apply a Mean (simple blur) filter.
+ * ImageOperation to apply a Gaussian blur filter.
  * </p>
  * 
  * <p>
- * A Mean filter blurs an image by replacing each pixel by the average of the
- * pixels in a surrounding neighbourhood, and can be implemented by a convoloution.
+ * A gaussian blur filter blurs an image through implementing by a convoloution.
  * </p>
  * 
  * <p> 
@@ -20,10 +18,10 @@ import cosc202.andie.ImageOperation;
  * </p>
  * 
  * @see java.awt.image.ConvolveOp
- * @author Steven Mills
+ * @author Blake Leahy
  * @version 1.0
  */
-public class MeanFilter implements ImageOperation, java.io.Serializable {
+public class GaussianBlur implements ImageOperation, java.io.Serializable {
     
     /**
      * The size of filter to apply. A radius of 1 is a 3x3 filter, a radius of 2 a 5x5 filter, and so forth.
@@ -32,7 +30,7 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
 
     /**
      * <p>
-     * Construct a Mean filter with the given size.
+     * Construct a Gaussian Blur filter with the given size.
      * </p>
      * 
      * <p>
@@ -43,28 +41,28 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
      * 
      * @param radius The radius of the newly constructed MeanFilter
      */
-    public MeanFilter(int radius) {
+    public GaussianBlur(int radius) {
         this.radius = radius;    
     }
 
     /**
      * <p>
-     * Construct a Mean filter with the default size.
+     * Construct a Gaussian Blur filter with the default size.
      * </p
      * >
      * <p>
-     * By default, a Mean filter has radius 1.
+     * By default, a Gaussian Blur filter has radius 1.
      * </p>
      * 
      * @see MeanFilter(int)
      */
-    MeanFilter() {
+    GaussianBlur() {
         this(1);
     }
 
     /**
      * <p>
-     * Apply a Mean filter to an image.
+     * Apply a Gaussian Blur filter to an image.
      * </p>
      * 
      * <p>
@@ -82,7 +80,36 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
         if (input == null){
             throw new IllegalArgumentException("Image to apply Mean filter to does not exist");
         }
-        //assuming acceptable image is selected as input
+        //assuming acceptable image is selected as input: 
+
+        // set size using users radius and create array of this size
+        int size = (2 * radius + 1) * (2 * radius + 1);
+        float[] array = new float[size];
+
+        // loop over each pixel within the kernel 
+        // value of x and y are the distance from the centre of the kernel, so x,y=0 at centre
+        // for each kernel pixel, the x and y distance (and radius) are used to call the 
+        // gaussianEquation method and added to an array.
+        // also, sum all the elements in this array to later divide through by to get 
+        // the 'normalised' kernel
+        int index = 0;
+        float arrayTotal = 0;
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++, index++) {
+                float kernelValue = (float)gaussianEquation(x, y, radius);
+                array[index] = kernelValue;
+                arrayTotal += array[index];
+            }
+        }
+
+        // loop over each element of this kernelValue filled array and divide 
+        // it by the arrayTotal (sum of the array), then add the result to newkernelArray
+        float[] newKernelArray = new float[size]; 
+        for(int i = 0 ; i <= size-1; i++){
+            float value = array[i] / arrayTotal;
+            newKernelArray[i] = value;
+        }   
+
         int r = radius; // as original radius accessed later
         
         //create enlarged image with all existing argb pixel values of old image set to the new images values 
@@ -162,10 +189,6 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
         // Implement convolution on new enlargedImage from input 
         // below is supplied code
 
-        int size = (2*radius+1) * (2*radius+1);
-        float [] array = new float[size];
-        Arrays.fill(array, 1.0f/size);
-
         Kernel kernel = new Kernel(2*radius+1, 2*radius+1, array);
         ConvolveOp convOp = new ConvolveOp(kernel);
         BufferedImage enlargedOutput = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
@@ -182,9 +205,18 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
         // return final MeanFiltered output iamge
         return output; 
 
-
-
     }
+    // gaussian equation method for easy access 
+    public double gaussianEquation(int x, int y, int radius){
+        double sigma = 1.0 / 3.0 * radius;
+        double twoSigmaSquared = 2*sigma*sigma; 
+        double oneOverTwoPiSigmaSquared = 1 / (Math.PI * twoSigmaSquared);
+        double exponent = - ( Math.pow(x,2) + Math.pow(y,2) )/ twoSigmaSquared;
+    
+        double result = oneOverTwoPiSigmaSquared * Math.exp(exponent);
+
+        return result;
     
 
+    }
 }

@@ -1,13 +1,12 @@
 package cosc202.andie.operations.filter;
 
 import java.awt.image.*;
-import java.util.*;
 
 import cosc202.andie.ImageOperation;
 
 /**
  * <p>
- * ImageOperation to apply a Mean (simple blur) filter.
+ * ImageOperation to apply a Sharpen filter.
  * </p>
  * 
  * <p>
@@ -20,70 +19,36 @@ import cosc202.andie.ImageOperation;
  * </p>
  * 
  * @see java.awt.image.ConvolveOp
- * @author Steven Mills
+ * @author Blake Leahy
  * @version 1.0
  */
-public class MeanFilter implements ImageOperation, java.io.Serializable {
+public class SharpenFilter implements ImageOperation, java.io.Serializable {
     
-    /**
-     * The size of filter to apply. A radius of 1 is a 3x3 filter, a radius of 2 a 5x5 filter, and so forth.
-     */
-    private int radius;
+    //construct a sharpenFilter 
+    public SharpenFilter(){ }
+
 
     /**
      * <p>
-     * Construct a Mean filter with the given size.
+     * Apply a sharpen filter to an image.
      * </p>
      * 
      * <p>
-     * The size of the filter is the 'radius' of the convolution kernel used.
-     * A size of 1 is a 3x3 filter, 2 is 5x5, and so on.
-     * Larger filters give a stronger blurring effect.
+     * As with many filters, the sharpen filter is implemented via convolution.
+     * The size of the convolution kernel is 3x3 as given.  
      * </p>
      * 
-     * @param radius The radius of the newly constructed MeanFilter
-     */
-    public MeanFilter(int radius) {
-        this.radius = radius;    
-    }
-
-    /**
-     * <p>
-     * Construct a Mean filter with the default size.
-     * </p
-     * >
-     * <p>
-     * By default, a Mean filter has radius 1.
-     * </p>
-     * 
-     * @see MeanFilter(int)
-     */
-    MeanFilter() {
-        this(1);
-    }
-
-    /**
-     * <p>
-     * Apply a Mean filter to an image.
-     * </p>
-     * 
-     * <p>
-     * As with many filters, the Mean filter is implemented via convolution.
-     * The size of the convolution kernel is specified by the {@link radius}.  
-     * Larger radii lead to stronger blurring.
-     * </p>
-     * 
-     * @param input The image to apply the Mean filter to.
-     * @return The resulting (blurred)) image.
+     * @param input The image to apply the Sharpen filter to.
+     * @return The resulting (sharpened)) image.
      */
     public BufferedImage apply(BufferedImage input) {
 
         //check for illegal argument 
         if (input == null){
-            throw new IllegalArgumentException("Image to apply Mean filter to does not exist");
+            throw new IllegalArgumentException("Image to apply Sharpen filter to does not exist");
         }
-        //assuming acceptable image is selected as input
-        int r = radius; // as original radius accessed later
+        //set radius to 1 
+        int r = 1; 
         
         //create enlarged image with all existing argb pixel values of old image set to the new images values 
         BufferedImage enlargedImage = new BufferedImage(input.getWidth() + r * 2, input.getHeight() + r * 2, input.getType());
@@ -162,11 +127,12 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
         // Implement convolution on new enlargedImage from input 
         // below is supplied code
 
-        int size = (2*radius+1) * (2*radius+1);
-        float [] array = new float[size];
-        Arrays.fill(array, 1.0f/size);
+        // kernel values in 3x3 array 
+        float[] array = { 0, -1 / 2.0f, 0,
+                        -1 / 2.0f, 3, -1 / 2.0f,
+                        0, -1 / 2.0f, 0 };
 
-        Kernel kernel = new Kernel(2*radius+1, 2*radius+1, array);
+        Kernel kernel = new Kernel(3 ,3 , array);
         ConvolveOp convOp = new ConvolveOp(kernel);
         BufferedImage enlargedOutput = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
         convOp.filter(enlargedImage, enlargedOutput);

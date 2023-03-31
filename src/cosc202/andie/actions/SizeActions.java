@@ -9,7 +9,7 @@ import cosc202.andie.ImageAction;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
-import cosc202.andie.operations.transform.Rotate;
+import cosc202.andie.operations.transform.RotateRight;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -20,7 +20,8 @@ public class SizeActions {
             actions = new ArrayList<Action>();
             actions.add(new SizeTestAction(msg("SizeTest_Title") , null , msg("SizeTest_Desc"), Integer.valueOf(KeyEvent.VK_T)));
             actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
-            //actions.add(new SizeRotateAction(msg("SizeRotate_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+            actions.add(new SizeRotateRightAction(msg("SizeRotateRight_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+            actions.add(new SizeRotateLeftAction(msg("SizeRotateLeft_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
             actions.add(new SizeFlipHorizontalAction(msg("SizeFlipHorizontalAction_Title"), null, msg("SizeFlipHorizontalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
             actions.add(new SizeFlipVerticalAction(msg("SizeFlipVerticalAction_Title"), null, msg("SizeFlipVerticalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
 
@@ -71,14 +72,40 @@ public class SizeActions {
             }
 
             public void actionPerformed(ActionEvent e) {
-            SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 1000, 1);
-            JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int invalid = JOptionPane.showOptionDialog(null, radiusSpinner, "Enter new size (Percentage)", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-            int option = radiusModel.getNumber().intValue();
+                SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 1000, 1);
+                JSpinner radiusSpinner = new JSpinner(radiusModel);
+                JOptionPane.showOptionDialog(null, radiusSpinner, "Enter new size (Percentage)", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                int option = radiusModel.getNumber().intValue();
                     target.getImage().apply(new Resize(option));
                     target.repaint();
                     target.getParent().revalidate();
             }
     }
+    public class SizeRotateRightAction extends ImageAction{
+        SizeRotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            
+                target.getImage().apply(new RotateRight());
+                target.repaint();
+                target.getParent().revalidate();
+        }
+}   
+    public class SizeRotateLeftAction extends ImageAction{
+        SizeRotateLeftAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+        
+                target.getImage().apply(new RotateRight());
+                target.getImage().apply(new RotateRight());
+                target.getImage().apply(new RotateRight());
+                target.repaint();
+                target.getParent().revalidate();
+        }
+}
 
 }
