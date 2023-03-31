@@ -18,7 +18,6 @@ public class SizeActions {
 
     public SizeActions(){
             actions = new ArrayList<Action>();
-            actions.add(new SizeTestAction(msg("SizeTest_Title") , null , msg("SizeTest_Desc"), Integer.valueOf(KeyEvent.VK_T)));
             actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
             actions.add(new SizeRotateRightAction(msg("SizeRotateRight_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
             actions.add(new SizeRotateLeftAction(msg("SizeRotateLeft_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
@@ -34,15 +33,6 @@ public class SizeActions {
         }
 
         return sizeMenu;
-    }
-
-    public class SizeTestAction extends ImageAction{
-            SizeTestAction(String name, ImageIcon icon, String desc, Integer mnemonic){
-                super(name, icon, desc, mnemonic);
-            } 
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(msg("SizeTest_Action"));
-            }
     }
 
     public class SizeFlipVerticalAction extends ImageAction{
@@ -74,7 +64,7 @@ public class SizeActions {
             public void actionPerformed(ActionEvent e) {
                 SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 1000, 1);
                 JSpinner radiusSpinner = new JSpinner(radiusModel);
-                JOptionPane.showOptionDialog(null, radiusSpinner, "Enter new size (Percentage)", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                JOptionPane.showOptionDialog(null, radiusSpinner, msg("SizeResizeAction"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
                 int option = radiusModel.getNumber().intValue();
                     target.getImage().apply(new Resize(option));
                     target.repaint();
