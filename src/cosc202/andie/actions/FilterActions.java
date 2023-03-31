@@ -48,7 +48,7 @@ public class FilterActions {
         // add GaussianBlurFilterAction to the actions arrayList, setting the mnumonic key to 'G'
         actions.add(new GaussianBlurFilterAction("Gaussian Blur Filter", null, "apply a Gaussian Blur filter", Integer.valueOf(KeyEvent.VK_G)));
         // add medianFilterAction to the actions arrayList, setting the mnumonic key to 'E'
-        actions.add(new SharpenFilterAction("Median Filter", null, "apply a median filter", Integer.valueOf(KeyEvent.VK_E)));
+        actions.add(new MedianFilterAction("Median Filter", null, "apply a median filter", Integer.valueOf(KeyEvent.VK_E)));
 
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
     }

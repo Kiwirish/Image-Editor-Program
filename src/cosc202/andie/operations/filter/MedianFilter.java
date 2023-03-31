@@ -78,7 +78,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
             throw new IllegalArgumentException("Image to apply Median filter to does not exist");
         }
         //assuming acceptable image is selected as input:
-
+        
         //set size of image based off radius input 
         int size = (2 * radius + 1) * (2 * radius + 1);
         
@@ -178,6 +178,11 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
         for(int y = r ; y <= input.getHeight() - r - 1 ; y++){
             for(int x = r ; x <= input.getWidth() - r - 1 ; x++){
                 // clear lists? 
+                aList.clear();
+                rList.clear();
+                gList.clear();
+                bList.clear();
+
                 for(int i = -r ; i <= r ; i++){
                     for(int j = -r ; j <= r ; j++){
                         int argb = 0;
