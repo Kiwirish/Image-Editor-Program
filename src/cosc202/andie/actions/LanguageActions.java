@@ -14,34 +14,33 @@ public class LanguageActions {
 
     public LanguageActions(){
         actions = new ArrayList<Action>();
-        actions.add(new EnglishLanguage(msg("English_Title"), null , msg("English_Desc"), null));
-        actions.add(new MaoriLanguage(msg("Maori_Title"), null, msg("Maori_Desc"), null));
+        actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, LanguageConfig.ENGLISH));
+        actions.add(new LanguageAction(msg("Maori_Title"), null , msg("Maori_Desc"), null, LanguageConfig.MAORI));
     }
 
     public JMenu createMenu() {
         JMenu sizeMenu = new JMenu(msg("Language_Title"));
+        ButtonGroup group = new ButtonGroup();
 
         for(Action action: actions) {
-            sizeMenu.add(new JMenuItem(action));
+            JRadioButtonMenuItem item = new JRadioButtonMenuItem(action);
+            group.add(item);
+            sizeMenu.add(item);
         }
 
         return sizeMenu;
     }
 
-    public class EnglishLanguage extends ImageAction{
-            EnglishLanguage(String name, ImageIcon icon, String desc, Integer mnemonic){
+    public class LanguageAction extends ImageAction{
+            int language;
+            LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, int language){
                 super(name, icon, desc, mnemonic);
+                this.language = language;
+                // putValue(Action.SELECTED_KEY, LanguageConfig.getLanguage() == language);
+                setEnabled(LanguageConfig.getLanguage() != language);
             } 
             public void actionPerformed(ActionEvent e) {
-                LanguageConfig.setLanguage(LanguageConfig.ENGLISH);
-            }
-    }
-    public class MaoriLanguage extends ImageAction{
-            MaoriLanguage(String name, ImageIcon icon, String desc, Integer mnemonic){
-                super(name, icon, desc, mnemonic);
-            } 
-            public void actionPerformed(ActionEvent e) {
-                LanguageConfig.setLanguage(LanguageConfig.MAORI);
+                LanguageConfig.changeLanguage(language);
             }
     }
 

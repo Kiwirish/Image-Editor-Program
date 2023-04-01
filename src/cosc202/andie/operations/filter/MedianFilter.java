@@ -87,8 +87,8 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
         //create enlarged image with all existing argb pixel values of old image set to the new images values 
         BufferedImage enlargedImage = new BufferedImage(input.getWidth() + r * 2, input.getHeight() + r * 2, input.getType());
         
-        for(int y = 0; y <input.getHeight(); ++y){
-            for(int x = 0 ; x < input.getWidth(); x++){
+        for(int y = 0; y < input.getHeight(); y++){
+            for(int x = 0; x < input.getWidth(); x++){
                 enlargedImage.setRGB((x + r), (y + r), input.getRGB(x,y));
             }
         }
@@ -178,6 +178,10 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
         for(int y = r ; y <= input.getHeight() - r - 1 ; y++){
             for(int x = r ; x <= input.getWidth() - r - 1 ; x++){
                 // clear lists? 
+                aList.clear();
+                rList.clear();
+                gList.clear();
+                bList.clear();
                 for(int i = -r ; i <= r ; i++){
                     for(int j = -r ; j <= r ; j++){
                         int argb = 0;
@@ -217,8 +221,8 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
         // Trim enlarged image and return this trimmed output as the final output of the apply class 
         BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
 
-        for(int y = 0 ; y < input.getHeight(); ++y){
-            for(int x = 0; x < input.getWidth(); ++x){
+        for(int y = 0 ; y < input.getHeight(); y++){
+            for(int x = 0; x < input.getWidth(); x++){
                 output.setRGB(x, y, enlargedOutput.getRGB(x, y)); 
             }
         }
