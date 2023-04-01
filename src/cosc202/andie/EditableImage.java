@@ -5,6 +5,8 @@ import java.io.*;
 //import java.security.MessageDigest;
 import java.awt.image.*;
 import javax.imageio.*;
+import javax.imageio.spi.ImageOutputStreamSpi;
+
 import static cosc202.andie.LanguageConfig.msg;
 
 /**
@@ -260,6 +262,7 @@ public class EditableImage {
     public void apply(ImageOperation imageOperation) {
         current = imageOperation.apply(current);
         ops.add(imageOperation);
+        redoOps.clear();
     }
 
     /**
@@ -268,6 +271,7 @@ public class EditableImage {
      * </p>
      */
     public void undo() {
+        if (ops.isEmpty()) return;
         redoOps.push(ops.pop());
         refresh();
     }
@@ -278,7 +282,10 @@ public class EditableImage {
      * </p>
      */
     public void redo()  {
-        apply(redoOps.pop());
+        if (redoOps.isEmpty()) return;
+        ImageOperation operationToRedo = redoOps.pop();
+        current = operationToRedo.apply(current);
+        ops.add(operationToRedo);
     }
 
     /**
