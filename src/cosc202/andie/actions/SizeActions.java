@@ -1,6 +1,8 @@
 package cosc202.andie.actions;
 
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 //import cosc202.andie.EditableImage;
@@ -16,7 +18,7 @@ import static cosc202.andie.LanguageConfig.msg;
 
 public class SizeActions extends MenuActions {
 
-    public SizeActions(){
+    public SizeActions() {
             actions = new ArrayList<Action>();
             actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
             actions.add(new SizeRotateRightAction(msg("SizeRotateRight_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
@@ -66,6 +68,11 @@ public class SizeActions extends MenuActions {
                 target.repaint();
                 target.getParent().revalidate();
             }
+        }
+            public void updateState() {
+                setEnabled(target.getImage().hasImage());
+            }
+
     }
     public class SizeRotateRightAction extends ImageAction{
         SizeRotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic){
@@ -100,9 +107,5 @@ public class SizeActions extends MenuActions {
         }
 }
 
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
-        }
+        
     }
-
-}

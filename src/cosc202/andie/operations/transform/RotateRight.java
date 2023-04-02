@@ -28,7 +28,7 @@ public class RotateRight implements ImageOperation, java.io.Serializable{
             }
             x++;
         }
-
+// comment to push properly
         return output;
     }
 
