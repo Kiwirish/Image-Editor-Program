@@ -36,7 +36,6 @@ public class LanguageActions {
             LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, int language){
                 super(name, icon, desc, mnemonic);
                 this.language = language;
-                // putValue(Action.SELECTED_KEY, LanguageConfig.getLanguage() == language);
                 setEnabled(LanguageConfig.getLanguage() != language);
             } 
             public void actionPerformed(ActionEvent e) {
