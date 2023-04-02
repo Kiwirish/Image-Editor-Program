@@ -1,6 +1,5 @@
 package cosc202.andie.actions;
 
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -11,31 +10,19 @@ import cosc202.andie.components.PopupWithSliders;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
-import cosc202.andie.operations.transform.Rotate;
 
 import static cosc202.andie.LanguageConfig.msg;
 
-public class SizeActions {
-    protected ArrayList<Action> actions;
+public class SizeActions extends MenuActions {
 
     public SizeActions(){
-            actions = new ArrayList<Action>();
-            actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
-            //actions.add(new SizeRotateAction(msg("SizeRotate_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
-            actions.add(new SizeFlipHorizontalAction(msg("SizeFlipHorizontalAction_Title"), null, msg("SizeFlipHorizontalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
-            actions.add(new SizeFlipVerticalAction(msg("SizeFlipVerticalAction_Title"), null, msg("SizeFlipVerticalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+        super(msg("Size_Title"));
+        actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
+        //actions.add(new SizeRotateAction(msg("SizeRotate_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+        actions.add(new SizeFlipHorizontalAction(msg("SizeFlipHorizontalAction_Title"), null, msg("SizeFlipHorizontalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+        actions.add(new SizeFlipVerticalAction(msg("SizeFlipVerticalAction_Title"), null, msg("SizeFlipVerticalAction_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
 
     }
-    public JMenu createMenu() {
-        JMenu sizeMenu = new JMenu(msg("Size_Title"));
-
-        for(Action action: actions) {
-            sizeMenu.add(new JMenuItem(action));
-        }
-
-        return sizeMenu;
-    }
-
     public class SizeFlipVerticalAction extends ImageAction{
         SizeFlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
             super(name, icon, desc, mnemonic);
@@ -44,7 +31,10 @@ public class SizeActions {
             target.getImage().apply(new FlipVertical());
             target.repaint();
             target.getParent().revalidate();
-    }
+        }
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
 }
     public class SizeFlipHorizontalAction extends ImageAction{
         SizeFlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
@@ -54,7 +44,10 @@ public class SizeActions {
             target.getImage().apply(new FlipHorizontal());
             target.repaint();
             target.getParent().revalidate();
-    }
+        }
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
 }
 
     public class SizeResizeAction extends ImageAction{
@@ -71,6 +64,10 @@ public class SizeActions {
                 target.repaint();
                 target.getParent().revalidate();
             }
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
     }
 

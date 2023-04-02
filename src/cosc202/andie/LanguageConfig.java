@@ -4,8 +4,6 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
-
-import javax.swing.JOptionPane;
 public class LanguageConfig {
 
 	public static final int MAORI = 0;

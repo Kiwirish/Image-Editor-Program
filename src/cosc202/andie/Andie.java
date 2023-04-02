@@ -7,8 +7,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.*;
-//import javax.swing.border.LineBorder;
-import javax.swing.text.Position;
 
 import cosc202.andie.actions.ColourActions;
 import cosc202.andie.actions.EditActions;
@@ -16,8 +14,6 @@ import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
 import cosc202.andie.actions.SizeActions;
 import cosc202.andie.actions.ViewActions;
-import cosc202.andie.components.PopupSlider;
-import cosc202.andie.components.PopupWithSliders;
 import cosc202.andie.actions.LanguageActions;
 
 import javax.imageio.*;

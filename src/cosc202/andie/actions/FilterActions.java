@@ -1,6 +1,5 @@
 package cosc202.andie.actions;
 
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -32,39 +31,19 @@ import static cosc202.andie.LanguageConfig.msg;
  * @author Steven Mills
  * @version 1.0
  */
-public class FilterActions {
+public class FilterActions extends MenuActions {
     
-    /** A list of actions for the Filter menu. */
-    protected ArrayList<Action> actions;
-
     /**
      * <p>
      * Create a set of Filter menu actions.
      * </p>
      */
     public FilterActions() {
-        actions = new ArrayList<Action>();
+        super(msg("Filter_Title"));
         actions.add(new SharpenFilterAction(msg("SharpenFilter_Title"), null, msg("SharpenFilter_Desc"), Integer.valueOf(KeyEvent.VK_S)));
         actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G)));
         actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
-    }
-
-    /**
-     * <p>
-     * Create a menu contianing the list of Filter actions.
-     * </p>
-     * 
-     * @return The filter menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(msg("Filter_Title"));
-
-        for(Action action: actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
-
-        return fileMenu;
     }
 
     /**
@@ -113,6 +92,10 @@ public class FilterActions {
             }
         }
 
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+
     }
 
     /**
@@ -154,6 +137,10 @@ public class FilterActions {
             target.getImage().apply(new SharpenFilter());
             target.repaint();
             target.getParent().revalidate();
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }
@@ -203,6 +190,10 @@ public class FilterActions {
                 target.getParent().revalidate();
             }
         }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
     }
 
     /**
@@ -249,6 +240,10 @@ public class FilterActions {
                 target.repaint();
                 target.getParent().revalidate();
             }
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }

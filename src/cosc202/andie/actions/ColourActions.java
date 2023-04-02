@@ -1,6 +1,5 @@
 package cosc202.andie.actions;
 
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -30,38 +29,18 @@ import static cosc202.andie.LanguageConfig.msg;
  * @author Steven Mills
  * @version 1.0
  */
-public class ColourActions {
+public class ColourActions extends MenuActions {
     
-    /** A list of actions for the Colour menu. */
-    protected ArrayList<Action> actions;
-
     /**
      * <p>
      * Create a set of Colour menu actions.
      * </p>
      */
     public ColourActions() {
-        actions = new ArrayList<Action>();
+        super(msg("Colour_Title"));
         actions.add(new ConvertToGreyAction(msg("ConvertToGrey_Title"), null, msg("ConvertToGrey_Desc"), Integer.valueOf(KeyEvent.VK_G))); 
         actions.add(new BrightnessAction(msg("Brightness_Title"), null,msg("Brightness_Desc"), Integer.valueOf(KeyEvent.VK_B)));
         actions.add(new ContrastAction(msg("Contrast_Title"), null,msg("Contrast_Desc"), null));
-    }
-
-    /**
-     * <p>
-     * Create a menu contianing the list of Colour actions.
-     * </p>
-     * 
-     * @return The colour menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(msg("Colour_Title"));
-
-        for(Action action: actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
-
-        return fileMenu;
     }
 
     /**
@@ -103,6 +82,10 @@ public class ColourActions {
             target.getImage().apply(new ConvertToGrey());
             target.repaint();
             target.getParent().revalidate();
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }
@@ -154,6 +137,10 @@ public class ColourActions {
             }
         }
 
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+
     }
     public class ContrastAction extends ImageAction {
 
@@ -194,6 +181,11 @@ public class ColourActions {
                 target.getParent().revalidate();
             }
         }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+
     }
 
 }

@@ -61,6 +61,17 @@ public abstract class ImageAction extends AbstractAction {
         }
     }
 
+
+    /**
+     * <p>
+     * Update the state of the action based on the current state of the target.
+     * </p>
+     * <p>
+     * Responsible for enabling or disabling the action based on the current state of the target. Called when the user clicks on the parent menu.
+     * </p>
+     */
+    public abstract void updateState();
+
     /**
      * <p>
      * Set the target for ImageActions.

@@ -33,10 +33,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * @author Steven Mills
  * @version 1.0
  */
-public class FileActions {
+public class FileActions extends MenuActions {
     
-    /** A list of actions for the File menu. */
-    protected ArrayList<Action> actions;
     private FileSaveAction saveAction;
     public FileCloseImageAction imageCloseAction;
 
@@ -46,11 +44,9 @@ public class FileActions {
      * </p>
      */
     public FileActions() {
-
+        super(msg("File_Title"));
         saveAction = new FileSaveAction(msg("File_Save"), null, msg("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S));
         imageCloseAction = new FileCloseImageAction(msg("File_Close_Image"), null, msg("File_Close_Image_Desc"), Integer.valueOf(0));
-
-        actions = new ArrayList<Action>();
 
         actions.add(new FileOpenAction(msg("File_Open"), null, msg("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O)));
         actions.add(saveAction);
@@ -59,23 +55,6 @@ public class FileActions {
         actions.add(imageCloseAction);
         actions.add(new FileExitAction(msg("File_Exit"), null, msg("File_Exit_Desc"), Integer.valueOf(0)));
 
-    }
-
-    /**
-     * <p>
-     * Create a menu contianing the list of File actions.
-     * </p>
-     * 
-     * @return The File menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(msg("File_Title"));
-
-        for(Action action: actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
-
-        return fileMenu;
     }
 
     /**
@@ -149,7 +128,6 @@ public class FileActions {
          */
         public void actionPerformed(ActionEvent e) {
 
-            if (!imageCloseAction.safeClose()) return;
 
             JFileChooser fileChooser = new JFileChooser();
 
@@ -162,11 +140,16 @@ public class FileActions {
             if (result != JFileChooser.APPROVE_OPTION) return;
             try {
                 String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
+
+                if (!imageCloseAction.safeClose()) return; //Close last image before opening a new one
                 target.attemptImageOpen(imageFilepath);
+
             } catch (IOException e1) {
                 JOptionPane.showMessageDialog(null, msg("File_Exception_e1"));
             }
         }
+
+        public void updateState() {}
 
     }
 
@@ -226,6 +209,10 @@ public class FileActions {
                 JOptionPane.showMessageDialog(null, msg("File_save_exception_err"));
             }
             return false;
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }
@@ -288,6 +275,10 @@ public class FileActions {
                     JOptionPane.showMessageDialog(null, msg("File_save_exception_err"));
                 }
             }
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
     }
 
@@ -357,6 +348,10 @@ public class FileActions {
             target.getParent().revalidate();
             return true;
         }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
     }
 
     /**
@@ -397,6 +392,7 @@ public class FileActions {
                 System.exit(0);
             }
         }
+        public void updateState() { }
     }
 
     /**
@@ -477,6 +473,10 @@ public class FileActions {
                 return;
             }
             JOptionPane.showMessageDialog(null, msg("File_Exit_Action_JPane"));
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
     }
 

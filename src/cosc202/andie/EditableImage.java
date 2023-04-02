@@ -5,7 +5,6 @@ import java.io.*;
 //import java.security.MessageDigest;
 import java.awt.image.*;
 import javax.imageio.*;
-import javax.imageio.spi.ImageOutputStreamSpi;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -294,6 +293,21 @@ public class EditableImage {
         current = operationToRedo.apply(current);
         ops.add(operationToRedo);
     }
+
+    /**
+    * Returns true if there are undoable operations, and false otherwise.
+    */
+    public boolean undoable() {
+        return !ops.isEmpty();
+    }
+
+    /**
+    * Returns true if there are redoable operations, and false otherwise.
+    */
+    public boolean redoable() {
+        return !redoOps.isEmpty();
+    }
+
 
     /**
      * <p>
