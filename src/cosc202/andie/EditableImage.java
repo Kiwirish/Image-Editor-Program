@@ -62,6 +62,13 @@ public class EditableImage {
      * </p>
      */
     public EditableImage() {
+        reset();
+    }
+
+    /**
+     * Resets the image
+     */
+    public void reset() {
         original = null;
         current = null;
         ops = new Stack<ImageOperation>();

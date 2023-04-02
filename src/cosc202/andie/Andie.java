@@ -123,7 +123,9 @@ public class Andie {
         WindowListener exitListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                fileActions.exitAction.exit();
+                if (fileActions.imageCloseAction.safeClose()) {
+                    System.exit(0);
+                }
             }
         };
         frame.addWindowListener(exitListener);
