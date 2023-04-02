@@ -1,6 +1,5 @@
 package cosc202.andie.actions;
 
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -25,12 +24,7 @@ import static cosc202.andie.LanguageConfig.msg;
  * @author Steven Mills
  * @version 1.0
  */
-public class ViewActions {
-    
-    /**
-     * A list of actions for the View menu.
-     */
-    protected ArrayList<Action> actions;
+public class ViewActions extends MenuActions {
 
     /**
      * <p>
@@ -38,28 +32,11 @@ public class ViewActions {
      * </p>
      */
     public ViewActions() {
-        actions = new ArrayList<Action>();
+        super(msg("View_Title"));
         actions.add(new ZoomInAction(msg("ZoomIn_Title"), null, msg("ZoomIn_Desc"), Integer.valueOf(KeyEvent.VK_PLUS)));
         actions.add(new ZoomOutAction(msg("ZoomOut_Title"), null, msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS)));
         actions.add(new ZoomFullAction(msg("ZoomFull_Title"), null, msg("ZoomFull_Desc"), Integer.valueOf(KeyEvent.VK_1)));
         actions.add(new ResetZoomAction(msg("ZoomReset_Title"), null, msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2)));
-    }
-
-    /**
-     * <p>
-     * Create a menu containing the list of View actions.
-     * </p>
-     * 
-     * @return The view menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu viewMenu = new JMenu(msg("View_Title"));
-
-        for (Action action: actions) {
-            viewMenu.add(new JMenuItem(action));
-        }
-
-        return viewMenu;
     }
 
     /**
@@ -105,6 +82,9 @@ public class ViewActions {
             target.getParent().revalidate();
         }
 
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
     }
 
     /**
@@ -148,6 +128,10 @@ public class ViewActions {
             target.setZoom(target.getZoom()-10);
             target.repaint();
             target.getParent().revalidate();
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }
@@ -195,6 +179,10 @@ public class ViewActions {
             target.getParent().revalidate();
         }
 
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+
     }
 
     public class ResetZoomAction extends ImageAction {
@@ -229,6 +217,10 @@ public class ViewActions {
             target.resetZoom();
             target.revalidate();
             target.getParent().revalidate();
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }
