@@ -1,6 +1,4 @@
 package cosc202.andie;
-// blakes comment 
-// blakes second change 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -12,7 +10,7 @@ import cosc202.andie.actions.ColourActions;
 import cosc202.andie.actions.EditActions;
 import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
-import cosc202.andie.actions.SizeActions;
+import cosc202.andie.actions.TransformActions;
 import cosc202.andie.actions.ViewActions;
 import cosc202.andie.actions.LanguageActions;
 
@@ -97,7 +95,7 @@ public class Andie {
         ViewActions viewActions = new ViewActions();
         menuBar.add(viewActions.createMenu());
         // Size actions transform the image 
-        SizeActions sizeActions = new SizeActions();
+        TransformActions sizeActions = new TransformActions();
         menuBar.add(sizeActions.createMenu());
         // Filters apply a per-pixel operation to the image, generally based on a local window
         FilterActions filterActions = new FilterActions();

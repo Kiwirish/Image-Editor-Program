@@ -1,8 +1,6 @@
 package cosc202.andie.actions;
 
 import java.awt.event.*;
-import java.util.ArrayList;
-
 import javax.swing.*;
 
 //import cosc202.andie.EditableImage;
@@ -16,19 +14,19 @@ import cosc202.andie.operations.transform.RotateRight;
 
 import static cosc202.andie.LanguageConfig.msg;
 
-public class SizeActions extends MenuActions {
+public class TransformActions extends MenuActions {
 
-    public SizeActions() {
-            actions = new ArrayList<Action>();
-            actions.add(new SizeResizeAction(msg("SizeResize_Title"), null, msg("SizeResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
-            actions.add(new SizeRotateRightAction(msg("SizeRotateRight_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
-            actions.add(new SizeRotateLeftAction(msg("SizeRotateLeft_Title"), null, msg("SizeRotate_Desc"), Integer.valueOf(KeyEvent.VK_H)));
-            actions.add(new SizeFlipHorizontalAction(msg("SizeFlipHorizontal_Title"), null, msg("SizeFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
-            actions.add(new SizeFlipVerticalAction(msg("SizeFlipVertical_Title"), null, msg("SizeFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+    public TransformActions(){
+        super(msg("Transform_Title"));
+        actions.add(new ResizeAction(msg("TransformResize_Title"), null, msg("TransformResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
+        actions.add(new RotateLeftAction(msg("TransformRotateClockwise_Title"), null, msg("TransformRotateClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+        actions.add(new RotateRightAction(msg("TransformRotateAntiClockwise_Title"), null, msg("TransformRotateAntiClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+        actions.add(new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), null, msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+        actions.add(new FlipVerticalAction(msg("TransformFlipVertical_Title"), null, msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
 
     }
-    public class SizeFlipVerticalAction extends ImageAction{
-        SizeFlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+    public class FlipVerticalAction extends ImageAction{
+        FlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
             super(name, icon, desc, mnemonic);
         } 
         public void actionPerformed(ActionEvent e) {
@@ -39,9 +37,9 @@ public class SizeActions extends MenuActions {
         public void updateState() {
             setEnabled(target.getImage().hasImage());
         }
-}
-    public class SizeFlipHorizontalAction extends ImageAction{
-        SizeFlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+    }
+    public class FlipHorizontalAction extends ImageAction{
+        FlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic){
             super(name, icon, desc, mnemonic);
         } 
         public void actionPerformed(ActionEvent e) {
@@ -52,10 +50,9 @@ public class SizeActions extends MenuActions {
         public void updateState() {
             setEnabled(target.getImage().hasImage());
         }
-}
-
-    public class SizeResizeAction extends ImageAction{
-        SizeResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+    }
+    public class ResizeAction extends ImageAction{
+        ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic){
             super(name, icon, desc, mnemonic);
         }
 
@@ -69,13 +66,12 @@ public class SizeActions extends MenuActions {
                 target.getParent().revalidate();
             }
         }
-            public void updateState() {
-                setEnabled(target.getImage().hasImage());
-            }
-
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
     }
-    public class SizeRotateRightAction extends ImageAction{
-        SizeRotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+    public class RotateRightAction extends ImageAction{
+        RotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic){
             super(name, icon, desc, mnemonic);
         }
 
@@ -88,24 +84,23 @@ public class SizeActions extends MenuActions {
         public void updateState() {
             setEnabled(target.getImage().hasImage());
         }
-}   
-    public class SizeRotateLeftAction extends ImageAction{
-        SizeRotateLeftAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+    }   
+    public class RotateLeftAction extends ImageAction{
+        RotateLeftAction(String name, ImageIcon icon, String desc, Integer mnemonic){
             super(name, icon, desc, mnemonic);
         }
 
         public void actionPerformed(ActionEvent e) {
-        
                 target.getImage().apply(new RotateRight());
                 target.getImage().apply(new RotateRight());
                 target.getImage().apply(new RotateRight());
+                //BUG: Applying the RotateRight operation 3 times adds 3 operations to the operations stack -  .apply() should be called once
+                //Possible solution: Have RotateRight() accept a boolean "clockwise"
                 target.repaint();
                 target.getParent().revalidate();
         }
         public void updateState() {
             setEnabled(target.getImage().hasImage());
         }
-}
-
-        
     }
+}
