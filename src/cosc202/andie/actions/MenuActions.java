@@ -2,7 +2,6 @@ package cosc202.andie.actions;
 
 import java.util.ArrayList;
 
-import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
@@ -11,9 +10,9 @@ import javax.swing.event.MenuListener;
 import cosc202.andie.ImageAction;
 
 public abstract class MenuActions {
-    protected ArrayList<Action> actions;
+    protected ArrayList<ImageAction> actions;
 
-		protected final String menuTitle;
+	protected final String menuTitle;
 
     public MenuActions(String menuTitle) {
         actions = new ArrayList<ImageAction>();
