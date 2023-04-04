@@ -12,6 +12,7 @@ import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
 import cosc202.andie.operations.transform.RotateRight;
 import cosc202.andie.operations.transform.RotateLeft;
+import cosc202.andie.operations.transform.Rotate180;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -22,6 +23,7 @@ public class TransformActions extends MenuActions {
         actions.add(new ResizeAction(msg("TransformResize_Title"), null, msg("TransformResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
         actions.add(new RotateLeftAction(msg("TransformRotateClockwise_Title"), null, msg("TransformRotateClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new RotateRightAction(msg("TransformRotateAntiClockwise_Title"), null, msg("TransformRotateAntiClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+        actions.add(new Rotate180Action(msg("TransformRotate180_Title"), null, msg("TransformRotate180_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), null, msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
         actions.add(new FlipVerticalAction(msg("TransformFlipVertical_Title"), null, msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
 
@@ -93,6 +95,20 @@ public class TransformActions extends MenuActions {
 
         public void actionPerformed(ActionEvent e) {
                 target.getImage().apply(new RotateLeft());
+                target.repaint();
+                target.getParent().revalidate();
+        }
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+    }
+    public class Rotate180Action extends ImageAction{
+        Rotate180Action(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+                target.getImage().apply(new Rotate180());
                 target.repaint();
                 target.getParent().revalidate();
         }
