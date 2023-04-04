@@ -66,12 +66,12 @@ public class GaussianBlur implements ImageOperation, java.io.Serializable {
      * </p>
      * 
      * <p>
-     * As with many filters, the Mean filter is implemented via convolution.
+     * As with many filters, the Gaussian filter is implemented via convolution.
      * The size of the convolution kernel is specified by the {@link radius}.  
      * Larger radii lead to stronger blurring.
      * </p>
      * 
-     * @param input The image to apply the Mean filter to.
+     * @param input The image to apply the Gaussian filter to.
      * @return The resulting (blurred)) image.
      */
     public BufferedImage apply(BufferedImage input) {
