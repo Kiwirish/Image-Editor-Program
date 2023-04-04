@@ -10,9 +10,8 @@ import javax.swing.event.MenuListener;
 import cosc202.andie.ImageAction;
 
 public abstract class MenuActions {
-    protected ArrayList<ImageAction> actions;
-
-	protected final String menuTitle;
+	protected ArrayList<ImageAction> actions;
+		protected final String menuTitle;
 
     public MenuActions(String menuTitle) {
         actions = new ArrayList<ImageAction>();
