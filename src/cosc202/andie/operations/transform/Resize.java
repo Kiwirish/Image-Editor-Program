@@ -14,7 +14,7 @@ public class Resize implements ImageOperation, java.io.Serializable{
     }
 
     public BufferedImage apply(BufferedImage input){
-
+        
         int scaledWidth = (int)(input.getWidth() * ((float)option/100));
         int scaledHeight = (int)(input.getHeight() * ((float)option/100));
         if(scaledWidth <= 1){

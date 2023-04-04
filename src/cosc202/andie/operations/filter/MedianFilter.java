@@ -11,7 +11,7 @@ import cosc202.andie.ImageOperation;
  * </p>
  * 
  * <p>
- * A median filter 'removes noise'. It takes a local bneighborhoods pixel values and sorts them 
+ * A median filter 'removes noise'. It takes a local neighborhoods pixel values and sorts them 
  * The middle value (the median) from each sorted list of pixel values is the new pixel value to be used in output.
  * </p>
  * 
@@ -36,7 +36,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
      * </p>
      * 
      * 
-     * @param radius The radius of the newly constructed MeanFilter
+     * @param radius The radius of the newly constructed MedianFilter
      */
     public MedianFilter(int radius) {
         this.radius = radius;    
@@ -51,7 +51,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
      * By default, a Median filter has radius 1.
      * </p>
      * 
-     * @see MeanFilter(int)
+     * @see MedianFilter(int)
      */
     MedianFilter() {
         this(1);
@@ -59,17 +59,17 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
 
     /**
      * <p>
-     * Apply a Mean filter to an image.
+     * Apply a Median filter to an image.
      * </p>
      * 
      * <p>
-     * As with many filters, the Mean filter is implemented via convolution.
+     * As with many filters, the Median filter is implemented via convolution.
      * The size of the convolution kernel is specified by the {@link radius}.  
      * Larger radii lead to stronger blurring.
      * </p>
      * 
-     * @param input The image to apply the Mean filter to.
-     * @return The resulting (blurred)) image.
+     * @param input The image to apply the Median filter to.
+     * @return The resulting (median filtered)) image.
      */
     public BufferedImage apply(BufferedImage input) {
 
