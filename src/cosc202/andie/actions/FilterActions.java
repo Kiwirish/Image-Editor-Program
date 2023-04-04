@@ -232,7 +232,7 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,5,1,"px",1,5);
             PopupWithSliders popup = new PopupWithSliders(msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
             if (popup.show() == PopupWithSliders.OK) {
                 int radius = slider.getValue();
