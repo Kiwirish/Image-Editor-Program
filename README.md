@@ -16,3 +16,25 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 ## Dependency Management
 
 The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+
+Team M ReadME 
+
+The task were divided up Where we each had three tasks:
+Blake: Sharpen Filter, Gaussian Blur Filter and Median Filter. 
+Ollie: Brightness adjustment, Contrast adjustment and Multilingual support.
+Bernard: Image resize, Image rotations, Image flip.
+Jeb: Image export, Exception handling, Other error avoidance/Prevention,
+
+Testing
+
+Median Filter:
+Salt and pepper test - the nosie of the salt and pepper gets cancelled out.
+
+User guide 
+
+To use out teams Image filter ANDIE either open a image file through the File menu or simply drag and drop in the window popup. Browse through the many different options provided, Note the menu options that show up grey are not applicable to that image. Whilst manipulating yur image if you accidently make a change that is no longer desirable just simply use the undo option to return the image to its previous state. After the image is how you want it use the file menu to save and or export your new image file.
+
+Significant refactoring
+
+The structure of our code has be futher sorted into folders for different categorys for example all the transform filters are in a single folder.  The Menu option will turn grey when they are unusable. The view option were changed so there an option to reset size and an option to fill the window. Ability to open an image by dragging and dropping the image onto the ANDIE window.
+These qaulity of life changes were courtesy of Jeb 
