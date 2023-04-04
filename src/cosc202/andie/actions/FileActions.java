@@ -33,12 +33,10 @@ import static cosc202.andie.LanguageConfig.msg;
  * @author Steven Mills
  * @version 1.0
  */
-public class FileActions {
+public class FileActions extends MenuActions {
     
-    /** A list of actions for the File menu. */
-    protected ArrayList<Action> actions;
     private FileSaveAction saveAction;
-    public FileExitAction exitAction;
+    public FileCloseImageAction imageCloseAction;
 
     /**
      * <p>
@@ -46,35 +44,17 @@ public class FileActions {
      * </p>
      */
     public FileActions() {
-
+        super(msg("File_Title"));
         saveAction = new FileSaveAction(msg("File_Save"), null, msg("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S));
-        exitAction = new FileExitAction(msg("File_Exit"), null, msg("File_Exit_Desc"), Integer.valueOf(0));
-
-        actions = new ArrayList<Action>();
+        imageCloseAction = new FileCloseImageAction(msg("File_Close_Image"), null, msg("File_Close_Image_Desc"), Integer.valueOf(0));
 
         actions.add(new FileOpenAction(msg("File_Open"), null, msg("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O)));
         actions.add(saveAction);
         actions.add(new FileSaveAsAction(msg("File_Save_As"), null, msg("File_Save_As_Desc"), Integer.valueOf(KeyEvent.VK_A)));
         actions.add(new FileExportAction(msg("File_Export"), null, msg("File_Export_Desc"), Integer.valueOf(KeyEvent.VK_E)));
-        actions.add(exitAction);
+        actions.add(imageCloseAction);
+        actions.add(new FileExitAction(msg("File_Exit"), null, msg("File_Exit_Desc"), Integer.valueOf(0)));
 
-    }
-
-    /**
-     * <p>
-     * Create a menu contianing the list of File actions.
-     * </p>
-     * 
-     * @return The File menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(msg("File_Title"));
-
-        for(Action action: actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
-
-        return fileMenu;
     }
 
     /**
@@ -147,6 +127,8 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
+
+
             JFileChooser fileChooser = new JFileChooser();
 
             //Only allow files with image extensions that ImageIO can parse to be opened
@@ -158,11 +140,16 @@ public class FileActions {
             if (result != JFileChooser.APPROVE_OPTION) return;
             try {
                 String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
+
+                if (!imageCloseAction.safeClose()) return; //Close last image before opening a new one
                 target.attemptImageOpen(imageFilepath);
+
             } catch (IOException e1) {
                 JOptionPane.showMessageDialog(null, msg("File_Exception_e1"));
             }
         }
+
+        public void updateState() {}
 
     }
 
@@ -222,6 +209,10 @@ public class FileActions {
                 JOptionPane.showMessageDialog(null, msg("File_save_exception_err"));
             }
             return false;
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }
@@ -285,6 +276,82 @@ public class FileActions {
                 }
             }
         }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+    }
+
+    /**
+     * <p>
+     * Action to close the current image
+     * </p>
+     */
+    public class FileCloseImageAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new file-close-image action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+        FileCloseImageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+         /**
+         * <p>
+         * Callback for when the file-close-image action is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the FileCloseImageAction is triggered.
+         * It closes the current image.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        public void actionPerformed(ActionEvent e) {
+            safeClose();
+        }
+
+        /**
+         * Closes the image, offering the user a chance to save first.
+         * The user can:
+         * a) Cancel. The image will remain open, and false will be returned
+         * b) Not save. The image will be closed without saving
+         * c) Save. The saveAction.save() will save the image before closing.
+         * @return A boolean representing whether the image was closed
+         */
+        public boolean safeClose() {
+            if (target.getImage().getModified()) {
+                int result = JOptionPane.showConfirmDialog(null,msg("File_Close_Unsaved_Warning_Message"),msg("File_Close_Unsaved_Warning_Title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
+                switch (result) {
+                    case JOptionPane.CANCEL_OPTION:
+                        return false;
+                    case JOptionPane.NO_OPTION:
+                        break;
+                    case JOptionPane.YES_OPTION:
+                        if(saveAction.save()) {
+                            JOptionPane.showMessageDialog(null,msg("File_Close_Saved_Success"));
+                        }
+                        break;
+                }
+            }
+            target.getImage().reset();
+            target.resetZoom();
+            target.repaint();
+            target.getParent().revalidate();
+            return true;
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
     }
 
     /**
@@ -321,32 +388,11 @@ public class FileActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            exit();
-        }
-
-        /**
-         * Exit the program, asking the user if they want to save their image first.
-         */
-        public void exit() {
-            //Ask the user if they want to save their image before quitting
-            if (!target.getImage().getModified()) System.exit(0);
-
-            int result = JOptionPane.showConfirmDialog(null, msg("File_Exit_JPane_Desc"), msg("File_Exit_JPane"), JOptionPane.YES_NO_CANCEL_OPTION);
-            switch (result) {
-                case JOptionPane.CANCEL_OPTION:
-                    return;
-                case JOptionPane.NO_OPTION:
-                    System.exit(0);
-                    break;
-                case JOptionPane.YES_OPTION:
-                    if(saveAction.save()) {
-                        JOptionPane.showMessageDialog(null,msg("File_Exit_JPane_YES"));
-                        System.exit(0);
-                    }
-                    break;
+            if(imageCloseAction.safeClose()) {
+                System.exit(0);
             }
         }
-
+        public void updateState() { }
     }
 
     /**
@@ -427,6 +473,10 @@ public class FileActions {
                 return;
             }
             JOptionPane.showMessageDialog(null, msg("File_Exit_Action_JPane"));
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
     }
 

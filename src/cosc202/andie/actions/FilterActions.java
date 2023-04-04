@@ -1,10 +1,11 @@
 package cosc202.andie.actions;
 
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 import cosc202.andie.ImageAction;
+import cosc202.andie.components.PopupSlider;
+import cosc202.andie.components.PopupWithSliders;
 import cosc202.andie.operations.filter.GaussianBlur;
 import cosc202.andie.operations.filter.MeanFilter;
 import cosc202.andie.operations.filter.MedianFilter;
@@ -30,43 +31,19 @@ import static cosc202.andie.LanguageConfig.msg;
  * @author Steven Mills
  * @version 1.0
  */
-public class FilterActions {
+public class FilterActions extends MenuActions {
     
-    /** A list of actions for the Filter menu. */
-    protected ArrayList<Action> actions;
-
     /**
      * <p>
      * Create a set of Filter menu actions.
      * </p>
      */
     public FilterActions() {
-        actions = new ArrayList<Action>();
-        // add SharpenFilterAction to the actions arrayList, setting the mnumonic key to 'S'
+        super(msg("Filter_Title"));
         actions.add(new SharpenFilterAction(msg("SharpenFilter_Title"), null, msg("SharpenFilter_Desc"), Integer.valueOf(KeyEvent.VK_S)));
-        // add GaussianBlurFilterAction to the actions arrayList, setting the mnumonic key to 'G'
         actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G)));
-        // add MedianFilterAction to the actions arrayList, setting the mnumonic key to 'E'
         actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
-        // add MeanFilterAction to the actions arrayList, setting the mnumonic key to 'M'
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
-    }
-
-    /**
-     * <p>
-     * Create a menu contianing the list of Filter actions.
-     * </p>
-     * 
-     * @return The filter menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu fileMenu = new JMenu(msg("Filter_Title"));
-
-        for(Action action: actions) {
-            fileMenu.add(new JMenuItem(action));
-        }
-
-        return fileMenu;
     }
 
     /**
@@ -94,7 +71,7 @@ public class FilterActions {
 
         /**
          * <p>
-         * Callback for when the convert-to-grey action is triggered.
+         * Callback for when the mean-filter action is triggered.
          * </p>
          * 
          * <p>
@@ -105,134 +82,132 @@ public class FilterActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-
-            // Determine the radius - ask the user.
-            int radius = 1;
-
-            // Pop-up dialog box to ask for the radius value.
-            SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
-            JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("FilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-            // Check the return value from the dialog box.
-            if (option == JOptionPane.CANCEL_OPTION) {
-                return;
-            } else if (option == JOptionPane.OK_OPTION) {
-                radius = radiusModel.getNumber().intValue();
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
+            PopupWithSliders popup = new PopupWithSliders(msg("MeanFilter_Popup_Title"),new PopupSlider[]{slider});
+            if (popup.show() == PopupWithSliders.OK) {
+                int radius = slider.getValue();
+                target.getImage().apply(new MeanFilter(radius));
+                target.repaint();
+                target.getParent().revalidate();
             }
+        }
 
-            // Create and apply the filter
-            target.getImage().apply(new MeanFilter(radius));
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+
+    }
+
+    /**
+    * <p>
+    * Action to apply SharpenFilter filter 
+    * </p>
+    * 
+    * @see SharpenFilter
+    */
+    public class SharpenFilterAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new sharpen-filter action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+        SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the SharpenFilterAction is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the SharpenFilterAction is triggered.
+         * It prompts the user for a filter radius, then applys an appropriately sized {@link SharpenFilter}.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        public void actionPerformed(ActionEvent e) {
+            target.getImage().apply(new SharpenFilter());
             target.repaint();
             target.getParent().revalidate();
         }
 
-    }
-
-public class SharpenFilterAction extends ImageAction {
-
-    /**
-     * <p>
-     * Create a new mean-filter action.
-     * </p>
-     * 
-     * @param name The name of the action (ignored if null).
-     * @param icon An icon to use to represent the action (ignored if null).
-     * @param desc A brief description of the action  (ignored if null).
-     * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
-     */
-    SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-        super(name, icon, desc, mnemonic);
-    }
-
-    /**
-     * <p>
-     * Callback for when the convert-to-grey action is triggered.
-     * </p>
-     * 
-     * <p>
-     * This method is called whenever the SharpenFilterAction is triggered.
-     * It prompts the user for a filter radius, then applys an appropriately sized {@link sharpenFilter}.
-     * </p>
-     * 
-     * @param e The event triggering this callback.
-     */
-    public void actionPerformed(ActionEvent e) {
-
-
-        // Create and apply the filter
-        target.getImage().apply(new SharpenFilter());
-        target.repaint();
-        target.getParent().revalidate();
-    }
-
-}
-
-public class GaussianBlurFilterAction extends ImageAction {
-
-    /**
-     * <p>
-     * Create a new GaussianBlur-filter action.
-     * </p>
-     * 
-     * @param name The name of the action (ignored if null).
-     * @param icon An icon to use to represent the action (ignored if null).
-     * @param desc A brief description of the action  (ignored if null).
-     * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
-     */
-    GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-        super(name, icon, desc, mnemonic);
-    }
-
-    /**
-     * <p>
-     * Callback for when the convert-to-grey action is triggered.
-     * </p>
-     * 
-     * <p>
-     * This method is called whenever the MeanFilterAction is triggered.
-     * It prompts the user for a filter radius, then applys an appropriately sized {@link MeanFilter}.
-     * </p>
-     * 
-     * @param e The event triggering this callback.
-     */
-    public void actionPerformed(ActionEvent e) {
-
-        // Determine the radius - ask the user.
-        int radius = 1;
-
-        // Pop-up dialog box to ask for the radius value.
-        SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
-        JSpinner radiusSpinner = new JSpinner(radiusModel);
-        int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("FilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-        // Check the return value from the dialog box.
-        if (option == JOptionPane.CANCEL_OPTION) {
-            return;
-        } else if (option == JOptionPane.OK_OPTION) {
-            radius = radiusModel.getNumber().intValue();
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
-        // Create and apply the filter
-        target.getImage().apply(new GaussianBlur(radius));
-        target.repaint();
-        target.getParent().revalidate();
     }
 
-}
+    /**
+    * <p>
+    * Action to apply GaussianBlur filter 
+    * </p>
+    * 
+    * @see GaussianBlur
+    */
+    public class GaussianBlurFilterAction extends ImageAction {
 
-/**
+        /**
+         * <p>
+         * Create a new GaussianBlur-filter action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+        GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the gaussian-blur action is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the GaussianBlurFilterAction is triggered.
+         * It prompts the user for a filter radius, then applys an appropriately sized {@link GaussianBlur}.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        public void actionPerformed(ActionEvent e) {
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
+            PopupWithSliders popup = new PopupWithSliders(msg("GaussianBlurFilter_Popup_Title"),new PopupSlider[]{slider});
+            if (popup.show() == PopupWithSliders.OK) {
+                int radius = slider.getValue();
+                target.getImage().apply(new GaussianBlur(radius));
+                target.repaint();
+                target.getParent().revalidate();
+            }
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
+        }
+    }
+
+    /**
      * <p>
      * Action to apply median filter 
      * </p>
      * 
-     * @see MeanFilter
+     * @see MedianFilter
      */
     public class MedianFilterAction extends ImageAction {
 
         /**
          * <p>
-         * Create a new mean-filter action.
+         * Create a new meidan-filter action.
          * </p>
          * 
          * @param name The name of the action (ignored if null).
@@ -246,41 +221,32 @@ public class GaussianBlurFilterAction extends ImageAction {
 
         /**
          * <p>
-         * Callback for when the convert-to-grey action is triggered.
+         * Callback for when the median-filter action is triggered.
          * </p>
          * 
          * <p>
-         * This method is called whenever the MeanFilterAction is triggered.
-         * It prompts the user for a filter radius, then applys an appropriately sized {@link MeanFilter}.
+         * This method is called whenever the MedianFilterAction is triggered.
+         * It prompts the user for a filter radius, then applys an appropriately sized {@link MedianFilter}.
          * </p>
          * 
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-
-            // Determine the radius - ask the user.
-            int radius = 1;
-
-            // Pop-up dialog box to ask for the radius value.
-            SpinnerNumberModel radiusModel = new SpinnerNumberModel(1, 1, 10, 1);
-            JSpinner radiusSpinner = new JSpinner(radiusModel);
-            int option = JOptionPane.showOptionDialog(null, radiusSpinner, msg("FilterAction_Title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-
-            // Check the return value from the dialog box.
-            if (option == JOptionPane.CANCEL_OPTION) {
-                return;
-            } else if (option == JOptionPane.OK_OPTION) {
-                radius = radiusModel.getNumber().intValue();
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
+            PopupWithSliders popup = new PopupWithSliders(msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
+            if (popup.show() == PopupWithSliders.OK) {
+                int radius = slider.getValue();
+                target.getImage().apply(new MedianFilter(radius));
+                target.repaint();
+                target.getParent().revalidate();
             }
+        }
 
-            // Create and apply the filter
-            target.getImage().apply(new MedianFilter(radius));
-            target.repaint();
-            target.getParent().revalidate();
+        public void updateState() {
+            setEnabled(target.getImage().hasImage());
         }
 
     }
-
 
 
 

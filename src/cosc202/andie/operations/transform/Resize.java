@@ -1,15 +1,11 @@
 package cosc202.andie.operations.transform;
 
 import java.awt.Graphics2D;
-import java.awt.image.*;
-import java.io.File;
-import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 import cosc202.andie.ImageOperation;
 
-
 public class Resize implements ImageOperation, java.io.Serializable{
-    private int percentage;
 
     private int option;
 
@@ -18,7 +14,7 @@ public class Resize implements ImageOperation, java.io.Serializable{
     }
 
     public BufferedImage apply(BufferedImage input){
-        
+
         int scaledWidth = (int)(input.getWidth() * ((float)option/100));
         int scaledHeight = (int)(input.getHeight() * ((float)option/100));
 

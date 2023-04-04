@@ -1,6 +1,5 @@
 package cosc202.andie.actions;
 
-import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -28,37 +27,17 @@ import static cosc202.andie.LanguageConfig.msg;
  * @author Steven Mills
  * @version 1.0
  */
-public class EditActions {
+public class EditActions extends MenuActions{
     
-    /** A list of actions for the Edit menu. */
-    protected ArrayList<Action> actions;
-
     /**
      * <p>
      * Create a set of Edit menu actions.
      * </p>
      */
     public EditActions() {
-        actions = new ArrayList<Action>();
+        super(msg("Edit_Title"));
         actions.add(new UndoAction(msg("Undo_Title"), null, msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z)));
         actions.add(new RedoAction(msg("Redo_Title"), null, msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y)));
-    }
-
-    /**
-     * <p>
-     * Create a menu contianing the list of Edit actions.
-     * </p>
-     * 
-     * @return The edit menu UI element.
-     */
-    public JMenu createMenu() {
-        JMenu editMenu = new JMenu(msg("Edit_Title"));
-
-        for (Action action: actions) {
-            editMenu.add(new JMenuItem(action));
-        }
-
-        return editMenu;
     }
 
     /**
@@ -100,6 +79,10 @@ public class EditActions {
             target.getImage().undo();
             target.repaint();
             target.getParent().revalidate();
+        }
+        
+        public void updateState() {
+            setEnabled(target.getImage().undoable());
         }
     }
 
@@ -143,6 +126,10 @@ public class EditActions {
             target.getImage().redo();
             target.repaint();
             target.getParent().revalidate();
+        }
+
+        public void updateState() {
+            setEnabled(target.getImage().redoable());
         }
     }
 

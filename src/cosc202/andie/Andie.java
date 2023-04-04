@@ -1,19 +1,16 @@
 package cosc202.andie;
-// blakes comment 
-// blakes second change 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.*;
-//import javax.swing.border.LineBorder;
 
 import cosc202.andie.actions.ColourActions;
 import cosc202.andie.actions.EditActions;
 import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
-import cosc202.andie.actions.SizeActions;
+import cosc202.andie.actions.TransformActions;
 import cosc202.andie.actions.ViewActions;
 import cosc202.andie.actions.LanguageActions;
 
@@ -40,15 +37,15 @@ import javax.imageio.*;
  */
 public class Andie {
 
+    private static ImagePanel imagePanel;
+    private static JFrame frame;
+
     /**
-     * <p>
-     * Launches the main GUI for the ANDIE program.
-     * </p>
      * 
      * <p>
      * This method sets up an interface consisting of an active image (an {@code ImagePanel})
      * and various menus which can be used to trigger operations to load, save, edit, etc. 
-     * These operations are implemented {@link ImageOperation}s and triggerd via 
+     * These operations are implemented {@link ImageOperation}s and triggered via 
      * {@code ImageAction}s grouped by their general purpose into menus.
      * </p>
      * 
@@ -61,15 +58,16 @@ public class Andie {
      * @see FilterActions
      * @see ColourActions
      * 
+     * @param size {@code Dimension} specifying the size of the window to be created. Defaults to 700x550 if null.
+     * @param position {@code Point} specifying the position of the window to be created. Defaults to the centre of the screen if null.
+     * 
      * @throws Exception if something goes wrong.
      */
-    private static void createAndShowGUI() throws Exception {
-        //Initialise the language
-        LanguageConfig.init();
+    private static void setup(Dimension size, Point position) throws Exception {
 
-        // Set up the main GUI frame
-        JFrame frame = new JFrame("ANDIE");
-        frame.setPreferredSize(new Dimension(700, 550));
+        frame = new JFrame("ANDIE");
+        if (size == null) size = new Dimension(700, 550);
+        frame.setPreferredSize(size);
         Image image = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
         frame.setIconImage(image);
 
@@ -78,8 +76,6 @@ public class Andie {
         contentPane.setLayout(new BorderLayout());
 
         // The main content area is an ImagePanel
-        ImagePanel imagePanel = new ImagePanel();
-        ImageAction.setTarget(imagePanel);
         // Inside a scroll pane
         JScrollPane scrollPane = new JScrollPane(imagePanel); 
         scrollPane.setBorder(null);
@@ -99,7 +95,7 @@ public class Andie {
         ViewActions viewActions = new ViewActions();
         menuBar.add(viewActions.createMenu());
         // Size actions transform the image 
-        SizeActions sizeActions = new SizeActions();
+        TransformActions sizeActions = new TransformActions();
         menuBar.add(sizeActions.createMenu());
         // Filters apply a per-pixel operation to the image, generally based on a local window
         FilterActions filterActions = new FilterActions();
@@ -113,17 +109,55 @@ public class Andie {
         
         frame.setJMenuBar(menuBar);
         frame.pack();
-        frame.setLocationRelativeTo(null);
+        if (position == null) frame.setLocationRelativeTo(null);
+        else frame.setLocation(position);
         frame.setVisible(true);
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         WindowListener exitListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                fileActions.exitAction.exit();
+                if (fileActions.imageCloseAction.safeClose()) {
+                    System.exit(0);
+                }
             }
         };
         frame.addWindowListener(exitListener);
+    }
+
+
+    /**
+     * <p>
+     * Initialises variables and launches Andie.
+     * </p>
+     */
+    public static void launchAndie() {
+        LanguageConfig.init();
+        imagePanel = new ImagePanel();
+        ImageAction.setTarget(imagePanel);
+
+        try {
+            setup(null,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * <p>
+     * Disposes of the current frame, and runs setup again, preserving the size and position of the frame.
+     * </p>
+     */
+    public static void relaunchAndie() {
+        Dimension size = frame.getSize();
+        Point position = frame.getLocation();
+        frame.dispose();
+
+        try {
+            setup(size,position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -132,8 +166,8 @@ public class Andie {
      * </p>
      * 
      * <p>
-     * Creates and launches the main GUI in a separate thread.
-     * As a result, this is essentially a wrapper around {@code createAndShowGUI()}.
+     * Launches Andie in a separate thread.
+     * As a result, this is essentially a wrapper around {@code launchAndie()}.
      * </p>
      * 
      * @param args Command line arguments, not currently used
@@ -143,13 +177,7 @@ public class Andie {
     public static void main(String[] args) throws Exception {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    createAndShowGUI();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    System.exit(1);
-                    
-                }
+                launchAndie();
             }
         });
     }

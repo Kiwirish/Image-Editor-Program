@@ -149,6 +149,10 @@ public class ImagePanel extends JPanel implements MouseWheelListener {
     }
 
     public void resetZoom() {
+        if (!image.hasImage()) {
+            setZoom(100);
+            return;
+        };
         int imageWidth = image.getCurrentImage().getWidth();
         int imageHeight = image.getCurrentImage().getHeight();
         int panelWidth = (int)this.getParent().getWidth();
