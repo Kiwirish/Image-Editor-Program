@@ -11,6 +11,7 @@ import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
 import cosc202.andie.operations.transform.RotateRight;
+import cosc202.andie.operations.transform.RotateLeft;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -91,11 +92,7 @@ public class TransformActions extends MenuActions {
         }
 
         public void actionPerformed(ActionEvent e) {
-                target.getImage().apply(new RotateRight());
-                target.getImage().apply(new RotateRight());
-                target.getImage().apply(new RotateRight());
-                //BUG: Applying the RotateRight operation 3 times adds 3 operations to the operations stack -  .apply() should be called once
-                //Possible solution: Have RotateRight() accept a boolean "clockwise"
+                target.getImage().apply(new RotateLeft());
                 target.repaint();
                 target.getParent().revalidate();
         }
