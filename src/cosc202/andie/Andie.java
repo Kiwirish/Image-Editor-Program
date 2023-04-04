@@ -1,6 +1,4 @@
 package cosc202.andie;
-// blakes comment 
-// blakes second change 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

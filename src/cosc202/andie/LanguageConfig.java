@@ -8,8 +8,16 @@ public class LanguageConfig {
 
 	public static final int MAORI = 0;
 	public static final int ENGLISH = 1;
+	public static final int FRENCH = 2;
+	public static final int GERMAN = 3;
+	public static final int SPANISH = 4;
+	public static final int TURKISH = 5;
+	public static final int ITALIAN = 6;
 
-	public static final Locale[] locales = {new Locale("mi", "NZ"), new Locale("en", "NZ")};
+	public static final Locale[] locales = {new Locale("mi", "NZ"), 
+	new Locale("en", "NZ"), new Locale("fr", "FR"), 
+	new Locale("de", "DE"), new Locale("es", "ES"), 
+	new Locale("tr", "TR"), new Locale("it", "IT")};
 
 	private static Preferences prefs;
 	private static ResourceBundle bundle;
