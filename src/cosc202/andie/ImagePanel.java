@@ -244,10 +244,11 @@ public class ImagePanel extends JPanel implements MouseWheelListener {
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
-        if (isWindows) 
+        if (isWindows) {
             if (!e.isControlDown()) {getParent().dispatchEvent(e); return;}
-        else 
+        } else {
             if (!e.isMetaDown()) {getParent().dispatchEvent(e); return;}
+        }
         double rotation = e.getPreciseWheelRotation();
         double currentLog = Math.log(getZoom()/100);
         currentLog += rotation*0.02;
