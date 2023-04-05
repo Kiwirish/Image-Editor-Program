@@ -266,7 +266,7 @@ public class FileActions extends MenuActions {
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    String givenImageExtension = getImageExtension(imageFilepath);
+                    String givenImageExtension = getPathWithImageExtension(imageFilepath, "png");
                     if (givenImageExtension.equals("")) throw new EditableImage.ExtensionException(msg("File_Extension_Exception"));
                     target.getImage().saveAs(givenImageExtension);
                 } catch (EditableImage.ExtensionException err) {
