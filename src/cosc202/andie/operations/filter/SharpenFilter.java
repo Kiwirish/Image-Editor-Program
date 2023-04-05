@@ -10,7 +10,7 @@ import cosc202.andie.ImageOperation;
  * </p>
  * 
  * <p>
- * A Mean filter blurs an image by replacing each pixel by the average of the
+ * A Sharpen filter blurs an image by replacing each pixel by the average of the
  * pixels in a surrounding neighbourhood, and can be implemented by a convoloution.
  * </p>
  * 

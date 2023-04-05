@@ -2,9 +2,10 @@ package cosc202.andie.operations.transform;
 
 import java.awt.image.*;
 import cosc202.andie.ImageOperation;
+
 /**
  * <p>
- * ImageOperation to rotate an image Left .
+ * ImageOperation to rotate an image 180 degrees .
  * </p>
  * 
  * <p>
@@ -19,17 +20,16 @@ import cosc202.andie.ImageOperation;
  * @author Bernard Pieters
  * @version 1.0
 */
+public class Rotate180 implements ImageOperation, java.io.Serializable{
 
-public class RotateLeft implements ImageOperation, java.io.Serializable{
-
-    public RotateLeft(){
+    public Rotate180(){
     }
-    /** Applys the rotate left filter 
+
+    /** Applys the Rotate to the image 
      * @param input Image to be rotated 
     */
-    public BufferedImage apply(BufferedImage input){
-
-    int pixels [][] = new int [input.getWidth()][input.getHeight()];
+    public BufferedImage method(BufferedImage input){
+        int pixels [][] = new int [input.getWidth()][input.getHeight()];
         for(int i = 0; i < input.getWidth(); i++){
             for(int j = 0; j < input.getHeight(); j++){
                 pixels[i][j] = input.getRGB(i, j);
@@ -51,5 +51,12 @@ public class RotateLeft implements ImageOperation, java.io.Serializable{
 // comment to push properly
         return output;
     }
+
+    /** runs method twice for two 90 degree turns */
+    public BufferedImage apply(BufferedImage input){
+
+        return method(method(input));
+    }
+
 
 }

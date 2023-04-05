@@ -4,12 +4,30 @@ package cosc202.andie.operations.transform;
 import java.awt.image.*;
 import cosc202.andie.ImageOperation;
 
+/**
+ * <p>
+ * ImageOperation to Flip an image vertical.
+ * </p>
+ * 
+ * <p>
+ * Swaps the pixels then over ride the old image. 
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @see java.awt.image.ConvolveOp
+ * @author Bernard Pieters
+ * @version 1.0
+*/
 
 public class FlipVertical implements ImageOperation, java.io.Serializable{
 
     public FlipVertical(){
     }
 
+    /** Applys the Flip vertical to the image */
     public BufferedImage apply(BufferedImage input){
     int pixels [][] = new int [input.getWidth()][input.getHeight()];
         for(int i = 0; i < input.getWidth(); i++){

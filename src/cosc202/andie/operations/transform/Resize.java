@@ -5,11 +5,30 @@ import java.awt.image.BufferedImage;
 import cosc202.andie.ImageOperation;
 
 import static cosc202.andie.LanguageConfig.msg;
+/**
+ * <p>
+ * ImageOperation to Resize an image.
+ * </p>
+ * 
+ * <p>
+ * Swaps the pixels then over ride the old image. 
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @see java.awt.image.ConvolveOp
+ * @author Bernard Pieters
+ * @version 1.0
+*/
 
 public class Resize implements ImageOperation, java.io.Serializable{
 
     private int option;
 
+
+    /** @param option percentage to resize the image by */
     public Resize(int option){
         this.option = option;
     }
