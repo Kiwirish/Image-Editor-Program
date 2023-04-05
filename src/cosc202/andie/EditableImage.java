@@ -2,6 +2,9 @@ package cosc202.andie;
 
 import java.util.*;
 import java.io.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Transparency;
 import java.awt.image.*;
 import javax.imageio.*;
 import javax.swing.JOptionPane;
@@ -259,8 +262,20 @@ public class EditableImage {
      * @throws IOException If the image cannot be written
      */
     public void export(String exportFilePath, String format) throws IOException {
+        boolean formatSupportsTransparency = format == "png" || format == "gif";
+        BufferedImage exportImage;
+        if (!formatSupportsTransparency && current.getTransparency() != Transparency.OPAQUE) {
+            exportImage = new BufferedImage(current.getWidth(), current.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = exportImage.createGraphics();
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, exportImage.getWidth(), exportImage.getHeight());
+            g.drawImage(current, 0, 0, null);
+            g.dispose();
+        } else {
+            exportImage = deepCopy(current);
+        }
         File exportFile = new File(exportFilePath);
-        ImageIO.write(current, format, exportFile);
+        ImageIO.write(exportImage, format, exportFile);
     }
 
     /**

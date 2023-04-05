@@ -260,13 +260,14 @@ public class FileActions extends MenuActions {
             fileChooser.setFileFilter(filter);
 
             String filepath = target.getImage().getFilepath();
-            if (filepath != null) fileChooser.setCurrentDirectory(new File(filepath));
+            if (filepath != null) fileChooser.setSelectedFile(new File(filepath));
             int result = fileChooser.showSaveDialog(target);
 
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    String givenImageExtension = getPathWithImageExtension(imageFilepath, "png");
+                    String originalExtension = getImageExtension(filepath);
+                    String givenImageExtension = getPathWithImageExtension(imageFilepath, originalExtension);
                     if (givenImageExtension.equals("")) throw new EditableImage.ExtensionException(msg("File_Extension_Exception"));
                     target.getImage().saveAs(givenImageExtension);
                 } catch (EditableImage.ExtensionException err) {
@@ -431,7 +432,7 @@ public class FileActions extends MenuActions {
         public void actionPerformed(ActionEvent e) {
             if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,msg("File_Exit_Action_hasImage")); return; }
 
-            String[] writerFormatNames = ImageIO.getWriterFileSuffixes();
+            String[] writerFormatNames = ImageIO.getReaderFileSuffixes();
 
             JPanel panel = new JPanel();
             JComboBox<String> imageFormatChooser = new JComboBox<String>(writerFormatNames);
