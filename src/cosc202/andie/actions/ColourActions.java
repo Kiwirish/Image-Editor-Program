@@ -27,6 +27,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
+ * @author Jeb Nicholson
+ * @author Oliver Peyroux
  * @version 1.0
  */
 public class ColourActions extends MenuActions {

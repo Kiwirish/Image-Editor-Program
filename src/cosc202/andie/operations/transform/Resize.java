@@ -2,9 +2,9 @@ package cosc202.andie.operations.transform;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 import cosc202.andie.ImageOperation;
 
+import static cosc202.andie.LanguageConfig.msg;
 /**
  * <p>
  * ImageOperation to Resize an image.
@@ -32,19 +32,15 @@ public class Resize implements ImageOperation, java.io.Serializable{
     public Resize(int option){
         this.option = option;
     }
-    /** applys the resize to the image 
-     *  @param input image to be manipulated
-     */
-    public BufferedImage apply(BufferedImage input){
-        
-        int scaledWidth = (int)(input.getWidth() * ((float)option/100));
-        int scaledHeight = (int)(input.getHeight() * ((float)option/100));
-        if(scaledWidth <= 1){
-            scaledWidth = 1;
-        }
-        if(scaledHeight <= 1){
-            scaledHeight = 1;
-        }
+
+    public BufferedImage apply(BufferedImage input) throws ImageOperationException {
+
+        double scale = (double)option/100;
+        int scaledWidth = (int)Math.max((input.getWidth() * scale),1);
+        int scaledHeight = (int)Math.max((input.getHeight() * scale),1);
+
+        if (scaledWidth > 20000 || scaledHeight > 20000)
+            throw new ImageOperationException(msg("Resize_Too_Large_Error"));
 
         BufferedImage output = new BufferedImage(scaledWidth, scaledHeight, input.getType());
         

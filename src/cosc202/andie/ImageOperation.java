@@ -24,7 +24,8 @@ import java.awt.image.BufferedImage;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @version 2.0
  */
 public interface ImageOperation {
 
@@ -38,5 +39,14 @@ public interface ImageOperation {
      * @param input The image to apply the operation to
      * @return The image resulting from the operation
      */
-    public BufferedImage apply(BufferedImage input);    
+    public BufferedImage apply(BufferedImage input) throws ImageOperationException;
+
+    /**
+     * An exception to be thrown when an ImageOperation fails.
+     */
+    public class ImageOperationException extends Exception {
+        public ImageOperationException(String message) {
+            super(message);
+        }
+    }
 }

@@ -8,10 +8,34 @@ import javax.swing.JSlider;
 import javax.swing.SpringLayout;
 import javax.swing.event.ChangeListener;
 
+/**
+ * <p>
+ * A slider with a message label, and a label showing the current value
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @see PopupWithSliders
+ * @see JSlider
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class PopupSlider extends JPanel {
 	
 	private JSlider slider;
 
+	/**
+	 * Create a new PopupSlider with the given settings
+	 * @param message The message to display above the slider
+	 * @param minimum The minimum value that the slider may be set to
+	 * @param maximum The maximum value that the slider may be set to
+	 * @param initialValue The intital value of the slider, between minimum and maximum
+	 * @param units The units to display after the value (e.g. "px", or "%")
+	 * @param minorTickSpace The spacing between minor ticks
+	 * @param majorTickSpace The spacing between major ticks
+	 */
 	public PopupSlider(String message, int minimum, int maximum, int initialValue, String units, int minorTickSpace, int majorTickSpace) {
 		super();
 		slider = new JSlider(minimum,maximum,initialValue);

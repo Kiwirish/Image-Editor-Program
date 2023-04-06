@@ -10,12 +10,30 @@ import cosc202.andie.components.PopupWithSliders;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
-import cosc202.andie.operations.transform.RotateRight;
 import cosc202.andie.operations.transform.RotateLeft;
+import cosc202.andie.operations.transform.RotateRight;
 import cosc202.andie.operations.transform.Rotate180;
 
 import static cosc202.andie.LanguageConfig.msg;
 
+/**
+ * <p>
+ * Actions provided by the Transform menu.
+ * </p>
+ * 
+ * <p>
+ * The transform menu contains action the affect the size and orientation of the image.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @author Steven Mills
+ * @author Jeb Nicholson
+ * @author Bernard Pieters
+ * @version 2.0
+ */
 public class TransformActions extends MenuActions {
 
 
@@ -23,8 +41,8 @@ public class TransformActions extends MenuActions {
     public TransformActions(){
         super(msg("Transform_Title"));
         actions.add(new ResizeAction(msg("TransformResize_Title"), null, msg("TransformResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
-        actions.add(new RotateLeftAction(msg("TransformRotateClockwise_Title"), null, msg("TransformRotateClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
-        actions.add(new RotateRightAction(msg("TransformRotateAntiClockwise_Title"), null, msg("TransformRotateAntiClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+        actions.add(new RotateRightAction(msg("TransformRotateClockwise_Title"), null, msg("TransformRotateClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
+        actions.add(new RotateLeftAction(msg("TransformRotateAntiClockwise_Title"), null, msg("TransformRotateAntiClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new Rotate180Action(msg("TransformRotate180_Title"), null, msg("TransformRotate180_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), null, msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
         actions.add(new FlipVerticalAction(msg("TransformFlipVertical_Title"), null, msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1)));

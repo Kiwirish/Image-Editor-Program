@@ -29,7 +29,9 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @author Blake Leahy
+ * @version 2.0
  */
 public class FilterActions extends MenuActions {
     

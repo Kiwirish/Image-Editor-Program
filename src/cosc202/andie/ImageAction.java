@@ -25,7 +25,8 @@ import javax.swing.*;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @version 2.0
  */
 public abstract class ImageAction extends AbstractAction {
    

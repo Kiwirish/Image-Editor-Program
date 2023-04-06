@@ -2,9 +2,14 @@ package cosc202.andie;
 
 import java.util.*;
 import java.io.*;
-//import java.security.MessageDigest;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Transparency;
 import java.awt.image.*;
 import javax.imageio.*;
+import javax.swing.JOptionPane;
+
+import cosc202.andie.ImageOperation.ImageOperationException;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -32,7 +37,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @version 2.0
  */
 public class EditableImage {
 
@@ -210,7 +216,10 @@ public class EditableImage {
             this.opsFilename = this.imageFilename + ".ops";
         }
         // Write image file based on file extension
-        String extension = imageFilename.substring(1+imageFilename.lastIndexOf(".")).toLowerCase();
+        int lastIndexOfDot = imageFilename.lastIndexOf(".");
+        if (lastIndexOfDot == -1) 
+            throw new ExtensionException(msg("Save_Exception") + imageFilename);
+        String extension = imageFilename.substring(1+lastIndexOfDot).toLowerCase();
         if (!ImageIO.write(original, extension, new File(imageFilename))) {
             throw new ExtensionException(msg("Save_Exception") + extension);
         };
@@ -254,21 +263,43 @@ public class EditableImage {
      * @throws IOException If the image cannot be written
      */
     public void export(String exportFilePath, String format) throws IOException {
+        boolean formatSupportsTransparency = format == "png" || format == "gif";
+        BufferedImage exportImage;
+        if (!formatSupportsTransparency && current.getTransparency() != Transparency.OPAQUE) {
+            exportImage = new BufferedImage(current.getWidth(), current.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = exportImage.createGraphics();
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, exportImage.getWidth(), exportImage.getHeight());
+            g.drawImage(current, 0, 0, null);
+            g.dispose();
+        } else {
+            exportImage = deepCopy(current);
+        }
         File exportFile = new File(exportFilePath);
-        ImageIO.write(current, format, exportFile);
+        boolean result = ImageIO.write(exportImage, format, exportFile);
+        if (!result) throw new IOException();
     }
 
     /**
      * <p>
      * Apply an {@link ImageOperation} to this image.
+     * This should only be called once per when the operation is originally applied.
+     * If the operation fails, a warning message will be shown, and the operation will not be applied.
      * </p>
      * 
      * @param imageOperation The operation to apply.
+     * @return true if the operation was applied, and false otherwise.
      */
-    public void apply(ImageOperation imageOperation) {
-        current = imageOperation.apply(current);
+    public boolean apply(ImageOperation imageOperation) {
+        try {
+            current = imageOperation.apply(current);
+        } catch (ImageOperationException ex) {
+            JOptionPane.showMessageDialog(null, msg("Apply_Exception") + "\n" + ex.getMessage(), msg("Apply_Exception_Title"), JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         ops.add(imageOperation);
         redoOps.clear();
+        return true;
     }
 
     /**
@@ -290,8 +321,14 @@ public class EditableImage {
     public void redo()  {
         if (redoOps.isEmpty()) return;
         ImageOperation operationToRedo = redoOps.pop();
-        current = operationToRedo.apply(current);
-        ops.add(operationToRedo);
+        try {
+            current = operationToRedo.apply(current);
+        } catch (ImageOperationException ex) {
+            // No operation should fail when being redone.
+            return;
+        } finally {
+            ops.add(operationToRedo);
+        }
     }
 
     /**
@@ -334,8 +371,13 @@ public class EditableImage {
      */
     private void refresh()  {
         current = deepCopy(original);
-        for (ImageOperation op: ops) {
-            current = op.apply(current);
+        try {
+            for (ImageOperation op: ops) {
+                current = op.apply(current);
+            }
+        } catch (ImageOperationException ex) {
+            // This should never happen, since the operations have already been applied once.
+            return;
         }
     }
 

@@ -22,7 +22,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @version 2.0
  */
 public class ViewActions extends MenuActions {
 
@@ -138,7 +139,7 @@ public class ViewActions extends MenuActions {
 
     /**
      * <p>
-     * Action to reset the zoom level to actual size.
+     * Action to set the zoom level to 100%.
      * </p>
      * 
      * <p>
@@ -185,6 +186,16 @@ public class ViewActions extends MenuActions {
 
     }
 
+
+    /**
+     * <p>
+     * Action to reset the zoom level to fill the frame
+     * </p>
+     * 
+     * <p>
+     * Note that this action only affects the way the image is displayed, not its actual contents.
+     * </p>
+     */
     public class ResetZoomAction extends ImageAction {
 
         /**

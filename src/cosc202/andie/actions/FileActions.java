@@ -31,7 +31,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @version 2.0
  */
 public class FileActions extends MenuActions {
     
@@ -260,13 +261,14 @@ public class FileActions extends MenuActions {
             fileChooser.setFileFilter(filter);
 
             String filepath = target.getImage().getFilepath();
-            if (filepath != null) fileChooser.setCurrentDirectory(new File(filepath));
+            if (filepath != null) fileChooser.setSelectedFile(new File(filepath));
             int result = fileChooser.showSaveDialog(target);
 
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
                     String imageFilepath = fileChooser.getSelectedFile().getCanonicalPath();
-                    String givenImageExtension = getImageExtension(imageFilepath);
+                    String originalExtension = getImageExtension(filepath);
+                    String givenImageExtension = getPathWithImageExtension(imageFilepath, originalExtension);
                     if (givenImageExtension.equals("")) throw new EditableImage.ExtensionException(msg("File_Extension_Exception"));
                     target.getImage().saveAs(givenImageExtension);
                 } catch (EditableImage.ExtensionException err) {
@@ -404,7 +406,7 @@ public class FileActions extends MenuActions {
 
         /**
          * <p>
-         * Create a new file-exit action.
+         * Create a new file-export action.
          * </p>
          * 
          * @param name The name of the action (ignored if null).
@@ -418,12 +420,12 @@ public class FileActions extends MenuActions {
 
          /**
          * <p>
-         * Callback for when the file-exit action is triggered.
+         * Callback for when the file-export action is triggered.
          * </p>
          * 
          * <p>
-         * This method is called whenever the FileExitAction is triggered.
-         * It quits the program.
+         * This method is called whenever the FileExportAction is triggered.
+         * It shows an export dialog box, and exports the image.
          * </p>
          * 
          * @param e The event triggering this callback.
@@ -431,7 +433,7 @@ public class FileActions extends MenuActions {
         public void actionPerformed(ActionEvent e) {
             if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,msg("File_Exit_Action_hasImage")); return; }
 
-            String[] writerFormatNames = ImageIO.getWriterFileSuffixes();
+            String[] writerFormatNames = {"png", "jpg", "gif", "bmp", "tiff"};
 
             JPanel panel = new JPanel();
             JComboBox<String> imageFormatChooser = new JComboBox<String>(writerFormatNames);

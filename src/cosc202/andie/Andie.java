@@ -31,7 +31,8 @@ import javax.imageio.*;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @version 2.0
  *
  * 
  */
@@ -43,7 +44,7 @@ public class Andie {
     /**
      * 
      * <p>
-     * This method sets up an interface consisting of an active image (an {@code ImagePanel})
+     * This method sets up an interface consisting of the active image (an {@code ImagePanel})
      * and various menus which can be used to trigger operations to load, save, edit, etc. 
      * These operations are implemented {@link ImageOperation}s and triggered via 
      * {@code ImageAction}s grouped by their general purpose into menus.
@@ -129,6 +130,7 @@ public class Andie {
     /**
      * <p>
      * Initialises variables and launches Andie.
+     * Creates the @{code ImagePanel} and links the {@code ImageAction} target.
      * </p>
      */
     public static void launchAndie() {
