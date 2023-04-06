@@ -42,6 +42,8 @@ public class LanguageConfig {
 	private static ResourceBundle bundle;
 	private static ResourceBundle fallbackBundle;
 
+	private static final String bundleBaseName = "languages/MessageBundle";
+
 	private static int currentLanguage = LanguageConfig.ENGLISH;
 
 	/**
@@ -82,12 +84,12 @@ public class LanguageConfig {
 	 */
 	private static void updateBundle() {
 		try {
-			LanguageConfig.bundle = ResourceBundle.getBundle("MessageBundle");
+			LanguageConfig.bundle = ResourceBundle.getBundle(LanguageConfig.bundleBaseName);
 		} catch (MissingResourceException err) {
 			setLanguage(LanguageConfig.ENGLISH);
-			LanguageConfig.bundle = ResourceBundle.getBundle("MessageBundle");
+			LanguageConfig.bundle = ResourceBundle.getBundle(LanguageConfig.bundleBaseName);
 		}
-		LanguageConfig.fallbackBundle = ResourceBundle.getBundle("MessageBundle", locales[LanguageConfig.ENGLISH]);
+		LanguageConfig.fallbackBundle = ResourceBundle.getBundle(LanguageConfig.bundleBaseName, locales[LanguageConfig.ENGLISH]);
 	}
 
 	/**

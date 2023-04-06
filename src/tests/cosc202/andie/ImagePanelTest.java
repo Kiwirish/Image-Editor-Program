@@ -1,10 +1,5 @@
 package tests.cosc202.andie;
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-
-import javax.swing.JPanel;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
