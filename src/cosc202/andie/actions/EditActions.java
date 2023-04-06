@@ -25,6 +25,7 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
+ * @author Jeb Nicholson
  * @version 1.0
  */
 public class EditActions extends MenuActions{

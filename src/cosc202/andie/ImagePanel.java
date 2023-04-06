@@ -30,7 +30,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @version 2.0
  */
 public class ImagePanel extends JPanel implements MouseWheelListener {
     

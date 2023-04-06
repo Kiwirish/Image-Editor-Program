@@ -16,6 +16,24 @@ import cosc202.andie.operations.transform.Rotate180;
 
 import static cosc202.andie.LanguageConfig.msg;
 
+/**
+ * <p>
+ * Actions provided by the Transform menu.
+ * </p>
+ * 
+ * <p>
+ * The transform menu contains action the affect the size and orientation of the image.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @author Steven Mills
+ * @author Jeb Nicholson
+ * @author Bernard Pieters
+ * @version 2.0
+ */
 public class TransformActions extends MenuActions {
 
 

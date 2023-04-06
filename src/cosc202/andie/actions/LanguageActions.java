@@ -8,8 +8,28 @@ import cosc202.andie.LanguageConfig;
 
 import static cosc202.andie.LanguageConfig.msg;
 
+/**
+ * <p>
+ * Actions provided by the Language menu.
+ * </p>
+ * 
+ * <p>
+ * The Language menu contains actions that set the language of the application. The action corresponding to the current language is disabled.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @see LanguageConfig
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class LanguageActions extends MenuActions {
 
+    /**
+     * Create a set of language actions
+     */
     public LanguageActions(){
         super(msg("Language_Title"));
         actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, LanguageConfig.ENGLISH));
@@ -22,20 +42,37 @@ public class LanguageActions extends MenuActions {
 
     }
 
+    /**
+     * Action to change the language
+     */
     public class LanguageAction extends ImageAction{
-            int language;
-            LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, int language){
-                super(name, icon, desc, mnemonic);
-                this.language = language;
-            } 
+        private int language;
+        /**
+         * <p>
+         * Create a new language action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         * @param language The key for the language to change to
+         */
+        LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, int language){
+            super(name, icon, desc, mnemonic);
+            this.language = language;
+        } 
 
-            public void actionPerformed(ActionEvent e) {
-                LanguageConfig.changeLanguage(language);
-            }
+        /**
+         * Set ANDIE's current language to the language specified in the constructor
+         */
+        public void actionPerformed(ActionEvent e) {
+            LanguageConfig.changeLanguage(language);
+        }
 
-            public void updateState() {
-                setEnabled(LanguageConfig.getLanguage() != language);
-            }
+        public void updateState() {
+            setEnabled(LanguageConfig.getLanguage() != language);
+        }
     }
 
 }
