@@ -22,6 +22,7 @@ import static cosc202.andie.LanguageConfig.msg;
  * 
  * @see LanguageConfig
  * @author Jeb Nicholson
+ * @author Oliver Peyroux
  * @version 1.0
  */
 public class LanguageActions extends MenuActions {
