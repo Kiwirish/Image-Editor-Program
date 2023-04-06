@@ -1,14 +1,22 @@
 package tests.cosc202.andie;
+
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.util.Stack;
+
+import javax.swing.JPanel;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import cosc202.andie.ImageOperation;
 import cosc202.andie.ImagePanel;
 
+/**
+ * <p>
+ * Tests for the ImagePanel
+ * </p>
+ * 
+ * @see ImagePanel
+ */
 public class ImagePanelTest {
 	@Test
 	void testInitialZoom() {
