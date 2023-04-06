@@ -92,7 +92,7 @@ public class ColourActions extends MenuActions {
 
     /**
      * <p>
-     * Action to adjust an images brightness and contrast.
+     * Action to adjust an images brightness.
      * </p>
      * 
      * @see BrightnessAction
@@ -146,7 +146,7 @@ public class ColourActions extends MenuActions {
 
         /**
          * <p>
-         * Create a new brightness adjustment action.
+         * Create a new contrast adjustment action.
          * </p>
          * 
          * @param name The name of the action (ignored if null).

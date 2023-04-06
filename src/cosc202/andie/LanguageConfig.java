@@ -4,6 +4,13 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
+    /**
+    * <p>
+    * Action to apply a LanguageAction
+    * </p>
+    * 
+    * @see SharpenFilter
+    */
 public class LanguageConfig {
 
 	public static final int MAORI = 0;
@@ -24,7 +31,11 @@ public class LanguageConfig {
 	private static ResourceBundle fallbackBundle;
 
 	private static int currentLanguage = LanguageConfig.ENGLISH;
-
+	/**
+     * <p>
+     * Create a new initialisation for language
+     * </p>
+     */
 	public static void init() {
 		LanguageConfig.prefs = Preferences.userNodeForPackage(LanguageConfig.class);
 
@@ -39,7 +50,12 @@ public class LanguageConfig {
 		updateBundle();
 
 	}
-
+	/**
+     * <p>
+     * setLanguage method, sets the language chosen.
+     * </p>
+	 * @return languageChanged
+     */
 	private static boolean setLanguage(int language) {
 		if (language < 0 || language >= locales.length) return false;
 		boolean languageChanged = currentLanguage != language;

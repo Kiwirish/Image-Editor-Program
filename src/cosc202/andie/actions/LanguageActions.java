@@ -7,9 +7,24 @@ import cosc202.andie.ImageAction;
 import cosc202.andie.LanguageConfig;
 
 import static cosc202.andie.LanguageConfig.msg;
-
+/**
+ * <p>
+ * Actions provided by the Language menu.
+ * </p>
+ * 
+ * <p>
+ * The Language menu contains actions that update the chosen language in the andie app.
+ * </p>
+ * 
+ * @author Oliver Peyroux
+ * @version 1.0
+ */
 public class LanguageActions extends MenuActions {
-
+    /**
+     * <p>
+     * Create a set of Language menu actions.
+     * </p>
+     */
     public LanguageActions(){
         super(msg("Language_Title"));
         actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, LanguageConfig.ENGLISH));
@@ -21,7 +36,13 @@ public class LanguageActions extends MenuActions {
         actions.add(new LanguageAction(msg("Italian_Title"), null , msg("Italian_Desc"), null, LanguageConfig.ITALIAN));
 
     }
-
+    /**
+    * <p>
+    * Action to apply a LanguageAction
+    * </p>
+    * 
+    * @see SharpenFilter
+    */
     public class LanguageAction extends ImageAction{
             int language;
             LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, int language){
