@@ -276,7 +276,8 @@ public class EditableImage {
             exportImage = deepCopy(current);
         }
         File exportFile = new File(exportFilePath);
-        ImageIO.write(exportImage, format, exportFile);
+        boolean result = ImageIO.write(exportImage, format, exportFile);
+        if (!result) throw new IOException();
     }
 
     /**
