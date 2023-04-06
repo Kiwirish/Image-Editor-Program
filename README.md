@@ -1,40 +1,100 @@
-## Getting Started
+# __Andie Image Editor__ : Group M
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+![Andie: A Non-Destructive Image Editor](.ReadmeAssets/Andie_Title.png)
+## User guide 
 
+__Welcome to ANDIE__
+
+To get started with ANDIE, drag and drop an image that you'd like to edit, or open an image by going to `File` > `Open`.
+
+Image operations, like filters, colour adjustments, and transformations can be applied to your image, by clicking them in the menu bar. You can undo and redo your changes by click the buttons in the `Edit` menu.
+
+Use the scrollbars, or if you're using a touchpad, use two-finger scrolling, to pan around the image. You can zoom in and out by holding `Control` on Windows, or `Command` on Mac, and scrolling up or down.
+
+The program's language can be changed by clicking the language menu in the menu bar.
+
+---
 ## Folder Structure
 
-The workspace contains two folders by default, where:
+The workspace contains two folders, where:
 
 - `src`: the folder to maintain sources
 - `lib`: the folder to maintain dependencies
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Within `src` there is:
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+- Our source code, under `cosc202/andie`
+- The language bundles for the languages we support, under `languages`
+- Our unit tests, under `tests/cosc202/andie`
 
-## Dependency Management
+Within `src/cosc202/andie` there is:
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- The main class, `Andie.java`, and other supporting classes core to the operation of Andie
+- `actions`, containing the classes providing the actions for the menu bar 
+- `components`, containing custom reusable swing components
+- `operations`, containing grouped imageOperations to be used within actions.
 
-Team M ReadME 
+---
+## Testing
+To test our program, we used a combination of Unit Testing, manual testing, and peer-reviewing.
 
-The task was divided up Where we each had three tasks:
-Blake: Sharpen Filter, Gaussian Blur Filter and Median Filter. 
-Ollie: Brightness adjustment, Contrast adjustment and Multilingual support.
-Bernard: Image resize, Image rotations, Image flip.
-Jeb: Image export, Exception handling, Other error avoidance/Prevention,
+After writing new code, we checked it's functionality by manually verifying its functionality, including testing it on a variety of edge-cases, for example:
+- Transforming images with unusual dimensions (Very large, very small)
+- Exporting images with transparency into formats that do not support transparency
+- Opening images with unusual file extensions (e.g. .txt)
+- Applying filters to images with unusual dimensions
 
-Testing
+We tested as a team, getting each other to run our code and try to break it.
 
-Median Filter:
-Salt and pepper test - the nose of the salt and pepper gets cancelled out.
+We also used Unit Testing to further verify that the Transform operations specifically were performing as expected, given different image inputs.
 
-User guide 
+In testing the filters, we had to verify that their output looked as expected. An example of how we tested our Median Filter was to apply it to a "salt and pepper" image, and verify that the noise was removed.
 
-To use out teams Image filter ANDIE either open an image file through the File menu or simply drag and drop in the window popup. Browse through the many different options provided, Note the menu options that show up grey are not applicable to that image. Whilst manipulating your image if you accidentally make a change that is no longer desirable just simply use the undo option to return the image to its previous state. After the image is how you want it use the file menu to save and or export your new image file.
+## Changes from the original ANDIE
+We've refactored ANDIE in a number of ways, to make it easier to work with, and to add new features. 
 
-Significant refactoring
+As detailed in **Folder Structure**, we've restructured the code to be more modular, putting actions, components, and operations into their own packages.
 
-The structure of our code has been further sorted into folders for different categories for example all the transform filters are in a single folder.  The Menu option will turn grey when they are unusable.The view option was changed so there an option to reset size and an option to fill the window. Ability to open an image by dragging and dropping the image onto the ANDIE window.
-These quality of life changes were courtesy of Jeb
+We've added new support classes, including `LanguageConfig.java` for handling the language bundles.
+- `Andie.java` has been refactored such that the UI is created in a separate method, `setup()`. This allows the UI to be reloaded when the language changes, without having to restart the program and lose any unsaved changes.
+- `ImagePanel.java` has been heavily modified, with the current image now drawn in the center of the panel, and the panel being zoomable by scroll. A welcome message and ability to drag and drop an image have also been added.
+- `EditableImage.java` has been added to, with support for saving and exporting images, as well as being able to test if an image has been modified since it was last saved.
+- `ImageAction.java` has had an `updateState()` method added, which is to be called when the menu item becomes visible. This allows actions to be disabled depending on the current state of the image.
+- We added `MenuActions.java`, a new superclass of our actions, which handles the creation of JMenuItem's for the menu bar, using the list of actions, and handles calling `updateState()` when the menu item becomes visible.
+
+---
+
+![Andie](.ReadmeAssets/Andie_Example_Image.png)
+## Who Did What
+### Bernard
+- Image transform operations
+	- Flip (Horizontal, Vertical)
+	- Resize
+	- Rotate (90˚, -90˚, 180˚)
+### Blake
+- Image filter operations
+	- Sharpen Filter
+	- Gaussian Blur
+	- Median Blur
+### Oliver
+- Image adjustment operations
+	- Brightness
+	- Contrast adjustment
+- Translations
+	- English, Maori, French, German, Spanish, Turkish, Italian
+### Jeb
+- File operations
+	- Open, Save, Save As, Export
+- Error handling (Error messages)
+- Error avoidance
+	- Disabling menu items that cannot be applied to the current image
+	- Warning user when closing unsaved image
+- Quality of life changes
+	- Welcome screen
+	- Drag and drop to open an image
+	- Image filling the frame by default
+	- Ctrl+Scroll to zoom
+	- Sliders for image filters/adjustments
+- Language support
+	- Loading correct messageBundle, fallback language
+	- Restarting the UI when language changes
