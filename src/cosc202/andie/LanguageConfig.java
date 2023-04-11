@@ -20,32 +20,36 @@ import java.util.prefs.Preferences;
  * 
  * @author Jeb Nicholson
  * @author Oliver Peyroux
- * @version 1.0
+ * @version 2.0
  */
 public class LanguageConfig {
 
 	//These are the language codes for the supported languages
-	public static final int MAORI = 0;
-	public static final int ENGLISH = 1;
-	public static final int FRENCH = 2;
-	public static final int GERMAN = 3;
-	public static final int SPANISH = 4;
-	public static final int TURKISH = 5;
-	public static final int ITALIAN = 6;
+	public static enum Language {
+		MAORI ("mi","NZ"), 
+		ENGLISH ("en","NZ"),
+		FRENCH ("fr","FR"), 
+		GERMAN ("de","DE"),
+		SPANISH ("es","ES"),
+		TURKISH ("tr","TR"), 
+		ITALIAN ("it","IT");
 
-	//Each language code represents an index in the locales array, which maps language codes to Locale objects
-	public static final Locale[] locales = {new Locale("mi", "NZ"), 
-	new Locale("en", "NZ"), new Locale("fr", "FR"), 
-	new Locale("de", "DE"), new Locale("es", "ES"), 
-	new Locale("tr", "TR"), new Locale("it", "IT")};
+		private Locale locale;
+		Language(String language, String country) {
+			locale = new Locale(language, country);
+		}
+		public Locale getLocale() {
+			return locale;
+		}
+	}
+
+	private static final String bundleBaseName = "languages/MessageBundle";
 
 	private static Preferences prefs;
 	private static ResourceBundle bundle;
 	private static ResourceBundle fallbackBundle;
 
-	private static final String bundleBaseName = "languages/MessageBundle";
-
-	private static int currentLanguage = LanguageConfig.ENGLISH;
+	private static Language currentLanguage = LanguageConfig.Language.ENGLISH;
 
 	/**
 	 * Called when the application starts, to set the language to the last used language
@@ -54,11 +58,11 @@ public class LanguageConfig {
 	public static void init() {
 		LanguageConfig.prefs = Preferences.userNodeForPackage(LanguageConfig.class);
 
-		int retrievedLanguage = -1;
+		Language retrievedLanguage = null;
 		try {
-			retrievedLanguage = Integer.valueOf(prefs.get("language", String.valueOf(LanguageConfig.ENGLISH)));
-		} catch (NumberFormatException err) {
-			retrievedLanguage = LanguageConfig.ENGLISH;
+			retrievedLanguage = Language.valueOf(prefs.get("language", String.valueOf(LanguageConfig.Language.ENGLISH)));
+		} catch (IllegalArgumentException err) {
+			retrievedLanguage = LanguageConfig.Language.ENGLISH;
 		}
 
 		setLanguage(retrievedLanguage);
@@ -70,11 +74,11 @@ public class LanguageConfig {
 	 * @param language the language code to set 
 	 * @return true if the language was changed, false otherwise (invalid language code, or language already set)
 	 */
-	private static boolean setLanguage(int language) {
-		if (language < 0 || language >= locales.length) return false;
+	private static boolean setLanguage(Language language) {
+		if (language == null) return false;
 		boolean languageChanged = currentLanguage != language;
 		currentLanguage = language;
-		Locale.setDefault(locales[currentLanguage]);
+		Locale.setDefault(currentLanguage.getLocale());
 		return languageChanged;
 	}
 
@@ -87,10 +91,10 @@ public class LanguageConfig {
 		try {
 			LanguageConfig.bundle = ResourceBundle.getBundle(LanguageConfig.bundleBaseName);
 		} catch (MissingResourceException err) {
-			setLanguage(LanguageConfig.ENGLISH);
+			setLanguage(LanguageConfig.Language.ENGLISH);
 			LanguageConfig.bundle = ResourceBundle.getBundle(LanguageConfig.bundleBaseName);
 		}
-		LanguageConfig.fallbackBundle = ResourceBundle.getBundle(LanguageConfig.bundleBaseName, locales[LanguageConfig.ENGLISH]);
+		LanguageConfig.fallbackBundle = ResourceBundle.getBundle(LanguageConfig.bundleBaseName, Language.ENGLISH.getLocale());
 	}
 
 	/**
@@ -98,7 +102,7 @@ public class LanguageConfig {
 	 * Updates the language, saves the new language to the user's preferences, and relaunches ANDIE.
 	 * @param lang the language code to change to
 	 */
-	public static void changeLanguage(int lang) {  
+	public static void changeLanguage(Language lang) {  
 		if (setLanguage(lang)) {
 			prefs.put("language", String.valueOf(currentLanguage));
 			updateBundle();
@@ -107,10 +111,10 @@ public class LanguageConfig {
 	}
 
 	/**
-	 * Gets the current language code
-	 * @return the current language code
+	 * Gets the current language
+	 * @return the current language 
 	 */
-	public static int getLanguage() {
+	public static Language getLanguage() {
 		return currentLanguage;
 	}
 

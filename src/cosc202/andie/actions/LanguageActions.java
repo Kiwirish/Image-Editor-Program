@@ -7,6 +7,7 @@ import cosc202.andie.ImageAction;
 import cosc202.andie.LanguageConfig;
 
 import static cosc202.andie.LanguageConfig.msg;
+import static cosc202.andie.LanguageConfig.Language;
 /**
  * <p>
  * Actions provided by the Language menu.
@@ -32,13 +33,13 @@ public class LanguageActions extends MenuActions {
      */
     public LanguageActions(){
         super(msg("Language_Title"));
-        actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, LanguageConfig.ENGLISH));
-        actions.add(new LanguageAction(msg("Maori_Title"), null , msg("Maori_Desc"), null, LanguageConfig.MAORI));
-        actions.add(new LanguageAction(msg("French_Title"), null , msg("French_Desc"), null, LanguageConfig.FRENCH));
-        actions.add(new LanguageAction(msg("German_Title"), null , msg("German_Desc"), null, LanguageConfig.GERMAN));
-        actions.add(new LanguageAction(msg("Spanish_Title"), null , msg("Spanish_Desc"), null, LanguageConfig.SPANISH));
-        actions.add(new LanguageAction(msg("Turkish_Title"), null , msg("Turkish_Desc"), null, LanguageConfig.TURKISH));
-        actions.add(new LanguageAction(msg("Italian_Title"), null , msg("Italian_Desc"), null, LanguageConfig.ITALIAN));
+        actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, Language.ENGLISH));
+        actions.add(new LanguageAction(msg("Maori_Title"), null , msg("Maori_Desc"), null, Language.MAORI));
+        actions.add(new LanguageAction(msg("French_Title"), null , msg("French_Desc"), null, Language.FRENCH));
+        actions.add(new LanguageAction(msg("German_Title"), null , msg("German_Desc"), null, Language.GERMAN));
+        actions.add(new LanguageAction(msg("Spanish_Title"), null , msg("Spanish_Desc"), null, Language.SPANISH));
+        actions.add(new LanguageAction(msg("Turkish_Title"), null , msg("Turkish_Desc"), null, Language.TURKISH));
+        actions.add(new LanguageAction(msg("Italian_Title"), null , msg("Italian_Desc"), null, Language.ITALIAN));
 
     }
 
@@ -46,7 +47,7 @@ public class LanguageActions extends MenuActions {
      * Action to change the language
      */
     public class LanguageAction extends ImageAction{
-        private int language;
+        private Language language;
         /**
          * <p>
          * Create a new language action.
@@ -58,7 +59,7 @@ public class LanguageActions extends MenuActions {
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          * @param language The key for the language to change to
          */
-        LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, int language){
+        LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, Language language){
             super(name, icon, desc, mnemonic);
             this.language = language;
         } 
