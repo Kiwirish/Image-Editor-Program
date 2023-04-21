@@ -197,7 +197,7 @@ public class FileActions extends MenuActions {
          * <p>
          * Saves the image to its original filepath.
          * </p>
-         * @returns true if the image was saved successfully, false otherwise
+         * @return true if the image was saved successfully, false otherwise
          */
         public boolean save() {
             if (!target.getImage().hasImage()) { JOptionPane.showMessageDialog(null,msg("File_save_error")); return false; }

@@ -174,7 +174,7 @@ public class Andie {
      * 
      * @param args Command line arguments, not currently used
      * @throws Exception If something goes awry
-     * @see #createAndShowGUI()
+     * @see #launchAndie()
      */
     public static void main(String[] args) throws Exception {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

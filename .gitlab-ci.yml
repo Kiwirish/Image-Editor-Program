@@ -1,0 +1,32 @@
+
+stages: # List of stages for jobs, and their order of execution
+  - build
+  - test
+
+pages: # publish Javadoc website
+  tags:
+    - docker
+  image: eclipse-temurin:17
+  stage: build
+  script:
+    - javadoc -d docs -sourcepath src/ -subpackages cosc202.andie
+    - mkdir public
+    - echo 'test' >public/test.txt
+    - mv docs public/
+    - ls -R public | head
+    - echo 'first ten public/ files listed'
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+unit-test-job:
+  tags:
+    - docker
+  image: eclipse-temurin:17
+  stage: test
+  script:
+    - echo "Attempting to run unit tests..."
+    - javac -d compiled $(find src -name "*.java") -cp "lib/*"
+    - cp -r src/languages compiled
+    - java -jar lib/junit-platform-console-standalone-1.9.2.jar -classpath compiled --select-package tests.cosc202.andie
