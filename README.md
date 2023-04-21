@@ -1,6 +1,11 @@
 # __Andie Image Editor__ : Group M
 
 ![Andie: A Non-Destructive Image Editor](.ReadmeAssets/Andie_Title.png)
+
+## Download [ANDIE.jar](https://cosc202-m.cspages.otago.ac.nz/andie/Andie.jar)
+
+---
+
 ## User guide 
 
 __Welcome to ANDIE__
@@ -12,6 +17,10 @@ Image operations, like filters, colour adjustments, and transformations can be a
 Use the scrollbars, or if you're using a touchpad, use two-finger scrolling, to pan around the image. You can zoom in and out by holding `Control` on Windows, or `Command` on Mac, and scrolling up or down.
 
 The program's language can be changed by clicking the language menu in the menu bar.
+
+---
+## Docs
+JavaDocs can be found [here](https://cosc202-m.cspages.otago.ac.nz/andie/docs).
 
 ---
 ## Folder Structure
