@@ -1,16 +1,17 @@
 
 stages: # List of stages for jobs, and their order of execution
-  - build
   - test
+  - build-jar
+  - build-docs
 
 pages: # publish Javadoc website
   tags:
     - docker
   image: eclipse-temurin:17
-  stage: build
+  stage: build-docs
   script:
     - javadoc -d docs -sourcepath src/ -subpackages cosc202.andie
-    - mkdir public
+    - mkdir -p public
     - echo 'test' >public/test.txt
     - mv docs public/
     - ls -R public | head
@@ -20,6 +21,7 @@ pages: # publish Javadoc website
       - public
   only:
     - main
+
 unit-test-job:
   tags:
     - docker
@@ -29,4 +31,24 @@ unit-test-job:
     - echo "Attempting to run unit tests..."
     - javac -d compiled $(find src -name "*.java") -cp "lib/*"
     - cp -r src/languages compiled
+    - cp -r src/icon.png compiled
     - java -jar lib/junit-platform-console-standalone-1.9.2.jar -classpath compiled --select-package tests.cosc202.andie
+
+build-jar-job:
+  tags:
+    - docker
+  image: eclipse-temurin:17
+  stage: build-jar
+  script:
+    - echo "Compiling to JAR file..."
+    - javac -d compiled $(find src/cosc202 -name "*.java") -cp "lib/*"
+    - cp -r src/languages compiled
+    - cp -r src/icon.png compiled
+    - jar cfe Andie.jar cosc202.andie.Andie -C compiled .
+    - mkdir -p public
+    - mv Andie.jar public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
