@@ -124,6 +124,7 @@ public class Andie {
             }
         };
         frame.addWindowListener(exitListener);
+
     }
 
 
