@@ -31,12 +31,6 @@ import javax.swing.*;
 public abstract class ImageAction extends AbstractAction {
    
     /**
-     * The user interface element containing the image upon which actions should be performed.
-     * This is common to all ImageActions.
-     */
-    protected static ImagePanel target;
-
-    /**
      * <p>
      * Constructor for ImageActions.
      * </p>
@@ -61,38 +55,4 @@ public abstract class ImageAction extends AbstractAction {
             putValue(MNEMONIC_KEY, mnemonic);
         }
     }
-
-
-    /**
-     * <p>
-     * Update the state of the action based on the current state of the target.
-     * </p>
-     * <p>
-     * Responsible for enabling or disabling the action based on the current state of the target. Called when the user clicks on the parent menu.
-     * </p>
-     */
-    public abstract void updateState();
-
-    /**
-     * <p>
-     * Set the target for ImageActions.
-     * </p>
-     * 
-     * @param newTarget The ImagePanel to apply ImageActions to.
-     */
-    public static void setTarget(ImagePanel newTarget) {
-        target = newTarget;
-    } 
-
-    /**
-     * <p>
-     * Get the target for ImageActions.
-     * </p>
-     * 
-     * @return The ImagePanel to which ImageActions are currently being applied.
-     */
-    public static ImagePanel getTarget() {
-        return target;
-    }
-
 }

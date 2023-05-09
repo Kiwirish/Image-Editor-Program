@@ -6,6 +6,9 @@ import javax.swing.*;
 import cosc202.andie.ImageAction;
 import cosc202.andie.components.PopupSlider;
 import cosc202.andie.components.PopupWithSliders;
+import cosc202.andie.controllers.AndieController;
+import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.AndieModel.ModelListener;
 import cosc202.andie.operations.colour.ConvertToGrey;
 import cosc202.andie.operations.colour.BrightnessAndContrast;
 
@@ -17,13 +20,16 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * <p>
- * The Colour menu contains actions that affect the colour of each pixel directly 
+ * The Colour menu contains actions that affect the colour of each pixel
+ * directly
  * without reference to the rest of the image.
- * This includes conversion to greyscale in the sample code, but more operations will need to be added.
+ * This includes conversion to greyscale in the sample code, but more operations
+ * will need to be added.
  * </p>
  * 
- * <p> 
- * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * <p>
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA
+ * 4.0</a>
  * </p>
  * 
  * @author Steven Mills
@@ -32,17 +38,31 @@ import static cosc202.andie.LanguageConfig.msg;
  * @version 2.0
  */
 public class ColourActions extends MenuActions {
-    
+
+
     /**
      * <p>
      * Create a set of Colour menu actions.
      * </p>
+     * 
+     * @param model
+     * @param controller
      */
-    public ColourActions() {
-        super(msg("Colour_Title"));
-        actions.add(new ConvertToGreyAction(msg("ConvertToGrey_Title"), null, msg("ConvertToGrey_Desc"), Integer.valueOf(KeyEvent.VK_G))); 
-        actions.add(new BrightnessAction(msg("Brightness_Title"), null,msg("Brightness_Desc"), Integer.valueOf(KeyEvent.VK_B)));
-        actions.add(new ContrastAction(msg("Contrast_Title"), null,msg("Contrast_Desc"), null));
+    public ColourActions(AndieController controller, AndieModel model) {
+        super(msg("Colour_Title"), controller, model);
+        actions.add(new ConvertToGreyAction(msg("ConvertToGrey_Title"), null, msg("ConvertToGrey_Desc"),
+                Integer.valueOf(KeyEvent.VK_G)));
+        actions.add(new BrightnessAction(msg("Brightness_Title"), null, msg("Brightness_Desc"),
+                Integer.valueOf(KeyEvent.VK_B)));
+        actions.add(new ContrastAction(msg("Contrast_Title"), null, msg("Contrast_Desc"), null));
+
+        ModelListener isl = ()-> {
+            for (ImageAction action : actions) {
+                action.setEnabled(model.hasImage());
+            }
+        };
+        model.registerImageStatusListener(isl);
+        isl.update();
     }
 
     /**
@@ -59,10 +79,10 @@ public class ColourActions extends MenuActions {
          * Create a new convert-to-grey action.
          * </p>
          * 
-         * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
-         * @param desc A brief description of the action  (ignored if null).
-         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
         ConvertToGreyAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
@@ -81,13 +101,7 @@ public class ColourActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            target.getImage().apply(new ConvertToGrey());
-            target.repaint();
-            target.getParent().revalidate();
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            controller.applyFilter(new ConvertToGrey());
         }
 
     }
@@ -106,10 +120,10 @@ public class ColourActions extends MenuActions {
          * Create a new brightness adjustment action.
          * </p>
          * 
-         * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
-         * @param desc A brief description of the action  (ignored if null).
-         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
         BrightnessAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
@@ -129,21 +143,15 @@ public class ColourActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Brightness_Popup_Label"),-100,100,0,"%",10,50);
-            PopupWithSliders popup = new PopupWithSliders(msg("Brightness_Popup_Title"),new PopupSlider[]{slider});
+            PopupSlider slider = new PopupSlider(msg("Brightness_Popup_Label"), -100, 100, 0, "%", 10, 50);
+            PopupWithSliders popup = new PopupWithSliders(msg("Brightness_Popup_Title"), new PopupSlider[] { slider });
             if (popup.show() == PopupWithSliders.OK) {
                 int brightness = slider.getValue();
-                target.getImage().apply(new BrightnessAndContrast(brightness,0));
-                target.repaint();
-                target.getParent().revalidate();
+                controller.applyFilter(new BrightnessAndContrast(brightness, 0));
             }
         }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
-        }
-
     }
+
     public class ContrastAction extends ImageAction {
 
         /**
@@ -151,10 +159,10 @@ public class ColourActions extends MenuActions {
          * Create a new contrast adjustment action.
          * </p>
          * 
-         * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
-         * @param desc A brief description of the action  (ignored if null).
-         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         * @param name     The name of the action (ignored if null).
+         * @param icon     An icon to use to represent the action (ignored if null).
+         * @param desc     A brief description of the action (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
         ContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
@@ -177,15 +185,9 @@ public class ColourActions extends MenuActions {
             PopupSlider slider = new PopupSlider(msg("Contrast_Popup_Label"),-100,100,0,"%",10,50);
             PopupWithSliders popup = new PopupWithSliders(msg("Contrast_Popup_Title"),new PopupSlider[]{slider});
             if (popup.show() == PopupWithSliders.OK) {
-                int constast = slider.getValue();
-                target.getImage().apply(new BrightnessAndContrast(0,constast));
-                target.repaint();
-                target.getParent().revalidate();
+                int contrast = slider.getValue();
+                controller.applyFilter(new BrightnessAndContrast(0, contrast));
             }
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
         }
 
     }

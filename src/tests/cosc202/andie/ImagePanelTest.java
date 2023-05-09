@@ -3,14 +3,14 @@ package tests.cosc202.andie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import cosc202.andie.ImagePanel;
+import cosc202.andie.ContentPanel;
 
 /**
  * <p>
  * Tests for the ImagePanel
  * </p>
  * 
- * @see ImagePanel
+ * @see ContentPanel
  */
 public class ImagePanelTest {
 	// @Test

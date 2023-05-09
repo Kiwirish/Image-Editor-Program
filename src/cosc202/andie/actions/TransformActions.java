@@ -7,6 +7,9 @@ import javax.swing.*;
 import cosc202.andie.ImageAction;
 import cosc202.andie.components.PopupSlider;
 import cosc202.andie.components.PopupWithSliders;
+import cosc202.andie.controllers.AndieController;
+import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.AndieModel.ModelListener;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
@@ -36,16 +39,22 @@ import static cosc202.andie.LanguageConfig.msg;
  */
 public class TransformActions extends MenuActions {
 
-
-    /** adds the Different actions of the transform style */
-    public TransformActions(){
-        super(msg("Transform_Title"));
+    public TransformActions(AndieController controller, AndieModel model){
+        super(msg("Transform_Title"), controller, model);
         actions.add(new ResizeAction(msg("TransformResize_Title"), null, msg("TransformResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
         actions.add(new RotateRightAction(msg("TransformRotateClockwise_Title"), null, msg("TransformRotateClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new RotateLeftAction(msg("TransformRotateAntiClockwise_Title"), null, msg("TransformRotateAntiClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new Rotate180Action(msg("TransformRotate180_Title"), null, msg("TransformRotate180_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), null, msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
         actions.add(new FlipVerticalAction(msg("TransformFlipVertical_Title"), null, msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+
+        ModelListener isl = ()-> {
+            for (ImageAction action : actions) {
+                action.setEnabled(model.hasImage());
+            }
+        };
+        model.registerImageStatusListener(isl);
+        isl.update();
 
     }
 
@@ -66,12 +75,7 @@ public class TransformActions extends MenuActions {
         } 
         /** Call back for when FlipVerticalAction is triggered */
         public void actionPerformed(ActionEvent e) {
-            target.getImage().apply(new FlipVertical());
-            target.repaint();
-            target.getParent().revalidate();
-        }
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            controller.applyFilter(new FlipVertical());
         }
     }
     /** action to apply the flip horizontal */
@@ -81,12 +85,7 @@ public class TransformActions extends MenuActions {
         } 
          /** Call back for when FlipHorizontalAction is triggered */
         public void actionPerformed(ActionEvent e) {
-            target.getImage().apply(new FlipHorizontal());
-            target.repaint();
-            target.getParent().revalidate();
-        }
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            controller.applyFilter(new FlipHorizontal());
         }
     }
     /** to apply the Resize  */
@@ -100,13 +99,8 @@ public class TransformActions extends MenuActions {
             PopupWithSliders popup = new PopupWithSliders(msg("Resize_Popup_Title"),new PopupSlider[]{slider});
             if (popup.show() == PopupWithSliders.OK) {
                 int scale = slider.getValue();
-                target.getImage().apply(new Resize(scale));
-                target.repaint();
-                target.getParent().revalidate();
+                controller.applyFilter(new Resize(scale));
             }
-        }
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
         }
     }
     /** action to apply the Rotate right filter */
@@ -116,13 +110,7 @@ public class TransformActions extends MenuActions {
         }
         /** Call back for when RotateRightAction is triggered */
         public void actionPerformed(ActionEvent e) {
-            
-                target.getImage().apply(new RotateRight());
-                target.repaint();
-                target.getParent().revalidate();
-        }
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+                controller.applyFilter(new RotateRight());
         }
     }   
     /** action to apply the rotate left  */
@@ -132,12 +120,7 @@ public class TransformActions extends MenuActions {
         }
          /** Call back for when RotateLeftAction is triggered */
         public void actionPerformed(ActionEvent e) {
-                target.getImage().apply(new RotateLeft());
-                target.repaint();
-                target.getParent().revalidate();
-        }
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            controller.applyFilter(new RotateLeft());
         }
     }
     /** action to apply the rotate 180 */
@@ -147,12 +130,7 @@ public class TransformActions extends MenuActions {
         }
          /** Call back for when Rotate180Action is triggered */
         public void actionPerformed(ActionEvent e) {
-                target.getImage().apply(new Rotate180());
-                target.repaint();
-                target.getParent().revalidate();
-        }
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            controller.applyFilter(new Rotate180());
         }
     }
 }

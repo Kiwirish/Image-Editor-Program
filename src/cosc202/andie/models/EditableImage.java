@@ -1,14 +1,15 @@
-package cosc202.andie;
+package cosc202.andie.models;
 
 import java.util.*;
 import java.io.*;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
 import java.awt.image.*;
-import javax.imageio.*;
 import javax.swing.JOptionPane;
 
+import cosc202.andie.ImageOperation;
 import cosc202.andie.ImageOperation.ImageOperationException;
 
 import static cosc202.andie.LanguageConfig.msg;
@@ -42,6 +43,8 @@ import static cosc202.andie.LanguageConfig.msg;
  */
 public class EditableImage {
 
+	private ArrayList<ImageListener> imageListeners = new ArrayList<ImageListener>();
+
     /** The original image. This should never be altered by ANDIE. */
     private BufferedImage original;
     /** The current image, the result of applying {@link ops} to {@link original}. */
@@ -50,10 +53,6 @@ public class EditableImage {
     private Stack<ImageOperation> ops;
     /** A memory of 'undone' operations to support 'redo'. */
     private Stack<ImageOperation> redoOps;
-    /** The file where the original image is stored/ */
-    private String imageFilename;
-    /** The file where the operation sequence is stored. */
-    private String opsFilename;
     /** Whether the image has been modified since it was last saved/opened */
     private BufferedImage lastSavedImage;
 
@@ -66,41 +65,25 @@ public class EditableImage {
      * A new EditableImage has no image (it is a null reference), and an empty stack of operations.
      * </p>
      */
-    public EditableImage() {
-        reset();
-    }
-
-    /**
-     * Resets the image
-     */
-    public void reset() {
-        original = null;
-        current = null;
-        ops = new Stack<ImageOperation>();
+    public EditableImage(BufferedImage image, String serializedOps) {
+        this.original = image;
+        this.ops = stringToOps(serializedOps);
         redoOps = new Stack<ImageOperation>();
-        imageFilename = null;
-        opsFilename = null;
-        lastSavedImage = null;
+        this.refresh();
+        lastSavedImage = deepCopy(current);
     }
 
-    /**
-     * <p>
-     * Check if there is an image loaded.
-     * </p>
-     * 
-     * @return True if there is an image, false otherwise.
-     */
-    public boolean hasImage() {
-        return current != null;
+    public EditableImage(BufferedImage image) {
+        this.original = image;
+        this.ops = new Stack<ImageOperation>();
+        redoOps = new Stack<ImageOperation>();
+        this.refresh();
+        lastSavedImage = deepCopy(current);
     }
 
-    /**
-     * <p>
-     * Get the current image's file path.
-     * @return The current image's file path, or null if there is no image.
-     */
-    public String getFilepath() {
-        return imageFilename;
+
+    public Dimension getSize() {
+        return new Dimension(current.getWidth(), current.getHeight());
     }
 
     /**
@@ -144,140 +127,30 @@ public class EditableImage {
         WritableRaster raster = bi.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
-    
-    /**
-     * <p>
-     * Open an image from a file.
-     * </p>
-     * 
-     * <p>
-     * Opens an image from the specified file.
-     * Also tries to open a set of operations from the file with <code>.ops</code> added.
-     * So if you open <code>some/path/to/image.png</code>, this method will also try to
-     * read the operations from <code>some/path/to/image.png.ops</code>.
-     * </p>
-     * 
-     * @param filePath The file to open the image from.
-     * @throws IOException The image cannot be read
-     */
-    public void open(String filePath) throws IOException {
-        imageFilename = filePath;
-        opsFilename = imageFilename + ".ops";
-        File imageFile = new File(imageFilename);
-        BufferedImage newImage = ImageIO.read(imageFile);
-        if (newImage == null) throw new IOException(msg("Open_Exception"));
-        Stack<ImageOperation> newOps = new Stack<ImageOperation>();
-        
-        try {
-            FileInputStream fileIn = new FileInputStream(this.opsFilename);
-            ObjectInputStream objIn = new ObjectInputStream(fileIn);
-            // Silence the Java compiler warning about type casting.
-            // Understanding the cause of the warning is way beyond
-            // the scope of COSC202, but if you're interested, it has
-            // to do with "type erasure" in Java: the compiler cannot
-            // produce code that fails at this point in all cases in
-            // which there is actually a type mismatch for one of the
-            // elements within the Stack, i.e., a non-ImageOperation.
-            @SuppressWarnings("unchecked")
-            Stack<ImageOperation> opsFromFile = (Stack<ImageOperation>) objIn.readObject();
-            newOps = opsFromFile;
-            objIn.close();
-            fileIn.close();
-        } catch (Exception ex) { }
-        //newOps will be empty unless there existed a valid .ops file.
-        openNewImage(newImage, newOps);
-    }
 
-    public void openNewImage(BufferedImage image, Stack<ImageOperation> ops) {
-        original = image;
-        this.ops = ops;
-        redoOps.clear();
-        this.refresh();
+    public void saved() {
         lastSavedImage = deepCopy(current);
     }
 
-    /**
-     * <p>
-     * Save an image to file.
-     * </p>
-     * 
-     * <p>
-     * Saves an image to the file it was opened from, or the most recent file saved as.
-     * Also saves a set of operations from the file with <code>.ops</code> added.
-     * So if you save to <code>some/path/to/image.png</code>, this method will also save
-     * the current operations to <code>some/path/to/image.png.ops</code>.
-     * </p>
-     * 
-     * @throws IOException If the immage cannot be written
-     * @throws ExtensionException If the file extension is not a valid image file format
-     */
-    public void save() throws IOException, ExtensionException {
-        if (this.opsFilename == null) {
-            this.opsFilename = this.imageFilename + ".ops";
-        }
-        // Write image file based on file extension
-        int lastIndexOfDot = imageFilename.lastIndexOf(".");
-        if (lastIndexOfDot == -1) 
-            throw new ExtensionException(msg("Save_Exception") + imageFilename);
-        String extension = imageFilename.substring(1+lastIndexOfDot).toLowerCase();
-        if (!ImageIO.write(original, extension, new File(imageFilename))) {
-            throw new ExtensionException(msg("Save_Exception") + extension);
-        };
-        // Write operations file
-        FileOutputStream fileOut = new FileOutputStream(this.opsFilename);
-        ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
-        objOut.writeObject(this.ops);
-        objOut.close();
-        fileOut.close();
-        lastSavedImage = deepCopy(current);
+    public String getOpsString() {
+        return opsToString(ops);
+    }
+    public boolean hasOps() {
+        return !ops.empty();
     }
 
-
-    /**
-     * <p>
-     * Save an image to a speficied file.
-     * </p>
-     * 
-     * <p>
-     * Saves an image to the file provided as a parameter.
-     * Also saves a set of operations from the file with <code>.ops</code> added.
-     * So if you save to <code>some/path/to/image.png</code>, this method will also save
-     * the current operations to <code>some/path/to/image.png.ops</code>.
-     * </p>
-     * 
-     * @param imageFilename The file location to save the image to.
-     * @throws IOException If The image cannot be written
-     */
-    public void saveAs(String imageFilename) throws IOException, ExtensionException {
-        this.imageFilename = imageFilename;
-        this.opsFilename = imageFilename + ".ops";
-        save();
-    }
-
-    /**
-     * <p>
-     * Export the image to a file.
-     * </p>
-     * @param exportFilePath The file to export the image to.
-     * @param format The format to export the image as.
-     * @throws IOException If the image cannot be written
-     */
-    public void export(String exportFilePath, String format) throws IOException {
+    public BufferedImage getExportImage(String format) {
         boolean formatSupportsTransparency = format == "png" || format == "gif";
-        BufferedImage exportImage;
         if (!formatSupportsTransparency && current.getTransparency() != Transparency.OPAQUE) {
-            exportImage = new BufferedImage(current.getWidth(), current.getHeight(), BufferedImage.TYPE_INT_RGB);
+            BufferedImage exportImage = new BufferedImage(current.getWidth(), current.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D g = exportImage.createGraphics();
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, exportImage.getWidth(), exportImage.getHeight());
             g.drawImage(current, 0, 0, null);
             g.dispose();
-        } else {
-            exportImage = deepCopy(current);
+            return exportImage;
         }
-        File exportFile = new File(exportFilePath);
-        boolean result = ImageIO.write(exportImage, format, exportFile);
-        if (!result) throw new IOException();
+        return deepCopy(current);
     }
 
     /**
@@ -293,13 +166,24 @@ public class EditableImage {
     public boolean apply(ImageOperation imageOperation) {
         try {
             current = imageOperation.apply(current);
+            notifyListeners(imageListeners);
         } catch (ImageOperationException ex) {
             JOptionPane.showMessageDialog(null, msg("Apply_Exception") + "\n" + ex.getMessage(), msg("Apply_Exception_Title"), JOptionPane.WARNING_MESSAGE);
             return false;
         }
         ops.add(imageOperation);
         redoOps.clear();
+        notifyListeners(imageListeners);
         return true;
+    }
+
+	public void registerImageListener(ImageListener listener) {
+		imageListeners.add(listener);
+	}
+	private void notifyListeners(ArrayList<ImageListener> listeners) {
+		for (ImageListener listener : listeners) {
+			listener.update();
+		}
     }
 
     /**
@@ -311,6 +195,7 @@ public class EditableImage {
         if (ops.isEmpty()) return;
         redoOps.push(ops.pop());
         refresh();
+        notifyListeners(imageListeners);
     }
 
     /**
@@ -328,6 +213,7 @@ public class EditableImage {
             return;
         } finally {
             ops.add(operationToRedo);
+            notifyListeners(imageListeners);
         }
     }
 
@@ -355,6 +241,10 @@ public class EditableImage {
      */
     public BufferedImage getCurrentImage() {
         return current;
+    }
+
+    public BufferedImage getOriginalImage() {
+        return original;
     }
 
     /**
@@ -388,14 +278,6 @@ public class EditableImage {
     public boolean getModified() {
         return !bufferedImagesAreEqual(lastSavedImage, current);
     }
-    /**
-     * A checked Exception for when a file extension is not supported.
-     */
-    public static class ExtensionException extends Exception {
-        public ExtensionException(String message) {
-            super(message);
-        }
-    }
 
     /**
      * <p>
@@ -417,4 +299,33 @@ public class EditableImage {
         }
         return true;
     }
+
+    public static String opsToString(Stack<ImageOperation> ops) {
+        ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream objOut = new ObjectOutputStream(bytesOut);
+            objOut.writeObject(ops);
+            objOut.close();
+        } catch (IOException ex) {
+            return "";
+        };
+        return Base64.getEncoder().encodeToString(bytesOut.toByteArray()); 
+    }
+
+    public static Stack<ImageOperation> stringToOps(String s) {
+        try {
+        byte[] bytes = Base64.getDecoder().decode(s);
+            ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            @SuppressWarnings("unchecked")
+            Stack<ImageOperation> ops = (Stack<ImageOperation>)objIn.readObject();
+            objIn.close();
+            return ops;
+        } catch (Exception e) {
+            return new Stack<ImageOperation>();
+        }
+    }
+
+	public interface ImageListener extends EventListener {
+		public void update();
+	}
 }

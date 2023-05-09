@@ -1,4 +1,4 @@
-package cosc202.andie;
+package cosc202.andie.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,7 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -22,7 +21,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
-public class PanView extends JPanel implements MouseWheelListener, MouseMotionListener, ComponentListener {
+import cosc202.andie.controllers.AndieController.ManualZoomListener;
+
+public class PanView extends JPanel implements MouseWheelListener, MouseMotionListener, ComponentListener, ManualZoomListener {
 	JPanel cp;
 	JComponent content;
 	JScrollPane sp;
@@ -32,7 +33,7 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 	Dimension contentSize;
 	double zoomFactor;
 
-	public PanView(JComponent content) {
+	public PanView(JComponent content, Dimension contentSize) {
 		super();
 		this.setLayout(new BorderLayout());
 
@@ -56,9 +57,9 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 		this.addComponentListener(this);
 
 		this.add(sp, BorderLayout.CENTER);
-		this.setBackground(java.awt.Color.pink);
+		this.contentSize = contentSize;
 		SwingUtilities.invokeLater(() -> {
-			setContentSize(content.getPreferredSize());
+			recalculateZoomFactor();
 			resetView();
 			mousePositionInThis = new Point(this.getWidth() / 2, this.getHeight() / 2);
 		});
@@ -77,7 +78,9 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 		cp.revalidate();
 	}
 
+
 	private void syncMousePosition() {
+		if (mousePositionInThis == null) return; 
 		SwingUtilities.invokeLater(() -> {
 			Point newMouseInIp = new Point((int) (mouseIpRatio.x * content.getWidth()),
 					(int) (mouseIpRatio.y * content.getHeight()));
@@ -92,9 +95,14 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 		return this.zoom;
 	}
 
+	//TODO: //BUG: why is it that 3 invokeLater's are needed to do the intial view reset? 
+	//TODO: //BUG: The image is jerky when zooming in and out. 
+
 	public void resetView() {
 		zoom = 1;
 		setZoom(zoom);
+		SwingUtilities.invokeLater(() -> {
+		SwingUtilities.invokeLater(() -> {
 		SwingUtilities.invokeLater(() -> {
 			// centers the viewport
 			JViewport vp = sp.getViewport();
@@ -107,11 +115,14 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 				updateMouseInIpRatio();
 			});
 		});
+		});
+		});
 	}
 
 	public void setContentSize(Dimension size) {
 		contentSize = size;
 		recalculateZoomFactor();
+		setZoom(zoom);
 	}
 
 	private void recalculateZoomFactor() {
@@ -139,6 +150,7 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 	}
 
 	private void updateMouseInIpRatio() {
+		if (mousePositionInThis == null) return; 
 		Point mouseInIp = SwingUtilities.convertPoint(this, mousePositionInThis, content);
 		double mouseIpRatioX = (double) mouseInIp.x / content.getWidth();
 		double mouseIpRatioY = (double) mouseInIp.y / content.getHeight();
@@ -158,6 +170,23 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 	}
 
 	@Override
+	public void manualZoomIn() {
+		setZoom(zoom+0.1);
+		updateMouseInIpRatio();
+	}
+
+	@Override
+	public void manualZoomOut() {
+		setZoom(zoom-0.1);
+		updateMouseInIpRatio();
+	}
+
+	@Override
+	public void manualResetZoom() {
+		resetView();
+	}
+
+	@Override
 	public void mouseDragged(MouseEvent e) {}
 
 	@Override
@@ -168,5 +197,6 @@ public class PanView extends JPanel implements MouseWheelListener, MouseMotionLi
 
 	@Override
 	public void componentHidden(ComponentEvent e) { }
+
 
 }

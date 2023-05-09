@@ -1,5 +1,7 @@
 package cosc202.andie;
 
+import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -42,6 +44,8 @@ public class LanguageConfig {
 			return locale;
 		}
 	}
+
+	private static ArrayList<LanguageListener> languageListeners = new ArrayList<LanguageListener>();
 
 	private static final String bundleBaseName = "languages/MessageBundle";
 
@@ -106,7 +110,8 @@ public class LanguageConfig {
 		if (setLanguage(lang)) {
 			prefs.put("language", String.valueOf(currentLanguage));
 			updateBundle();
-			Andie.relaunchAndie();
+			notifyLanguageListeners();
+			// Andie.relaunchAndie();
 		}
 	}
 
@@ -127,6 +132,19 @@ public class LanguageConfig {
 		if (bundle.containsKey(key)) return bundle.getString(key);
 		else if (fallbackBundle.containsKey(key)) return fallbackBundle.getString(key);
 		else return key;
+	}
+
+	public static void registerLanguageListener(LanguageListener listener) {
+		languageListeners.add(listener);
+	}
+	public static void notifyLanguageListeners() {
+		for (LanguageListener listener : languageListeners) {
+			listener.update();
+		}
+	}
+
+	public interface LanguageListener extends EventListener {
+		public void update();
 	}
 
 }

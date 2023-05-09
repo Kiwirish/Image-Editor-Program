@@ -5,6 +5,9 @@ import javax.swing.*;
 
 import cosc202.andie.ImageAction;
 import cosc202.andie.LanguageConfig;
+import cosc202.andie.LanguageConfig.LanguageListener;
+import cosc202.andie.controllers.AndieController;
+import cosc202.andie.models.AndieModel;
 
 import static cosc202.andie.LanguageConfig.msg;
 import static cosc202.andie.LanguageConfig.Language;
@@ -30,9 +33,11 @@ public class LanguageActions extends MenuActions {
 
     /**
      * Create a set of language actions
+     * @param model
+     * @param controller
      */
-    public LanguageActions(){
-        super(msg("Language_Title"));
+    public LanguageActions(AndieController controller, AndieModel model){
+        super(msg("Language_Title"), controller, model);
         actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, Language.ENGLISH));
         actions.add(new LanguageAction(msg("Maori_Title"), null , msg("Maori_Desc"), null, Language.MAORI));
         actions.add(new LanguageAction(msg("French_Title"), null , msg("French_Desc"), null, Language.FRENCH));
@@ -40,7 +45,6 @@ public class LanguageActions extends MenuActions {
         actions.add(new LanguageAction(msg("Spanish_Title"), null , msg("Spanish_Desc"), null, Language.SPANISH));
         actions.add(new LanguageAction(msg("Turkish_Title"), null , msg("Turkish_Desc"), null, Language.TURKISH));
         actions.add(new LanguageAction(msg("Italian_Title"), null , msg("Italian_Desc"), null, Language.ITALIAN));
-
     }
 
     /**
@@ -62,6 +66,11 @@ public class LanguageActions extends MenuActions {
         LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, Language language){
             super(name, icon, desc, mnemonic);
             this.language = language;
+            LanguageListener listener = ()->{
+                setEnabled(LanguageConfig.getLanguage() != language);
+            };
+            LanguageConfig.registerLanguageListener(listener);
+            listener.update();
         } 
 
         /**
@@ -69,10 +78,6 @@ public class LanguageActions extends MenuActions {
          */
         public void actionPerformed(ActionEvent e) {
             LanguageConfig.changeLanguage(language);
-        }
-
-        public void updateState() {
-            setEnabled(LanguageConfig.getLanguage() != language);
         }
     }
 
