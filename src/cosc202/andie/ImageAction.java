@@ -37,8 +37,6 @@ public abstract class ImageAction extends AbstractAction {
      * 
      * <p>
      * To construct an ImageAction you provide the information needed to integrate it with the interface.
-     * Note that the target is not specified per-action, but via the static member {@link target}
-     * via {@link setTarget}.
      * </p>
      * 
      * @param name The name of the action (ignored if null).

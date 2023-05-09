@@ -56,7 +56,6 @@ public class FileActions extends MenuActions {
      * Action to open an image from file.
      * </p>
      * 
-     * @see EditableImage#open(String)
      */
     public class FileOpenAction extends ImageAction {
 
@@ -111,7 +110,6 @@ public class FileActions extends MenuActions {
      * Action to save an image to its current file location.
      * </p>
      * 
-     * @see EditableImage#save()
      */
     public class FileSaveAction extends ImageAction {
 
@@ -157,7 +155,6 @@ public class FileActions extends MenuActions {
      * Action to save an image to a new file location.
      * </p>
      * 
-     * @see EditableImage#saveAs(String)
      */
     public class FileSaveAsAction extends ImageAction {
 
