@@ -34,6 +34,9 @@ public class AndieController {
 	public void registerZoomListener(ManualZoomListener listener) {
 		zoomListeners.add(listener);
 	}
+	public void deregisterZoomListener(ManualZoomListener listener) {
+		zoomListeners.remove(listener);
+	}
 	public void zoomIn() {
 		for (ManualZoomListener listener : zoomListeners) {
 			listener.manualZoomIn();

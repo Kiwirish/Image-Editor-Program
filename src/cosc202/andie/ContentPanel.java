@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import cosc202.andie.components.ImagePanView;
 import cosc202.andie.components.PanView;
 import cosc202.andie.components.WelcomeBlank;
 import cosc202.andie.controllers.AndieController;
@@ -44,42 +45,37 @@ public class ContentPanel extends JPanel {
     /**
      * The image to display in the ImagePanel.
      */
-    private ImagePanel imagePanel;
-    private PanView panView;
+    private ImagePanView ipv;
 
     public ContentPanel(AndieController controller, AndieModel model) {
         super();
         this.setLayout(new BorderLayout());
 
+        ipv = null;
+
         ModelListener isl = () -> {
-            if (model.hasImage()) {
+            if (model.hasImage() && ipv == null) {
                 removeAll();
-
-                imagePanel = new ImagePanel(controller, model);
-                panView = new PanView(imagePanel, model.getImage().getSize());
-
-                controller.registerZoomListener(panView);
-                add(panView, BorderLayout.CENTER);
-                panView.resetView();
+                ipv = new ImagePanView(model.getImage().getCurrentImage());
+                controller.registerZoomListener(ipv);
+                add(ipv, BorderLayout.CENTER);
             } else {
                 removeAll();
-                panView = null;
-                ContentPanel.this.add(new WelcomeBlank(), BorderLayout.CENTER);
+                ipv = null;
+                this.add(new WelcomeBlank(), BorderLayout.CENTER);
             }
             this.revalidate();
         };
 
         ModelListener il = () -> {
-            if (model.hasImage() && panView != null) {
-                panView.setContentSize(model.getImage().getSize());
+            if (model.hasImage() && ipv != null) {
+                ipv.updateImage(model.getImage().getCurrentImage());
             } 
         };
 
         model.registerImageStatusListener(isl);
         model.registerImageListener(il);
         isl.update();
-        il.update();
-
 
         //Open dropped image files
         setDropTarget(new DropTarget() {

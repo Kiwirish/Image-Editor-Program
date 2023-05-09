@@ -15,6 +15,12 @@ import cosc202.andie.ImageOperation;
 import cosc202.andie.Utils;
 import cosc202.andie.Utils.ExtensionException;
 
+/* 
+ * //BUG: Listeners from both the model and controller may not be getting deregistered when components no longer need them.
+ * Given enough open/closes of an image, this would use up too much memory.
+ * (Some listeners contain BufferedImages, which are not being garbage collected)
+ */
+
 public class AndieModel {
 
 	EditableImage image;
@@ -125,8 +131,14 @@ public class AndieModel {
 	public void registerImageStatusListener(ModelListener listener) {
 		imageStatusListeners.add(listener);
 	}
+	public void deregisterImageStatusListener(ModelListener listener) {
+		imageStatusListeners.remove(listener);
+	}
 	public void registerImageListener(ModelListener listener) {
 		imageListeners.add(listener);
+	}
+	public void deregisterImageListener(ModelListener listener) {
+		imageListeners.remove(listener);
 	}
 
 	public void applyFilter(ImageOperation filter) {

@@ -11,7 +11,7 @@ public class WelcomeBlank extends JPanel {
 	@Override
 	public void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
-		g.setColor(new Color(0x1a1b1c));
+		g.setColor(new Color(0x1E1E1E));
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		String message = msg("Andie_Welcome_Message");
 		g.setFont(new Font("Arial", Font.BOLD, 20));
