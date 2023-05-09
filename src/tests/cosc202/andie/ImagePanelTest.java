@@ -1,7 +1,5 @@
 package tests.cosc202.andie;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import cosc202.andie.ContentPanel;
 

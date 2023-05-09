@@ -38,7 +38,8 @@ public class LanguageConfig {
 
 		private Locale locale;
 		Language(String language, String country) {
-			locale = new Locale(language, country);
+			// locale = new Locale(language, country); (Deprecated)
+			locale = new Locale.Builder().setLanguage(language).setRegion(country).build();
 		}
 		public Locale getLocale() {
 			return locale;
@@ -138,7 +139,9 @@ public class LanguageConfig {
 		languageListeners.add(listener);
 	}
 	public static void notifyLanguageListeners() {
-		for (LanguageListener listener : languageListeners) {
+		// Copy the list of listeners to avoid ConcurrentModificationException
+		ArrayList<LanguageListener> listeners = new ArrayList<LanguageListener>(languageListeners);
+		for (LanguageListener listener : listeners) {
 			listener.update();
 		}
 	}

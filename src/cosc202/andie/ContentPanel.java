@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.*;
 
 import cosc202.andie.components.ImagePanView;
-import cosc202.andie.components.PanView;
 import cosc202.andie.components.WelcomeBlank;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
