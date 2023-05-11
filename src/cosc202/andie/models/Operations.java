@@ -33,7 +33,6 @@ public class Operations {
 				try {
 					return operation.drawPreview(image);
 				} catch (ImageOperationException e) {
-					// lastException = e;
 					return image;
 				}
 			};
@@ -73,9 +72,12 @@ public class Operations {
 			this.listener = listener;
 		}
 		public void run() {
+			try {
 			BufferedImage result = operation.apply(baseImage);
+
 			if (Thread.interrupted()) return;
 			listener.filterThreadFinished(result);
+			} catch (RuntimeException e) {}
 		}
 		public interface OperationRunnableListener {
 			public void filterThreadFinished(BufferedImage result);

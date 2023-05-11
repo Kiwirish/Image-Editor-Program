@@ -176,6 +176,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
         // for each pixel, an inner loop is created to iterate over all neighboring pixels to 
         // the current pixel the outer loop is on - only iterate within the size of the window. 
         for(int y = r ; y <= input.getHeight() - r - 1 ; y++){
+            if (Thread.interrupted()) throw new RuntimeException("Interrupted");
             for(int x = r ; x <= input.getWidth() - r - 1 ; x++){
                 // clear lists? 
                 aList.clear();
