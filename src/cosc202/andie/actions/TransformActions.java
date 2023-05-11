@@ -75,7 +75,7 @@ public class TransformActions extends MenuActions {
         } 
         /** Call back for when FlipVerticalAction is triggered */
         public void actionPerformed(ActionEvent e) {
-            controller.applyFilter(new FlipVertical());
+            controller.operations.apply(new FlipVertical());
         }
     }
     /** action to apply the flip horizontal */
@@ -85,7 +85,7 @@ public class TransformActions extends MenuActions {
         } 
          /** Call back for when FlipHorizontalAction is triggered */
         public void actionPerformed(ActionEvent e) {
-            controller.applyFilter(new FlipHorizontal());
+            controller.operations.apply(new FlipHorizontal());
         }
     }
     /** to apply the Resize  */
@@ -96,11 +96,11 @@ public class TransformActions extends MenuActions {
          /** Call back for when ResizeAction is triggered */
         public void actionPerformed(ActionEvent e) {
             PopupSlider slider = new PopupSlider(msg("Resize_Popup_Label"),1,300,100,"%",10,50);
-            PopupWithSliders popup = new PopupWithSliders(msg("Resize_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int scale = slider.getValue();
-                controller.applyFilter(new Resize(scale));
-            }
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new Resize(slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("Resize_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
     }
     /** action to apply the Rotate right filter */
@@ -110,7 +110,7 @@ public class TransformActions extends MenuActions {
         }
         /** Call back for when RotateRightAction is triggered */
         public void actionPerformed(ActionEvent e) {
-                controller.applyFilter(new RotateRight());
+            controller.operations.apply(new RotateRight());
         }
     }   
     /** action to apply the rotate left  */
@@ -120,7 +120,7 @@ public class TransformActions extends MenuActions {
         }
          /** Call back for when RotateLeftAction is triggered */
         public void actionPerformed(ActionEvent e) {
-            controller.applyFilter(new RotateLeft());
+            controller.operations.apply(new RotateLeft());
         }
     }
     /** action to apply the rotate 180 */
@@ -130,7 +130,7 @@ public class TransformActions extends MenuActions {
         }
          /** Call back for when Rotate180Action is triggered */
         public void actionPerformed(ActionEvent e) {
-            controller.applyFilter(new Rotate180());
+            controller.operations.apply(new Rotate180());
         }
     }
 }

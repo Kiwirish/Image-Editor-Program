@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import javax.imageio.ImageIO;
 
-import cosc202.andie.ImageOperation;
 import cosc202.andie.Utils;
 import cosc202.andie.Utils.ExtensionException;
 
@@ -23,17 +22,21 @@ import cosc202.andie.Utils.ExtensionException;
 
 public class AndieModel {
 
-	EditableImage image;
-	boolean isImageOpen = false;
-	String imageFilepath;
+	private EditableImage image;
+	private BufferedImage previewImage;
+	private boolean isImageOpen = false;
+	private String imageFilepath;
 
-	Dimension frameSize;
-	Point frameLocation;
+	private Dimension frameSize;
+	private Point frameLocation;
 
-	ArrayList<ModelListener> imageStatusListeners = new ArrayList<ModelListener>();
-	ArrayList<ModelListener> imageListeners = new ArrayList<ModelListener>();
+	private ArrayList<ModelListener> imageStatusListeners = new ArrayList<ModelListener>();
+	private ArrayList<ModelListener> workingImageListeners = new ArrayList<ModelListener>();
+
+	public Operations operations;
 
 	public AndieModel() {
+		this.operations = new Operations(this);
 	}
 
 	public void init() {
@@ -60,15 +63,21 @@ public class AndieModel {
 	public EditableImage getImage() {
 		return image;
 	}
+	public BufferedImage getWorkingImage() {
+		if (previewImage != null)
+			return previewImage;
+		return image.getCurrentImage();
+	}
 	public boolean hasImage() {
 		return isImageOpen;
 	}
 
 	public void closeImage() {
 		image = null;
+		previewImage = null;
 		isImageOpen = false;
 		notifyListeners(imageStatusListeners);
-		notifyListeners(imageListeners);
+		notifyListeners(workingImageListeners);
 	}
 
 	public void openImage(String filepath) throws IOException {
@@ -85,9 +94,10 @@ public class AndieModel {
 		this.imageFilepath = filepath;
 		isImageOpen = true;
 		notifyListeners(imageStatusListeners);
-		notifyListeners(imageListeners);
+		notifyListeners(workingImageListeners);
 		image.registerImageListener(() -> {
-			notifyListeners(imageListeners);
+			previewImage = null;
+			notifyListeners(workingImageListeners);
 		});
 	}
 
@@ -134,23 +144,28 @@ public class AndieModel {
 	public void deregisterImageStatusListener(ModelListener listener) {
 		imageStatusListeners.remove(listener);
 	}
-	public void registerImageListener(ModelListener listener) {
-		imageListeners.add(listener);
+	public void registerWorkingImageListener(ModelListener listener) {
+		workingImageListeners.add(listener);
 	}
-	public void deregisterImageListener(ModelListener listener) {
-		imageListeners.remove(listener);
+	public void deregisterWorkingImageListener(ModelListener listener) {
+		workingImageListeners.remove(listener);
 	}
-
-	public void applyFilter(ImageOperation filter) {
-		this.getImage().apply(filter);
-	}
-
 	public interface ModelListener extends EventListener {
 		public void update();
 	}
 
 	public void removeAllListeners() {
 		imageStatusListeners.clear();
-		imageListeners.clear();
+		workingImageListeners.clear();
+	}
+
+	public void setPreviewImage(BufferedImage image) {
+		previewImage = image;
+		notifyListeners(workingImageListeners);
+	}
+
+	public void clearPreviewImage() {
+		previewImage = null;
+		notifyListeners(workingImageListeners);
 	}
 }

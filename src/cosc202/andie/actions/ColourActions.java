@@ -1,6 +1,7 @@
 package cosc202.andie.actions;
 
 import java.awt.event.*;
+
 import javax.swing.*;
 
 import cosc202.andie.ImageAction;
@@ -101,7 +102,7 @@ public class ColourActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            controller.applyFilter(new ConvertToGrey());
+            controller.operations.apply(new ConvertToGrey());
         }
 
     }
@@ -144,11 +145,12 @@ public class ColourActions extends MenuActions {
          */
         public void actionPerformed(ActionEvent e) {
             PopupSlider slider = new PopupSlider(msg("Brightness_Popup_Label"), -100, 100, 0, "%", 10, 50);
-            PopupWithSliders popup = new PopupWithSliders(msg("Brightness_Popup_Title"), new PopupSlider[] { slider });
-            if (popup.show() == PopupWithSliders.OK) {
-                int brightness = slider.getValue();
-                controller.applyFilter(new BrightnessAndContrast(brightness, 0));
-            }
+            slider.addChangeListener((ev) -> {
+                controller.operations.update(new BrightnessAndContrast(slider.getValue(), 0));
+            });
+
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(), msg("Brightness_Popup_Title"), new PopupSlider[] { slider });
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
     }
 
@@ -183,11 +185,11 @@ public class ColourActions extends MenuActions {
          */
         public void actionPerformed(ActionEvent e) {
             PopupSlider slider = new PopupSlider(msg("Contrast_Popup_Label"),-100,100,0,"%",10,50);
-            PopupWithSliders popup = new PopupWithSliders(msg("Contrast_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int contrast = slider.getValue();
-                controller.applyFilter(new BrightnessAndContrast(0, contrast));
-            }
+            slider.addChangeListener((ev) -> {
+                controller.operations.update(new BrightnessAndContrast(0, slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("Contrast_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
 
     }

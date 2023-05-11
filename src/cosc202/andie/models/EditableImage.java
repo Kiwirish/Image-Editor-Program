@@ -10,6 +10,7 @@ import java.awt.image.*;
 import javax.swing.JOptionPane;
 
 import cosc202.andie.ImageOperation;
+import cosc202.andie.Utils;
 import cosc202.andie.ImageOperation.ImageOperationException;
 
 import static cosc202.andie.LanguageConfig.msg;
@@ -70,7 +71,7 @@ public class EditableImage {
         this.ops = stringToOps(serializedOps);
         redoOps = new Stack<ImageOperation>();
         this.refresh();
-        lastSavedImage = deepCopy(current);
+        lastSavedImage = Utils.deepCopy(current);
     }
 
     public EditableImage(BufferedImage image) {
@@ -78,7 +79,7 @@ public class EditableImage {
         this.ops = new Stack<ImageOperation>();
         redoOps = new Stack<ImageOperation>();
         this.refresh();
-        lastSavedImage = deepCopy(current);
+        lastSavedImage = Utils.deepCopy(current);
     }
 
 
@@ -86,50 +87,9 @@ public class EditableImage {
         return new Dimension(current.getWidth(), current.getHeight());
     }
 
-    /**
-     * <p>
-     * Make a 'deep' copy of a BufferedImage. 
-     * </p>
-     * 
-     * <p>
-     * Object instances in Java are accessed via references, which means that assignment does
-     * not copy an object, it merely makes another reference to the original.
-     * In order to make an independent copy, the {@code clone()} method is generally used.
-     * {@link BufferedImage} does not implement {@link Cloneable} interface, and so the 
-     * {@code clone()} method is not accessible.
-     * </p>
-     * 
-     * <p>
-     * This method makes a cloned copy of a BufferedImage.
-     * This requires knoweldge of some details about the internals of the BufferedImage,
-     * but essentially comes down to making a new BufferedImage made up of copies of
-     * the internal parts of the input.
-     * </p>
-     * 
-     * <p>
-     * This code is taken from StackOverflow:
-     * <a href="https://stackoverflow.com/a/3514297">https://stackoverflow.com/a/3514297</a>
-     * in response to 
-     * <a href="https://stackoverflow.com/questions/3514158/how-do-you-clone-a-bufferedimage">https://stackoverflow.com/questions/3514158/how-do-you-clone-a-bufferedimage</a>.
-     * Code by Klark used under the CC BY-SA 2.5 license.
-     * </p>
-     * 
-     * <p>
-     * This method (only) is released under <a href="https://creativecommons.org/licenses/by-sa/2.5/">CC BY-SA 2.5</a>
-     * </p>
-     * 
-     * @param bi The BufferedImage to copy.
-     * @return A deep copy of the input.
-     */
-    private static BufferedImage deepCopy(BufferedImage bi) {
-        ColorModel cm = bi.getColorModel();
-        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-        WritableRaster raster = bi.copyData(null);
-        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-    }
 
     public void saved() {
-        lastSavedImage = deepCopy(current);
+        lastSavedImage = Utils.deepCopy(current);
     }
 
     public String getOpsString() {
@@ -150,7 +110,7 @@ public class EditableImage {
             g.dispose();
             return exportImage;
         }
-        return deepCopy(current);
+        return Utils.deepCopy(current);
     }
 
     /**
@@ -165,7 +125,7 @@ public class EditableImage {
      */
     public boolean apply(ImageOperation imageOperation) {
         try {
-            current = imageOperation.apply(current);
+            current = imageOperation.draw(current);
             notifyListeners(imageListeners);
         } catch (ImageOperationException ex) {
             JOptionPane.showMessageDialog(null, msg("Apply_Exception") + "\n" + ex.getMessage(), msg("Apply_Exception_Title"), JOptionPane.WARNING_MESSAGE);
@@ -207,7 +167,7 @@ public class EditableImage {
         if (redoOps.isEmpty()) return;
         ImageOperation operationToRedo = redoOps.pop();
         try {
-            current = operationToRedo.apply(current);
+            current = operationToRedo.draw(current);
         } catch (ImageOperationException ex) {
             // No operation should fail when being redone.
             return;
@@ -260,10 +220,10 @@ public class EditableImage {
      * </p>
      */
     private void refresh()  {
-        current = deepCopy(original);
+        current = Utils.deepCopy(original);
         try {
             for (ImageOperation op: ops) {
-                current = op.apply(current);
+                current = op.draw(current);
             }
         } catch (ImageOperationException ex) {
             // This should never happen, since the operations have already been applied once.

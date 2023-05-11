@@ -78,4 +78,11 @@ public class PopupSlider extends JPanel {
 		return slider.getValue();
 	}
 
+	public void addChangeListener(ChangeListener listener) {
+		slider.addChangeListener(listener);
+		listener.stateChanged(null);
+	}
+	public void removeChangeListener(ChangeListener listener) {
+		slider.removeChangeListener(listener);
+	}
 }

@@ -81,6 +81,8 @@ public class AndieView {
         frame.setVisible(true);
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+				controller.setPopupParent(contentPane);
         WindowListener exitListener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

@@ -30,7 +30,7 @@ public class FlipHorizontal implements ImageOperation, java.io.Serializable{
     /** Applys the Flip to the image 
      * @param input the image to be maniupuated 
      */
-    public BufferedImage apply(BufferedImage input){
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
     
     int pixels [][] = new int [input.getWidth()][input.getHeight()];
         for(int i = 0; i < input.getWidth(); i++){
@@ -49,6 +49,10 @@ public class FlipHorizontal implements ImageOperation, java.io.Serializable{
         }
 
         return input;
+    }
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
     }
  }
 

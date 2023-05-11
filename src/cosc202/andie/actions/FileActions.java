@@ -10,7 +10,6 @@ import cosc202.andie.ImageAction;
 import cosc202.andie.Utils;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
-import cosc202.andie.models.EditableImage;
 import cosc202.andie.models.AndieModel.ModelListener;
 
 import javax.imageio.*;
@@ -128,7 +127,7 @@ public class FileActions extends MenuActions {
             ModelListener listener = ()-> {
                 setEnabled(model.hasImage() && model.getImage().getModified());
             };
-            model.registerImageListener(listener);
+            model.registerWorkingImageListener(listener);
             listener.update();
         }
 

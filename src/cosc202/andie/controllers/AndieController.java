@@ -2,25 +2,32 @@ package cosc202.andie.controllers;
 
 import java.util.ArrayList;
 
-import cosc202.andie.ImageOperation;
+import javax.swing.JComponent;
+
 import cosc202.andie.models.AndieModel;
 
 public class AndieController {
 	private AndieModel model;
+	private JComponent popupParent;
 
-	public AndieFileIO IO;
+	public AndieIOController IO;
+	public AndieOperationsController operations;
 
 	public AndieController(AndieModel model) {
 		this.model = model;
-		this.IO = new AndieFileIO(model);
+		this.IO = new AndieIOController(model, this);
+		this.operations = new AndieOperationsController(model);
 	}
 	public void closeWindow() {
 		if(IO.safeClose()) {
 			System.exit(0);
 		}
 	}
-	public void applyFilter(ImageOperation filter) {
-		this.model.applyFilter(filter);
+	public JComponent getPopupParent() {
+		return popupParent;
+	}
+	public void setPopupParent(JComponent popupParent) {
+		this.popupParent = popupParent;
 	}
 	public void undo() {
 		model.getImage().undo();

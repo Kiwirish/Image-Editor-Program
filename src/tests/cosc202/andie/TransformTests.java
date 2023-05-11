@@ -26,20 +26,20 @@ public class TransformTests {
 
 		BufferedImage testImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 		Resize resize = new Resize(150);
-		BufferedImage resized = resize.apply(testImage);
+		BufferedImage resized = resize.draw(testImage);
 		Assertions.assertEquals(150, resized.getWidth());
 
 		resize = new Resize(0);
-		resized = resize.apply(testImage);
+		resized = resize.draw(testImage);
 		Assertions.assertEquals(1, resized.getWidth());
 
 		resize = new Resize(-20);
-		resized = resize.apply(testImage);
+		resized = resize.draw(testImage);
 		Assertions.assertEquals(1, resized.getWidth());
 
 		resize = new Resize(100000);
 		final Resize resize2 = resize;
-		Assertions.assertThrows(ImageOperationException.class, () -> resize2.apply(testImage));
+		Assertions.assertThrows(ImageOperationException.class, () -> resize2.draw(testImage));
 	}
 
 	@Test
@@ -49,14 +49,14 @@ public class TransformTests {
 		BufferedImage testImage = new BufferedImage(50, 100, BufferedImage.TYPE_INT_ARGB);
 		testImage.setRGB(0, 0, 0xFF0000);
 		FlipHorizontal flip = new FlipHorizontal();
-		BufferedImage flipped = flip.apply(testImage);
+		BufferedImage flipped = flip.draw(testImage);
 
 		Assertions.assertEquals(50, flipped.getWidth());
 		Assertions.assertEquals(100, flipped.getHeight());
 		Assertions.assertEquals(0xFF0000, flipped.getRGB(testImage.getWidth()-1, 0));
 
 		testImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-		flipped = flip.apply(testImage);
+		flipped = flip.draw(testImage);
 		Assertions.assertEquals(1, flipped.getWidth());
 		Assertions.assertEquals(1, flipped.getHeight());
 	}
@@ -68,7 +68,7 @@ public class TransformTests {
 		BufferedImage testImage = new BufferedImage(50, 100, BufferedImage.TYPE_INT_ARGB);
 		testImage.setRGB(0, 0, 0xFF0000);
 		FlipVertical flip = new FlipVertical();
-		BufferedImage flipped = flip.apply(testImage);
+		BufferedImage flipped = flip.draw(testImage);
 		Assertions.assertEquals(50, flipped.getWidth());
 		Assertions.assertEquals(100, flipped.getHeight());
 		Assertions.assertEquals(0xFF0000, flipped.getRGB(0, testImage.getHeight()-1));
@@ -80,7 +80,7 @@ public class TransformTests {
 		BufferedImage testImage = new BufferedImage(50, 100, BufferedImage.TYPE_INT_ARGB);
 		testImage.setRGB(0, 0, 0xFF0000);
 		RotateRight rotate = new RotateRight();
-		BufferedImage rotated = rotate.apply(testImage);
+		BufferedImage rotated = rotate.draw(testImage);
 		Assertions.assertEquals(100,rotated.getWidth());
 		Assertions.assertEquals(50,rotated.getHeight());
 		Assertions.assertEquals(0xFF0000,rotated.getRGB(rotated.getWidth()-1, 0));

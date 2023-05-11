@@ -98,11 +98,11 @@ public class FilterActions extends MenuActions {
          */
         public void actionPerformed(ActionEvent e) {
             PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
-            PopupWithSliders popup = new PopupWithSliders(msg("MeanFilter_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int radius = slider.getValue();
-                controller.applyFilter(new MeanFilter(radius));
-            }
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new MeanFilter(slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("MeanFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
 
     }
@@ -143,7 +143,7 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            controller.applyFilter(new SharpenFilter());
+            controller.operations.apply(new SharpenFilter());
         }
 
     }
@@ -184,12 +184,12 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
-            PopupWithSliders popup = new PopupWithSliders(msg("GaussianBlurFilter_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int radius = slider.getValue();
-                controller.applyFilter(new GaussianBlur(radius));
-            }
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),2,10,2,"px",1,5);
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new GaussianBlur(slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(), msg("GaussianBlurFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
     }
 
@@ -230,11 +230,11 @@ public class FilterActions extends MenuActions {
          */
         public void actionPerformed(ActionEvent e) {
             PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,5,1,"px",1,5);
-            PopupWithSliders popup = new PopupWithSliders(msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int radius = slider.getValue();
-                controller.applyFilter(new MedianFilter(radius));
-            }
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new MedianFilter(slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
 
     }

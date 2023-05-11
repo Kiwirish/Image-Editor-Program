@@ -55,7 +55,7 @@ public class ContentPanel extends JPanel {
         ModelListener isl = () -> {
             if (model.hasImage() && ipv == null) {
                 removeAll();
-                ipv = new ImagePanView(model.getImage().getCurrentImage());
+                ipv = new ImagePanView(model.getWorkingImage());
                 controller.registerZoomListener(ipv);
                 add(ipv, BorderLayout.CENTER);
             } else {
@@ -66,14 +66,14 @@ public class ContentPanel extends JPanel {
             this.revalidate();
         };
 
-        ModelListener il = () -> {
+        ModelListener wil = () -> {
             if (model.hasImage() && ipv != null) {
-                ipv.updateImage(model.getImage().getCurrentImage());
+                ipv.updateImage(model.getWorkingImage());
             } 
         };
 
         model.registerImageStatusListener(isl);
-        model.registerImageListener(il);
+        model.registerWorkingImageListener(wil);
         isl.update();
 
         //Open dropped image files

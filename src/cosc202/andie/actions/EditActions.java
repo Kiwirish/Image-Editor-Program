@@ -70,7 +70,7 @@ public class EditActions extends MenuActions{
             ModelListener imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().undoable());
             };
-            model.registerImageListener(imageListener);   
+            model.registerWorkingImageListener(imageListener);   
             imageListener.update();
         }
 
@@ -115,7 +115,7 @@ public class EditActions extends MenuActions{
             ModelListener imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().redoable());
             };
-            model.registerImageListener(imageListener);
+            model.registerWorkingImageListener(imageListener);
             imageListener.update();
         }
 

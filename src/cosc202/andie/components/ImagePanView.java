@@ -1,6 +1,7 @@
 package cosc202.andie.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
@@ -25,6 +26,7 @@ public class ImagePanView extends JPanel
 	private Point2D.Double viewportOffset;
 	private BufferedImage image;
 	private double zoom;
+	private Dimension imageDimensions;
 
 	private static final int SCROLL_TYPE_PAN = 0;
 	private static final int SCROLL_TYPE_ZOOM = 1;
@@ -37,6 +39,7 @@ public class ImagePanView extends JPanel
 		super();
 
 		this.image = image;
+		this.imageDimensions = new Dimension(image.getWidth(), image.getHeight());
 
 		this.addMouseWheelListener(this);
 		this.addMouseMotionListener(this);
@@ -49,19 +52,23 @@ public class ImagePanView extends JPanel
 
 		SwingUtilities.invokeLater(() -> {
 			SwingUtilities.invokeLater(() -> {
-				resetZoom();
+				resetView();
 			});
 		});
 	}
 
+	/**
+	 * <p>Updates the image to be displayed by the view, and repaints the view.</p>
+	 * <p>It will center the viewport if the new image is of different dimensions.</p>
+	 * @param newImage The new image to display
+	 */
 	public void updateImage(BufferedImage newImage) {
-		boolean sizeChanged = newImage.getWidth() != image.getWidth() || newImage.getHeight() != image.getHeight();
+		boolean sizeChanged = newImage.getWidth() != imageDimensions.getWidth() || newImage.getHeight() != imageDimensions.getHeight();
+		this.imageDimensions = new Dimension(newImage.getWidth(), newImage.getHeight());
 		this.image = newImage;
-		if (sizeChanged) {
-			resetZoom();
-		} else {
-			repaint();
-		}
+		if (sizeChanged)
+			centerViewport();
+		repaint();
 	}
 
 	@Override
@@ -134,7 +141,15 @@ public class ImagePanView extends JPanel
 		updateViewport(viewportOffset);
 	}
 
-	public void resetZoom() {
+	private void centerViewport() {
+		Point2D.Double thisSize = new Point2D.Double(this.getWidth(), this.getHeight());
+		Point2D.Double imageSize = new Point2D.Double(image.getWidth(), image.getHeight());
+		Point2D.Double viewportOffset = new Point2D.Double((thisSize.getX() - imageSize.getX() * this.zoom) / 2,
+				(thisSize.getY() - imageSize.getY() * this.zoom) / 2);
+		updateViewport(viewportOffset);
+	}
+
+	public void resetView() {
 		Point2D.Double margin = new Point2D.Double(20, 20);
 		Point2D.Double thisSize = new Point2D.Double(this.getWidth(), this.getHeight());
 		Point2D.Double imageSize = new Point2D.Double(image.getWidth(), image.getHeight());
@@ -142,11 +157,7 @@ public class ImagePanView extends JPanel
 				(thisSize.getY() - 2 * margin.getY()) / imageSize.getY());
 
 		this.zoom = getZoomClamp(newZoom);
-
-		Point2D.Double viewportOffset = new Point2D.Double((thisSize.getX() - imageSize.getX() * this.zoom) / 2,
-				(thisSize.getY() - imageSize.getY() * this.zoom) / 2);
-
-		updateViewport(viewportOffset);
+		centerViewport();
 		repaint();
 	}
 
@@ -157,7 +168,16 @@ public class ImagePanView extends JPanel
 	}
 
 	private void updateZoom(double newZoom, Point2D.Double anchorPos) {
-		double clampedZoom = getZoomClamp(newZoom);
+		double zoomBoundary = getZoomClamp(newZoom);
+		// The zoom clamp shouldn't affect zooms going in the right direction
+		if (newZoom > this.zoom){ //Zooming in 
+			if (this.zoom >= zoomBoundary) return; //not allowed
+			if (newZoom >= zoomBoundary) newZoom = zoomBoundary; //clamp to boundary
+		}else if (newZoom < this.zoom){ //Zooming out
+			if (this.zoom <= zoomBoundary) return; //not allowed
+			if (newZoom <= zoomBoundary) newZoom = zoomBoundary; //clamp to boundary
+		}
+
 
 		Point2D.Double anchorInImage = new Point2D.Double(anchorPos.getX() - viewportOffset.getX(),
 				anchorPos.getY() - viewportOffset.getY());
@@ -165,13 +185,13 @@ public class ImagePanView extends JPanel
 		Point2D.Double anchorInImagePercent = new Point2D.Double(anchorInImage.getX() / imageSize.getX(),
 				anchorInImage.getY() / imageSize.getY());
 
-		Point2D.Double newImageSize = new Point2D.Double(image.getWidth() * clampedZoom, image.getHeight() * clampedZoom);
+		Point2D.Double newImageSize = new Point2D.Double(image.getWidth() * newZoom, image.getHeight() * newZoom);
 		Point2D.Double newAnchorInImage = new Point2D.Double(newImageSize.getX() * anchorInImagePercent.getX(),
 				newImageSize.getY() * anchorInImagePercent.getY());
 		Point2D.Double newViewportOffset = new Point2D.Double(anchorPos.getX() - newAnchorInImage.getX(),
 				anchorPos.getY() - newAnchorInImage.getY());
 
-		this.zoom = clampedZoom;
+		this.zoom = newZoom;
 		updateViewport(newViewportOffset);
 		repaint();
 	}
@@ -233,7 +253,7 @@ public class ImagePanView extends JPanel
 
 	@Override
 	public void manualResetZoom() {
-		resetZoom();
+		resetView();
 	}
 
 }
