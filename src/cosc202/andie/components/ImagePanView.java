@@ -91,8 +91,8 @@ public class ImagePanView extends JPanel
 		double rotationDelta = Math.abs(rotation - lastRotation); // In inertial scrolling,
 		double rotationDeltaPercent = lastRotation != 0 ? Math.abs(rotationDelta / lastRotation) : 1;
 		boolean possiblyInteria = (rotationDelta < 0.3 || rotationDeltaPercent < 0.2) && (time - lastScrollTime) < 400;
+		boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 		if (!possiblyInteria) {
-			boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
 			scrollType = ((isWindows && e.isControlDown()) || (!isWindows && e.isMetaDown()) && !e.isShiftDown())
 					? SCROLL_TYPE_ZOOM
 					: SCROLL_TYPE_PAN;
@@ -114,7 +114,7 @@ public class ImagePanView extends JPanel
 
 			moveViewport(pan);
 		} else if (scrollType == SCROLL_TYPE_ZOOM) {
-			zoomByLinear(rotation * 0.02, mousePosition);
+			zoomByLinear(rotation * (isWindows ? 0.1 : 0.02), mousePosition);
 		}
 	}
 
