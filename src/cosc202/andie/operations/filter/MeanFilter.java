@@ -76,7 +76,7 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
      * @param input The image to apply the Mean filter to.
      * @return The resulting (blurred)) image.
      */
-    public BufferedImage apply(BufferedImage input) {
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
         //check for illegal argument 
         if (input == null){
@@ -182,8 +182,10 @@ public class MeanFilter implements ImageOperation, java.io.Serializable {
         // return final MeanFiltered output iamge
         return output; 
 
+    }
 
-
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
     }
     
 

@@ -28,7 +28,7 @@ public class FlipVertical implements ImageOperation, java.io.Serializable{
     }
 
     /** Applys the Flip vertical to the image */
-    public BufferedImage apply(BufferedImage input){
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
     int pixels [][] = new int [input.getWidth()][input.getHeight()];
         for(int i = 0; i < input.getWidth(); i++){
             for(int j = 0; j < input.getHeight(); j++){
@@ -46,6 +46,10 @@ public class FlipVertical implements ImageOperation, java.io.Serializable{
         }
 
         return input;
+    }
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
     }
     
 }

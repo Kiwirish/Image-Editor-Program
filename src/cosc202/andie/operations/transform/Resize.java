@@ -33,7 +33,7 @@ public class Resize implements ImageOperation, java.io.Serializable{
         this.option = option;
     }
 
-    public BufferedImage apply(BufferedImage input) throws ImageOperationException {
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
         double scale = (double)option/100;
         int scaledWidth = (int)Math.max((input.getWidth() * scale),1);
@@ -48,6 +48,10 @@ public class Resize implements ImageOperation, java.io.Serializable{
         graphics2D.drawImage(input,0,0,scaledWidth , scaledHeight, null);
 
         return output;
+    }
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
     }
 
 }

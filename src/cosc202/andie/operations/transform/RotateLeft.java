@@ -28,7 +28,7 @@ public class RotateLeft implements ImageOperation, java.io.Serializable{
     /** Applys the Rotate to the image 
      * @param input Image to be rotated 
     */
-    public BufferedImage apply(BufferedImage input){
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
     int pixels [][] = new int [input.getWidth()][input.getHeight()];
         for(int i = 0; i < input.getWidth(); i++){
             for(int j = 0; j < input.getHeight(); j++){
@@ -49,6 +49,10 @@ public class RotateLeft implements ImageOperation, java.io.Serializable{
         }
 
         return output;
+    }
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
     }
 
 }

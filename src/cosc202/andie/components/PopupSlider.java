@@ -25,6 +25,7 @@ import javax.swing.event.ChangeListener;
 public class PopupSlider extends JPanel {
 	
 	private JSlider slider;
+	private int lastValue;
 
 	/**
 	 * Create a new PopupSlider with the given settings
@@ -39,6 +40,7 @@ public class PopupSlider extends JPanel {
 	public PopupSlider(String message, int minimum, int maximum, int initialValue, String units, int minorTickSpace, int majorTickSpace) {
 		super();
 		slider = new JSlider(minimum,maximum,initialValue);
+		lastValue = initialValue;
 		slider.setMinorTickSpacing(minorTickSpace);
 		slider.setMajorTickSpacing(majorTickSpace);
 		slider.setPaintTicks(true);
@@ -78,4 +80,16 @@ public class PopupSlider extends JPanel {
 		return slider.getValue();
 	}
 
+	public void addChangeListener(ChangeListener listener) {
+		slider.addChangeListener((ev)->{
+			if (slider.getValue()!=lastValue) {
+				lastValue = slider.getValue();
+				listener.stateChanged(ev);
+			}
+		});
+		listener.stateChanged(null);
+	}
+	public void removeChangeListener(ChangeListener listener) {
+		slider.removeChangeListener(listener);
+	}
 }

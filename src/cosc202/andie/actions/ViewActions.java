@@ -4,6 +4,9 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import cosc202.andie.ImageAction;
+import cosc202.andie.controllers.AndieController;
+import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.AndieModel.ModelListener;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -31,13 +34,22 @@ public class ViewActions extends MenuActions {
      * <p>
      * Create a set of View menu actions.
      * </p>
+     * @param model
+     * @param controller
      */
-    public ViewActions() {
-        super(msg("View_Title"));
+    public ViewActions(AndieController controller, AndieModel model) {
+        super(msg("View_Title"), controller, model);
         actions.add(new ZoomInAction(msg("ZoomIn_Title"), null, msg("ZoomIn_Desc"), Integer.valueOf(KeyEvent.VK_PLUS)));
         actions.add(new ZoomOutAction(msg("ZoomOut_Title"), null, msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS)));
-        actions.add(new ZoomFullAction(msg("ZoomFull_Title"), null, msg("ZoomFull_Desc"), Integer.valueOf(KeyEvent.VK_1)));
         actions.add(new ResetZoomAction(msg("ZoomReset_Title"), null, msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2)));
+
+        ModelListener isl = ()-> {
+            for (ImageAction action : actions) {
+                action.setEnabled(model.hasImage());
+            }
+        };
+        model.registerImageStatusListener(isl);
+        isl.update();
     }
 
     /**
@@ -78,13 +90,7 @@ public class ViewActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            target.setZoom(target.getZoom()+10);
-            target.repaint();
-            target.getParent().revalidate();
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            controller.zoomIn();
         }
     }
 
@@ -126,66 +132,9 @@ public class ViewActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            target.setZoom(target.getZoom()-10);
-            target.repaint();
-            target.getParent().revalidate();
+            controller.zoomOut();
         }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
-        }
-
     }
-
-    /**
-     * <p>
-     * Action to set the zoom level to 100%.
-     * </p>
-     * 
-     * <p>
-     * Note that this action only affects the way the image is displayed, not its actual contents.
-     * </p>
-     */
-    public class ZoomFullAction extends ImageAction {
-
-        /**
-         * <p>
-         * Create a new zoom-full action.
-         * </p>
-         * 
-         * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
-         * @param desc A brief description of the action  (ignored if null).
-         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
-         */
-        ZoomFullAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
-        }
-
-        /**
-         * <p>
-         * Callback for when the zoom-full action is triggered.
-         * </p>
-         * 
-         * <p>
-         * This method is called whenever the ZoomFullAction is triggered.
-         * It resets the Zoom level to 100%.
-         * </p>
-         * 
-         * @param e The event triggering this callback.
-         */
-        public void actionPerformed(ActionEvent e) {
-            target.setZoom(100);
-            target.revalidate();
-            target.getParent().revalidate();
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
-        }
-
-    }
-
 
     /**
      * <p>
@@ -225,17 +174,8 @@ public class ViewActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            target.resetZoom();
-            target.revalidate();
-            target.getParent().revalidate();
+            controller.resetZoom();
         }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
-        }
-
     }
-
-
 
 }

@@ -1,5 +1,7 @@
 package cosc202.andie;
 
+import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -36,12 +38,15 @@ public class LanguageConfig {
 
 		private Locale locale;
 		Language(String language, String country) {
-			locale = new Locale(language, country);
+			// locale = new Locale(language, country); (Deprecated)
+			locale = new Locale.Builder().setLanguage(language).setRegion(country).build();
 		}
 		public Locale getLocale() {
 			return locale;
 		}
 	}
+
+	private static ArrayList<LanguageListener> languageListeners = new ArrayList<LanguageListener>();
 
 	private static final String bundleBaseName = "languages/MessageBundle";
 
@@ -106,7 +111,8 @@ public class LanguageConfig {
 		if (setLanguage(lang)) {
 			prefs.put("language", String.valueOf(currentLanguage));
 			updateBundle();
-			Andie.relaunchAndie();
+			notifyLanguageListeners();
+			// Andie.relaunchAndie();
 		}
 	}
 
@@ -127,6 +133,21 @@ public class LanguageConfig {
 		if (bundle.containsKey(key)) return bundle.getString(key);
 		else if (fallbackBundle.containsKey(key)) return fallbackBundle.getString(key);
 		else return key;
+	}
+
+	public static void registerLanguageListener(LanguageListener listener) {
+		languageListeners.add(listener);
+	}
+	public static void notifyLanguageListeners() {
+		// Copy the list of listeners to avoid ConcurrentModificationException
+		ArrayList<LanguageListener> listeners = new ArrayList<LanguageListener>(languageListeners);
+		for (LanguageListener listener : listeners) {
+			listener.update();
+		}
+	}
+
+	public interface LanguageListener extends EventListener {
+		public void update();
 	}
 
 }

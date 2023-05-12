@@ -49,7 +49,7 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
      * @param input The image to be adjusted
      * @return The resulting adjsuted image.
      */
-    public BufferedImage apply(BufferedImage input) {
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
         //brightness change b
         //contrast change c
@@ -79,5 +79,9 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
                     
         return input;
         
-    }   
+    }
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
+    }
 }

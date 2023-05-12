@@ -29,17 +29,8 @@ import java.awt.image.BufferedImage;
  */
 public interface ImageOperation {
 
-    /**
-     * Apply the operation to an image.
-     * 
-     * ImageOperations may be either done in-place (that is, modifying the input image), or 
-     * create a new BufferedImage to store the result.
-     * This decision is left to the implementer of specific operations.
-     * 
-     * @param input The image to apply the operation to
-     * @return The image resulting from the operation
-     */
-    public BufferedImage apply(BufferedImage input) throws ImageOperationException;
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException;
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException;
 
     /**
      * An exception to be thrown when an ImageOperation fails.
