@@ -51,7 +51,7 @@ public class NegativeResults implements ImageOperation, java.io.Serializable {
      * @param input The image to apply the Sharpen filter to.
      * @return The resulting (sharpened)) image.
      */
-    public BufferedImage apply(BufferedImage input) {
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
         //check for illegal argument 
         if (input == null){
@@ -160,6 +160,11 @@ public class NegativeResults implements ImageOperation, java.io.Serializable {
 
 
 
+    }
+
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
     }
     
 
