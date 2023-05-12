@@ -3,9 +3,12 @@ package cosc202.andie.actions;
 import java.awt.event.*;
 import javax.swing.*;
 
-import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
 import cosc202.andie.ImageOperation;
+import cosc202.andie.controllers.AndieController;
+import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.EditableImage;
+import cosc202.andie.models.AndieModel.ModelListener;
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -25,6 +28,7 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
+ * @author Jeb Nicholson
  * @version 1.0
  */
 public class EditActions extends MenuActions{
@@ -33,9 +37,11 @@ public class EditActions extends MenuActions{
      * <p>
      * Create a set of Edit menu actions.
      * </p>
+     * @param model
+     * @param controller
      */
-    public EditActions() {
-        super(msg("Edit_Title"));
+    public EditActions(AndieController controller, AndieModel model) {
+        super(msg("Edit_Title"), controller, model);
         actions.add(new UndoAction(msg("Undo_Title"), null, msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z)));
         actions.add(new RedoAction(msg("Redo_Title"), null, msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y)));
     }
@@ -61,6 +67,11 @@ public class EditActions extends MenuActions{
          */
         UndoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            ModelListener imageListener = () -> {
+                setEnabled(model.hasImage() && model.getImage().undoable());
+            };
+            model.registerWorkingImageListener(imageListener);   
+            imageListener.update();
         }
 
         /**
@@ -76,13 +87,7 @@ public class EditActions extends MenuActions{
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            target.getImage().undo();
-            target.repaint();
-            target.getParent().revalidate();
-        }
-        
-        public void updateState() {
-            setEnabled(target.getImage().undoable());
+            controller.undo();
         }
     }
 
@@ -107,6 +112,11 @@ public class EditActions extends MenuActions{
          */
         RedoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
+            ModelListener imageListener = () -> {
+                setEnabled(model.hasImage() && model.getImage().redoable());
+            };
+            model.registerWorkingImageListener(imageListener);
+            imageListener.update();
         }
 
         
@@ -123,13 +133,7 @@ public class EditActions extends MenuActions{
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            target.getImage().redo();
-            target.repaint();
-            target.getParent().revalidate();
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().redoable());
+            controller.redo();
         }
     }
 

@@ -2,14 +2,13 @@ package cosc202.andie.operations.transform;
 
 import java.awt.image.*;
 import cosc202.andie.ImageOperation;
-
 /**
  * <p>
- * ImageOperation to rotate an image Right .
+ * ImageOperation to rotate an image right .
  * </p>
  * 
  * <p>
- * Swaps the pixels then over ride the old image. 
+ * Swaps the pixels then overrides the old image. 
  * </p>
  * 
  * <p> 
@@ -20,15 +19,16 @@ import cosc202.andie.ImageOperation;
  * @author Bernard Pieters
  * @version 1.0
 */
+
 public class RotateRight implements ImageOperation, java.io.Serializable{
 
     public RotateRight(){
     }
-
-    /** Applys the Rotate to the image 
+    /** Applys the rotate right filter 
      * @param input Image to be rotated 
     */
-    public BufferedImage apply(BufferedImage input){
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
+
     int pixels [][] = new int [input.getWidth()][input.getHeight()];
         for(int i = 0; i < input.getWidth(); i++){
             for(int j = 0; j < input.getHeight(); j++){
@@ -38,18 +38,21 @@ public class RotateRight implements ImageOperation, java.io.Serializable{
 
         BufferedImage output = new BufferedImage(input.getHeight(), input.getWidth(), input.getType());
 
-        int x = 0;
+        int x = output.getWidth()-1;
         for(int i = 0; i < output.getWidth(); i++){
-            int y = output.getHeight()-1;
+            int y = 0;
             for(int j = 0; j < output.getHeight(); j++){
                 output.setRGB(x, y, pixels[j][i]);
-                y--;
+                y++;
             }
-            x++;
+            x--;
         }
 
         return output;
     }
 
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
+    }
+
 }
-    

@@ -71,7 +71,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
      * @param input The image to apply the Median filter to.
      * @return The resulting (median filtered)) image.
      */
-    public BufferedImage apply(BufferedImage input) {
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
         //check for illegal argument 
         if (input == null){
@@ -176,6 +176,7 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
         // for each pixel, an inner loop is created to iterate over all neighboring pixels to 
         // the current pixel the outer loop is on - only iterate within the size of the window. 
         for(int y = r ; y <= input.getHeight() - r - 1 ; y++){
+            if (Thread.interrupted()) throw new RuntimeException("Interrupted");
             for(int x = r ; x <= input.getWidth() - r - 1 ; x++){
                 // clear lists? 
                 aList.clear();
@@ -231,6 +232,11 @@ public class MedianFilter implements ImageOperation, java.io.Serializable {
 
 
 
+    }
+
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
     }
     
 

@@ -3,11 +3,30 @@ package cosc202.andie.operations.colour;
 import java.awt.image.*;
 
 import cosc202.andie.ImageOperation;
-
+/**
+ * <p>
+ * ImageOperation to adjust an images brightness and contrast.
+ * </p>
+ * 
+ * <p>
+ * The images produced by this operation have adjusted rgb values,
+ * which causes the contrast or brightness to change depending
+ *  on the adjustment.
+ * </p>
+ * 
+ * @author Oliver Peyroux
+ * @version 1.0
+ */
 public class BrightnessAndContrast implements ImageOperation, java.io.Serializable  {
+
     private int brightness;
     private int contrast;
 
+    /**
+     * <p>
+     * Create a new BrightnessAndContrast operation.
+     * </p>
+     */
     public BrightnessAndContrast(int brightness, int contrast) {
         this.brightness = brightness;
         this.contrast = contrast;
@@ -17,8 +36,20 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
         this(0, 0);
     }
     
-    
-    public BufferedImage apply(BufferedImage input) {
+    /**
+     * <p>
+     * Apply BrightnessAndContrast adjustment to an image.
+     * </p>
+     * 
+     * <p>
+     * The conversion of the red, green, and blue values uses a calculation,
+     * with inserted brightness and contrast values.
+     * </p>
+     * 
+     * @param input The image to be adjusted
+     * @return The resulting adjsuted image.
+     */
+    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
         //brightness change b
         //contrast change c
@@ -48,5 +79,9 @@ public class BrightnessAndContrast implements ImageOperation, java.io.Serializab
                     
         return input;
         
-    }   
+    }
+
+    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
+        return draw(input);
+    }
 }

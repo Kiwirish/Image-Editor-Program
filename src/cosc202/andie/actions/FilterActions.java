@@ -6,6 +6,9 @@ import javax.swing.*;
 import cosc202.andie.ImageAction;
 import cosc202.andie.components.PopupSlider;
 import cosc202.andie.components.PopupWithSliders;
+import cosc202.andie.controllers.AndieController;
+import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.AndieModel.ModelListener;
 import cosc202.andie.operations.filter.GaussianBlur;
 import cosc202.andie.operations.filter.MeanFilter;
 import cosc202.andie.operations.filter.MedianFilter;
@@ -29,7 +32,9 @@ import static cosc202.andie.LanguageConfig.msg;
  * </p>
  * 
  * @author Steven Mills
- * @version 1.0
+ * @author Jeb Nicholson
+ * @author Blake Leahy
+ * @version 2.0
  */
 public class FilterActions extends MenuActions {
     
@@ -37,13 +42,23 @@ public class FilterActions extends MenuActions {
      * <p>
      * Create a set of Filter menu actions.
      * </p>
+     * @param model
+     * @param controller
      */
-    public FilterActions() {
-        super(msg("Filter_Title"));
+    public FilterActions(AndieController controller, AndieModel model) {
+        super(msg("Filter_Title"), controller, model);
         actions.add(new SharpenFilterAction(msg("SharpenFilter_Title"), null, msg("SharpenFilter_Desc"), Integer.valueOf(KeyEvent.VK_S)));
         actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G)));
         actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
+
+        ModelListener isl = ()-> {
+            for (ImageAction action : actions) {
+                action.setEnabled(model.hasImage());
+            }
+        };
+        model.registerImageStatusListener(isl);
+        isl.update();
     }
 
     /**
@@ -83,17 +98,11 @@ public class FilterActions extends MenuActions {
          */
         public void actionPerformed(ActionEvent e) {
             PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
-            PopupWithSliders popup = new PopupWithSliders(msg("MeanFilter_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int radius = slider.getValue();
-                target.getImage().apply(new MeanFilter(radius));
-                target.repaint();
-                target.getParent().revalidate();
-            }
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new MeanFilter(slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("MeanFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
 
     }
@@ -134,13 +143,7 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            target.getImage().apply(new SharpenFilter());
-            target.repaint();
-            target.getParent().revalidate();
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            controller.operations.apply(new SharpenFilter());
         }
 
     }
@@ -181,18 +184,12 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
-            PopupWithSliders popup = new PopupWithSliders(msg("GaussianBlurFilter_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int radius = slider.getValue();
-                target.getImage().apply(new GaussianBlur(radius));
-                target.repaint();
-                target.getParent().revalidate();
-            }
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),2,10,2,"px",1,5);
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new GaussianBlur(slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(), msg("GaussianBlurFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
     }
 
@@ -233,21 +230,13 @@ public class FilterActions extends MenuActions {
          */
         public void actionPerformed(ActionEvent e) {
             PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,5,1,"px",1,5);
-            PopupWithSliders popup = new PopupWithSliders(msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
-            if (popup.show() == PopupWithSliders.OK) {
-                int radius = slider.getValue();
-                target.getImage().apply(new MedianFilter(radius));
-                target.repaint();
-                target.getParent().revalidate();
-            }
-        }
-
-        public void updateState() {
-            setEnabled(target.getImage().hasImage());
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new MedianFilter(slider.getValue()));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
 
     }
-
-
 
 }
