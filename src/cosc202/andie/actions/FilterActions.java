@@ -12,6 +12,7 @@ import cosc202.andie.models.AndieModel.ModelListener;
 import cosc202.andie.operations.filter.GaussianBlur;
 import cosc202.andie.operations.filter.MeanFilter;
 import cosc202.andie.operations.filter.MedianFilter;
+import cosc202.andie.operations.filter.NegativeResults;
 import cosc202.andie.operations.filter.SharpenFilter;
 
 import static cosc202.andie.LanguageConfig.msg;
@@ -51,6 +52,7 @@ public class FilterActions extends MenuActions {
         actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G)));
         actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
+        actions.add(new NegativeFilterAction("Negative Filter", null, null, null));
 
         ModelListener isl = ()-> {
             for (ImageAction action : actions) {
@@ -235,6 +237,46 @@ public class FilterActions extends MenuActions {
             });
             PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
             controller.operations.end(popup.show() == PopupWithSliders.OK);
+        }
+
+    }
+        /**
+    * <p>
+    * Action to apply SharpenFilter filter 
+    * </p>
+    * 
+    * @see SharpenFilter
+    */
+    public class NegativeFilterAction extends ImageAction {
+
+        /**
+         * <p>
+         * Create a new sharpen-filter action.
+         * </p>
+         * 
+         * @param name The name of the action (ignored if null).
+         * @param icon An icon to use to represent the action (ignored if null).
+         * @param desc A brief description of the action  (ignored if null).
+         * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+         */
+        NegativeFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
+        }
+
+        /**
+         * <p>
+         * Callback for when the SharpenFilterAction is triggered.
+         * </p>
+         * 
+         * <p>
+         * This method is called whenever the SharpenFilterAction is triggered.
+         * It prompts the user for a filter radius, then applys an appropriately sized {@link SharpenFilter}.
+         * </p>
+         * 
+         * @param e The event triggering this callback.
+         */
+        public void actionPerformed(ActionEvent e) {
+            controller.operations.apply(new NegativeResults());
         }
 
     }
