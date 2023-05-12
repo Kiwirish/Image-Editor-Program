@@ -22,7 +22,7 @@ import cosc202.andie.ImageOperation;
  * @author Blake Leahy
  * @version 1.0
  */
-public class SharpenFilter implements ImageOperation, java.io.Serializable {
+public class SharpenFilter implements ImageOperation {
     
     //construct a sharpenFilter 
     public SharpenFilter(){ }

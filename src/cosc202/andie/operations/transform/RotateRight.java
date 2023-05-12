@@ -20,7 +20,7 @@ import cosc202.andie.ImageOperation;
  * @version 1.0
 */
 
-public class RotateRight implements ImageOperation, java.io.Serializable{
+public class RotateRight implements ImageOperation{
 
     public RotateRight(){
     }

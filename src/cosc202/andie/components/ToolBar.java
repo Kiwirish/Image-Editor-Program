@@ -3,8 +3,6 @@ package cosc202.andie.components;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

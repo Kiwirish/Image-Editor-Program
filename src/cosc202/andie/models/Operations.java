@@ -22,6 +22,10 @@ public class Operations {
 		}
 
 		public void update(ImageOperation operation) {
+			//If the operation is of a different type, cancel the previous operation
+			if (lastOperation != null && lastOperation.getClass() != operation.getClass()) {
+				cancel();
+			}
 			//Cancel any previous operation thread, and start a new one
 			if(operationThread != null) {
 				operationThread.interrupt();

@@ -6,6 +6,9 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -58,6 +61,18 @@ public class ContentPanel extends JPanel {
                 ipv = new ImagePanView(model.getWorkingImage());
                 controller.registerZoomListener(ipv);
                 add(ipv, BorderLayout.CENTER);
+                ipv.addMouseMotionListener(new MouseMotionListener() {
+                    public void mouseDragged(MouseEvent e) { model.mouse.mouseDragged(ipv.convertPoint(e.getPoint())); }
+                    public void mouseMoved(MouseEvent e) { model.mouse.mouseMoved(ipv.convertPoint(e.getPoint())); }
+                });
+                ipv.addMouseListener(new MouseListener() {
+                    public void mouseClicked(MouseEvent e) { model.mouse.mouseClicked(ipv.convertPoint(e.getPoint())); }
+                    public void mousePressed(MouseEvent e) { model.mouse.mouseDown(ipv.convertPoint(e.getPoint())); }
+                    public void mouseReleased(MouseEvent e) { model.mouse.mouseUp(ipv.convertPoint(e.getPoint())); }
+                    public void mouseEntered(MouseEvent e) { }
+                    public void mouseExited(MouseEvent e) { }
+                });
+
             } else {
                 removeAll();
                 ipv = null;

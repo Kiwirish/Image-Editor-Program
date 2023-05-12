@@ -7,6 +7,7 @@ import cosc202.andie.actions.EditActions;
 import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
 import cosc202.andie.actions.LanguageActions;
+import cosc202.andie.actions.ToolActions;
 import cosc202.andie.actions.TransformActions;
 import cosc202.andie.actions.ViewActions;
 import cosc202.andie.controllers.AndieController;
@@ -32,6 +33,8 @@ public class MenuBar extends JMenuBar {
 		this.add(filterActions.createMenu());
 		ColourActions colourActions = new ColourActions(controller, model);
 		this.add(colourActions.createMenu());
+		ToolActions toolActions = new ToolActions(controller, model);
+		this.add(toolActions.createMenu());
 		LanguageActions languageActions = new LanguageActions(controller, model);
 		this.add(languageActions.createMenu());
 	}

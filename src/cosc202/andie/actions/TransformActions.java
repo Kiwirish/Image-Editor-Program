@@ -1,5 +1,6 @@
 package cosc202.andie.actions;
 
+import java.awt.Point;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -9,7 +10,10 @@ import cosc202.andie.components.PopupSlider;
 import cosc202.andie.components.PopupWithSliders;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.MouseModel;
 import cosc202.andie.models.AndieModel.ModelListener;
+import cosc202.andie.models.MouseModel.MouseModelListener;
+import cosc202.andie.operations.transform.Crop;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
 import cosc202.andie.operations.transform.Resize;
@@ -47,6 +51,7 @@ public class TransformActions extends MenuActions {
         actions.add(new Rotate180Action(msg("TransformRotate180_Title"), null, msg("TransformRotate180_Desc"), Integer.valueOf(KeyEvent.VK_H)));
         actions.add(new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), null, msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
         actions.add(new FlipVerticalAction(msg("TransformFlipVertical_Title"), null, msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
+        actions.add(new CropAction("Crop", null, "Crops the image", null));
 
         ModelListener isl = ()-> {
             for (ImageAction action : actions) {
@@ -131,6 +136,37 @@ public class TransformActions extends MenuActions {
          /** Call back for when Rotate180Action is triggered */
         public void actionPerformed(ActionEvent e) {
             controller.operations.apply(new Rotate180());
+        }
+    }
+
+    /*TODO: Implement general selection rather than custom for crop */
+    /* General selection would be faster, and wouldn't scale with image */
+    public class CropAction extends ImageAction{
+        CropAction(String name, ImageIcon icon, String desc, Integer mnemonic){
+            super(name, icon, desc, mnemonic);
+        }
+         /** Call back for when Rotate180Action is triggered */
+        public void actionPerformed(ActionEvent e) {
+            MouseModelListener listener = new MouseModel.MouseModelListener() {
+                Point p1 = null;
+                public void mouseMoved(Point position) { }
+                public void mouseDragged(Point position) {
+                    if (p1 == null) 
+                        return;
+                    controller.operations.update(new Crop(p1, new Point(position.x - p1.x, position.y - p1.y)));
+                }
+                public void mouseClicked(Point position) { }
+                public void mouseUp(Point position) {
+                    if (p1 == null) 
+                        return;
+                    controller.operations.apply(new Crop(p1, new Point(position.x - p1.x, position.y - p1.y)));
+                    model.mouse.deregisiterMouseModelListener(this);
+                }
+                public void mouseDown(Point position) {
+                    p1 = position;
+                }
+            };
+            model.mouse.registerMouseModelListener(listener);
         }
     }
 }

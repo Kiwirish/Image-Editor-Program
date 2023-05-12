@@ -167,6 +167,18 @@ public class ImagePanView extends JPanel
 		return Math.min(Math.max(newZoom, minZoom), maxZoom);
 	}
 
+	/**
+	 * Converts a point from its position relative to the ImagePanView to its position relative to the image.
+	 * @param point A point relative to the ImagePanView
+	 * @return The point relative to the image
+	 */
+	public Point convertPoint(Point point) {
+		Point2D.Double p = new Point2D.Double(point.getX(), point.getY());
+		p = new Point2D.Double(p.getX()-viewportOffset.getX(), p.getY()-viewportOffset.getY());
+		p = new Point2D.Double(p.getX()/zoom, p.getY()/zoom);
+		return new Point((int)p.getX(), (int)p.getY());
+	}
+
 	private void updateZoom(double newZoom, Point2D.Double anchorPos) {
 		double zoomBoundary = getZoomClamp(newZoom);
 		// The zoom clamp shouldn't affect zooms going in the right direction

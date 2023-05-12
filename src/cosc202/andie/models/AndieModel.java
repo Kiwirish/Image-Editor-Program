@@ -2,6 +2,7 @@ package cosc202.andie.models;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,9 +35,11 @@ public class AndieModel {
 	private ArrayList<ModelListener> workingImageListeners = new ArrayList<ModelListener>();
 
 	public Operations operations;
+	public MouseModel mouse;
 
 	public AndieModel() {
 		this.operations = new Operations(this);
+		this.mouse = new MouseModel(this);
 	}
 
 	public void init() {

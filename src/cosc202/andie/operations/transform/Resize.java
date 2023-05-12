@@ -23,7 +23,7 @@ import static cosc202.andie.LanguageConfig.msg;
  * @version 1.0
 */
 
-public class Resize implements ImageOperation, java.io.Serializable{
+public class Resize implements ImageOperation{
 
     private int option;
 

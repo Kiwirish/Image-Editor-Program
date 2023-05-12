@@ -20,7 +20,7 @@ import cosc202.andie.ImageOperation;
  * @author Bernard Pieters
  * @version 1.0
 */
-public class Rotate180 implements ImageOperation, java.io.Serializable{
+public class Rotate180 implements ImageOperation{
 
     public Rotate180(){
     }
