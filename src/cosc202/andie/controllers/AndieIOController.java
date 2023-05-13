@@ -26,7 +26,7 @@ public class AndieIOController {
 	public boolean safeClose() {
 		if (!model.hasImage()) return true;
 		if (model.getImage().getModified()) {
-			int result = JOptionPane.showConfirmDialog(controller.getPopupParent(),msg("File_Close_Unsaved_Warning_Message"),msg("File_Close_Unsaved_Warning_Title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
+			int result = JOptionPane.showConfirmDialog(controller.getContentPane(),msg("File_Close_Unsaved_Warning_Message"),msg("File_Close_Unsaved_Warning_Title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null);
 			switch (result) {
 				case JOptionPane.CANCEL_OPTION:
 					return false;
@@ -34,7 +34,7 @@ public class AndieIOController {
 					break;
 				case JOptionPane.YES_OPTION:
 					if(save()) {
-						JOptionPane.showMessageDialog(controller.getPopupParent(),msg("File_Close_Saved_Success"));
+						JOptionPane.showMessageDialog(controller.getContentPane(),msg("File_Close_Saved_Success"));
 					}
 					break;
 			}
@@ -44,19 +44,19 @@ public class AndieIOController {
 	}
 
 	public boolean save() {
-		if (!model.hasImage()) { JOptionPane.showMessageDialog(controller.getPopupParent(),msg("File_save_error")); return false; }
+		if (!model.hasImage()) { JOptionPane.showMessageDialog(controller.getContentPane(),msg("File_save_error")); return false; }
 		try {
 			model.saveImage();
 			return true;
 		} catch (ExtensionException err) {
-			JOptionPane.showMessageDialog(controller.getPopupParent(), msg("File_save_extension_exception") + String.join(", ", ImageIO.getWriterFileSuffixes()));
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("File_save_extension_exception") + String.join(", ", ImageIO.getWriterFileSuffixes()));
 		} catch (IOException err) {
-			JOptionPane.showMessageDialog(controller.getPopupParent(), msg("File_save_exception_err"));
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("File_save_exception_err"));
 		}
 		return false;
 	}
 	public boolean saveAs(String imageFilepath) {
-		if (!model.hasImage()) { JOptionPane.showMessageDialog(controller.getPopupParent(),msg("File_save_error")); return false; }
+		if (!model.hasImage()) { JOptionPane.showMessageDialog(controller.getContentPane(),msg("File_save_error")); return false; }
 		if (Utils.getFileExtension(imageFilepath) == null) {
 			String newExtension = Utils.getFileExtension(model.getImageFilepath());
 			newExtension = newExtension == null ? "png" : newExtension;
@@ -66,9 +66,9 @@ public class AndieIOController {
 			model.saveImageAs(imageFilepath);
 			return true;
 		} catch (ExtensionException err) {
-			JOptionPane.showMessageDialog(controller.getPopupParent(), msg("File_save_extension_exception") + String.join(", ", ImageIO.getWriterFileSuffixes()));
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("File_save_extension_exception") + String.join(", ", ImageIO.getWriterFileSuffixes()));
 		} catch (IOException err) {
-			JOptionPane.showMessageDialog(controller.getPopupParent(), msg("File_save_exception_err"));
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("File_save_exception_err"));
 		}
 		return false;
 	}
@@ -78,7 +78,7 @@ public class AndieIOController {
 			model.openImage(filePath);
 			return true;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(controller.getPopupParent(), msg("File_Exception_e1"));
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("File_Exception_e1"));
 			return false;
 		}
 	}
@@ -88,7 +88,7 @@ public class AndieIOController {
 		try {
 			model.exportImage(cleanPath, imageFormat);
 		} catch (IOException err) {
-			JOptionPane.showMessageDialog(controller.getPopupParent(), msg("File_IO_Exception_err"));
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("File_IO_Exception_err"));
 			return false;
 		}
 		return true;

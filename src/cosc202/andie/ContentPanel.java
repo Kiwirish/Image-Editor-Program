@@ -62,13 +62,13 @@ public class ContentPanel extends JPanel {
                 controller.registerZoomListener(ipv);
                 add(ipv, BorderLayout.CENTER);
                 ipv.addMouseMotionListener(new MouseMotionListener() {
-                    public void mouseDragged(MouseEvent e) { model.mouse.mouseDragged(ipv.convertPoint(e.getPoint())); }
-                    public void mouseMoved(MouseEvent e) { model.mouse.mouseMoved(ipv.convertPoint(e.getPoint())); }
+                    public void mouseDragged(MouseEvent e) { model.mouse.mouseDragged(ipv.convertPoint(e.getPoint()),e); }
+                    public void mouseMoved(MouseEvent e) { model.mouse.mouseMoved(ipv.convertPoint(e.getPoint()),e); }
                 });
                 ipv.addMouseListener(new MouseListener() {
-                    public void mouseClicked(MouseEvent e) { model.mouse.mouseClicked(ipv.convertPoint(e.getPoint())); }
-                    public void mousePressed(MouseEvent e) { model.mouse.mouseDown(ipv.convertPoint(e.getPoint())); }
-                    public void mouseReleased(MouseEvent e) { model.mouse.mouseUp(ipv.convertPoint(e.getPoint())); }
+                    public void mouseClicked(MouseEvent e) { model.mouse.mouseClicked(ipv.convertPoint(e.getPoint()),e); }
+                    public void mousePressed(MouseEvent e) { model.mouse.mouseDown(ipv.convertPoint(e.getPoint()),e); }
+                    public void mouseReleased(MouseEvent e) { model.mouse.mouseUp(ipv.convertPoint(e.getPoint()),e); }
                     public void mouseEntered(MouseEvent e) { }
                     public void mouseExited(MouseEvent e) { }
                 });

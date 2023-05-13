@@ -2,7 +2,6 @@ package cosc202.andie.models;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +22,8 @@ import cosc202.andie.Utils.ExtensionException;
 
 public class AndieModel {
 
+	public static boolean IS_MAC = System.getProperty("os.name").toLowerCase().startsWith("mac");
+
 	private EditableImage image;
 	private BufferedImage previewImage;
 	private boolean isImageOpen = false;
@@ -36,10 +37,12 @@ public class AndieModel {
 
 	public Operations operations;
 	public MouseModel mouse;
+	public ToolModel tool;
 
 	public AndieModel() {
 		this.operations = new Operations(this);
 		this.mouse = new MouseModel(this);
+		this.tool = new ToolModel(this);
 	}
 
 	public void init() {

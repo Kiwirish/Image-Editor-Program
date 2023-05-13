@@ -13,6 +13,7 @@ import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.MouseModel;
 import cosc202.andie.models.AndieModel.ModelListener;
 import cosc202.andie.models.MouseModel.MouseModelListener;
+import cosc202.andie.models.MouseModel.MouseStatus;
 import cosc202.andie.operations.transform.Crop;
 import cosc202.andie.operations.transform.FlipHorizontal;
 import cosc202.andie.operations.transform.FlipVertical;
@@ -104,7 +105,7 @@ public class TransformActions extends MenuActions {
             slider.addChangeListener((ev)->{
                 controller.operations.update(new Resize(slider.getValue()));
             });
-            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("Resize_Popup_Title"),new PopupSlider[]{slider});
+            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(),msg("Resize_Popup_Title"),new PopupSlider[]{slider});
             controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
     }
@@ -149,21 +150,21 @@ public class TransformActions extends MenuActions {
         public void actionPerformed(ActionEvent e) {
             MouseModelListener listener = new MouseModel.MouseModelListener() {
                 Point p1 = null;
-                public void mouseMoved(Point position) { }
-                public void mouseDragged(Point position) {
+                public void mouseMoved(MouseStatus status) { }
+                public void mouseDragged(MouseStatus status) {
                     if (p1 == null) 
                         return;
-                    controller.operations.update(new Crop(p1, new Point(position.x - p1.x, position.y - p1.y)));
+                    controller.operations.update(new Crop(p1, new Point(status.position.x - p1.x, status.position.y - p1.y)));
                 }
-                public void mouseClicked(Point position) { }
-                public void mouseUp(Point position) {
+                public void mouseClicked(MouseStatus status) { }
+                public void mouseUp(MouseStatus status) {
                     if (p1 == null) 
                         return;
-                    controller.operations.apply(new Crop(p1, new Point(position.x - p1.x, position.y - p1.y)));
+                    controller.operations.apply(new Crop(p1, new Point(status.position.x - p1.x, status.position.y - p1.y)));
                     model.mouse.deregisiterMouseModelListener(this);
                 }
-                public void mouseDown(Point position) {
-                    p1 = position;
+                public void mouseDown(MouseStatus status) {
+                    p1 = status.position;
                 }
             };
             model.mouse.registerMouseModelListener(listener);

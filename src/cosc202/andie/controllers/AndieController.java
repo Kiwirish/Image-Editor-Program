@@ -1,5 +1,6 @@
 package cosc202.andie.controllers;
 
+import java.awt.Cursor;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -8,7 +9,7 @@ import cosc202.andie.models.AndieModel;
 
 public class AndieController {
 	private AndieModel model;
-	private JComponent popupParent;
+	private JComponent contentPane;
 
 	public AndieIOController IO;
 	public AndieOperationsController operations;
@@ -23,11 +24,11 @@ public class AndieController {
 			System.exit(0);
 		}
 	}
-	public JComponent getPopupParent() {
-		return popupParent;
+	public JComponent getContentPane() {
+		return contentPane;
 	}
-	public void setPopupParent(JComponent popupParent) {
-		this.popupParent = popupParent;
+	public void setContentPane(JComponent contentPane) {
+		this.contentPane = contentPane;
 	}
 	public void undo() {
 		model.getImage().undo();
@@ -66,5 +67,11 @@ public class AndieController {
 	}
 	public void removeAllListeners() {
 		zoomListeners.clear();
+	}
+	public void setCursor(Cursor cursor) {
+		this.contentPane.setCursor(cursor);
+	}
+	public void resetCursor() {
+		this.contentPane.setCursor(Cursor.getDefaultCursor());
 	}
 }
