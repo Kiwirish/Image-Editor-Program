@@ -26,7 +26,7 @@ public class LineTool extends Tool {
 			public void mouseDragged(MouseStatus status) {
 				if (p1 == null) 
 					return;
-				controller.operations.update(getOp(p1, status.position, status.isShiftDown));
+				controller.operations.update(getOp(p1, status.position, status.isShiftDown), false);
 			}
 			public void mouseClicked(MouseStatus status) { }
 			public void mouseUp(MouseStatus status) {

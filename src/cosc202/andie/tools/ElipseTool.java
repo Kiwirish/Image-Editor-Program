@@ -2,6 +2,7 @@ package cosc202.andie.tools;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import cosc202.andie.ImageOperation;
 import cosc202.andie.controllers.AndieController;
@@ -26,7 +27,7 @@ public class ElipseTool extends Tool {
 			public void mouseDragged(MouseStatus status) {
 				if (p == null) 
 					return;
-				controller.operations.update(getOp(p, status.position, status.isShiftDown, status.isCommtrolDown));
+				controller.operations.update(getOp(p, status.position, status.isShiftDown, status.isCommtrolDown), false);
 			}
 			public void mouseClicked(MouseStatus status) { }
 			public void mouseUp(MouseStatus status) {
@@ -63,7 +64,7 @@ public class ElipseTool extends Tool {
 
 		Point p = new Point(Math.min(np1.x, np2.x), Math.min(np1.y, np2.y));
 		Dimension d = new Dimension(Math.abs(np1.x - np2.x), Math.abs(np1.y - np2.y));
-		return new Elipse(p, d, model.tool.getStrokeColor(), model.tool.getFillColor(), model.tool.getStrokeWidth());
+		return new Elipse(new Rectangle(p, d), model.tool.getStrokeColor(), model.tool.getFillColor(), model.tool.getStrokeWidth());
 	}
 
 	@Override

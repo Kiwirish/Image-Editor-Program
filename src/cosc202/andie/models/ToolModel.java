@@ -11,6 +11,7 @@ public class ToolModel {
 	private Color fillColor;
 	private Color strokeColor;
 	private int strokeWidth;
+	
 
 
 	public ToolModel(AndieModel model) {
@@ -18,7 +19,7 @@ public class ToolModel {
 		this.tool = null;
 		this.strokeColor = Color.BLACK;
 		this.fillColor = Color.WHITE;
-		this.strokeWidth = 4;
+		this.strokeWidth = 12;
 	}
 
 	public Tool getTool() {

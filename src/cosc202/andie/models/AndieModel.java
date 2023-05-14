@@ -40,13 +40,15 @@ public class AndieModel {
 	public ToolModel tool;
 
 	public AndieModel() {
-		this.operations = new Operations(this);
-		this.mouse = new MouseModel(this);
-		this.tool = new ToolModel(this);
+		init();
 	}
 
 	public void init() {
+		this.operations = new Operations(this);
+		this.mouse = new MouseModel(this);
+		this.tool = new ToolModel(this);
 		image = null;
+		previewImage = null;
 		isImageOpen = false;
 		notifyListeners(imageStatusListeners);
 	}
@@ -79,9 +81,7 @@ public class AndieModel {
 	}
 
 	public void closeImage() {
-		image = null;
-		previewImage = null;
-		isImageOpen = false;
+		init();
 		notifyListeners(imageStatusListeners);
 		notifyListeners(workingImageListeners);
 	}

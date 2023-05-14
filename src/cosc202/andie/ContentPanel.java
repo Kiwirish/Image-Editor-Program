@@ -43,73 +43,50 @@ import static cosc202.andie.LanguageConfig.msg;
  * @version 2.0
  */
 public class ContentPanel extends JPanel {
-    
-    /**
-     * The image to display in the ImagePanel.
-     */
-    private ImagePanView ipv;
+	
+	boolean hasImage;
 
-    public ContentPanel(AndieController controller, AndieModel model) {
-        super();
-        this.setLayout(new BorderLayout());
+	public ContentPanel(AndieController controller, AndieModel model) {
+		super();
+		this.setLayout(new BorderLayout());
+		hasImage = false;
 
-        ipv = null;
+		ModelListener isl = () -> {
+			if (model.hasImage()) {
+				if (!hasImage) {
+					removeAll();
+					this.add(new ImagePanel(controller,model), BorderLayout.CENTER);
+				};
+			} else {
+				removeAll();
+				this.add(new WelcomeBlank(), BorderLayout.CENTER);
+			}
+			this.revalidate();
+			hasImage = model.hasImage();
+		};
 
-        ModelListener isl = () -> {
-            if (model.hasImage() && ipv == null) {
-                removeAll();
-                ipv = new ImagePanView(model.getWorkingImage());
-                controller.registerZoomListener(ipv);
-                add(ipv, BorderLayout.CENTER);
-                ipv.addMouseMotionListener(new MouseMotionListener() {
-                    public void mouseDragged(MouseEvent e) { model.mouse.mouseDragged(ipv.convertPoint(e.getPoint()),e); }
-                    public void mouseMoved(MouseEvent e) { model.mouse.mouseMoved(ipv.convertPoint(e.getPoint()),e); }
-                });
-                ipv.addMouseListener(new MouseListener() {
-                    public void mouseClicked(MouseEvent e) { model.mouse.mouseClicked(ipv.convertPoint(e.getPoint()),e); }
-                    public void mousePressed(MouseEvent e) { model.mouse.mouseDown(ipv.convertPoint(e.getPoint()),e); }
-                    public void mouseReleased(MouseEvent e) { model.mouse.mouseUp(ipv.convertPoint(e.getPoint()),e); }
-                    public void mouseEntered(MouseEvent e) { }
-                    public void mouseExited(MouseEvent e) { }
-                });
+		model.registerImageStatusListener(isl);
+		isl.update();
 
-            } else {
-                removeAll();
-                ipv = null;
-                this.add(new WelcomeBlank(), BorderLayout.CENTER);
-            }
-            this.revalidate();
-        };
+		//Open dropped image files
+		setDropTarget(new DropTarget() {
+			public void drop(DropTargetDropEvent evt) {
+				if (model.hasImage()) return; //Don't allow dropping if an image is already open
+				try {
+					evt.acceptDrop(DnDConstants.ACTION_COPY);
+					if (!evt.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) 
+						return;
+					List<?> list = (List<?>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+					String filepath = ((File)list.get(0)).getAbsolutePath();
+					controller.IO.dropOpen(filepath);
 
-        ModelListener wil = () -> {
-            if (model.hasImage() && ipv != null) {
-                ipv.updateImage(model.getWorkingImage());
-            } 
-        };
-
-        model.registerImageStatusListener(isl);
-        model.registerWorkingImageListener(wil);
-        isl.update();
-
-        //Open dropped image files
-        setDropTarget(new DropTarget() {
-            public void drop(DropTargetDropEvent evt) {
-                if (model.hasImage()) return; //Don't allow dropping if an image is already open
-                try {
-                    evt.acceptDrop(DnDConstants.ACTION_COPY);
-                    if (!evt.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) 
-                        return;
-                    List<?> list = (List<?>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    String filepath = ((File)list.get(0)).getAbsolutePath();
-                    controller.IO.dropOpen(filepath);
-
-                    evt.getDropTargetContext().dropComplete(true);
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
-                } catch (UnsupportedFlavorException e) {
-                    JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
-                }
-            }
-        });
-    }
+					evt.getDropTargetContext().dropComplete(true);
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
+				} catch (UnsupportedFlavorException e) {
+					JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
+				}
+			}
+		});
+	}
 }
