@@ -25,14 +25,14 @@ public class ToolBar extends JFrame{
         }
 
         private void createToolBar(){
-            var toolBar = new JToolBar();
-            var icon = new ImageIcon(ToolBar.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
+            JToolBar toolBar = new JToolBar();
+            ImageIcon icon = new ImageIcon(ToolBar.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
 
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(30, 30, DO_NOTHING_ON_CLOSE);
-            var icon2 = new ImageIcon(newimg);
+            ImageIcon icon2 = new ImageIcon(newimg);
             
-            var exitButton = new JButton(icon2);
+            JButton exitButton = new JButton(icon2);
             toolBar.add(exitButton);
 
             exitButton.addActionListener((e) -> System.exit(0));
@@ -42,7 +42,7 @@ public class ToolBar extends JFrame{
 
         public static void main(String[] args){
                 EventQueue.invokeLater(() -> {
-                    var ex = new ToolBar();
+                    ToolBar ex = new ToolBar();
                     ex.setVisible(true);
                 });
         }
