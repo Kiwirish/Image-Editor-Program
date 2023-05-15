@@ -16,7 +16,7 @@ public class MouseModel {
 	public void registerMouseModelListener(MouseModelListener listener) {
 		mouseModelListeners.add(listener);
 	}
-	public void deregisiterMouseModelListener(MouseModelListener listener) {
+	public void unregisterMouseModelListener(MouseModelListener listener) {
 		mouseModelListeners.remove(listener);
 	}
 

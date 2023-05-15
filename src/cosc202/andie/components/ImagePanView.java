@@ -3,7 +3,9 @@ package cosc202.andie.components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -13,6 +15,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -36,6 +39,8 @@ public class ImagePanView extends JPanel
 	private double lastRotation = 0;
 	private int lastScrollType = SCROLL_TYPE_PAN;
 	private long lastScrollTime = 0;
+
+	private ArrayList<ViewRectListener> viewRectListeners = new ArrayList<ViewRectListener>();
 
 	public ImagePanView(BufferedImage image) {
 		super();
@@ -70,6 +75,7 @@ public class ImagePanView extends JPanel
 		this.image = newImage;
 		if (sizeChanged)
 			centerViewport();
+		notifyViewRectListeners();
 		repaint();
 	}
 
@@ -140,6 +146,7 @@ public class ImagePanView extends JPanel
 			mousePosition = new Point2D.Double(this.getWidth() / 2, this.getHeight() / 2);
 
 		updateViewport(viewportOffset);
+		notifyViewRectListeners();
 	}
 
 	private void centerViewport() {
@@ -159,6 +166,7 @@ public class ImagePanView extends JPanel
 
 		this.zoom = getZoomClamp(newZoom);
 		centerViewport();
+		notifyViewRectListeners();
 		repaint();
 	}
 
@@ -206,6 +214,7 @@ public class ImagePanView extends JPanel
 
 		this.zoom = newZoom;
 		updateViewport(newViewportOffset);
+		notifyViewRectListeners();
 		repaint();
 	}
 
@@ -214,6 +223,7 @@ public class ImagePanView extends JPanel
 				viewportOffset.getY() + pan.getY());
 
 		updateViewport(newViewportOffset);
+		notifyViewRectListeners();
 		repaint();
 	}
 
@@ -230,8 +240,18 @@ public class ImagePanView extends JPanel
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(this.image, (int) viewportOffset.getX(), (int) viewportOffset.getY(),
-				(int) (this.image.getWidth() * zoom), (int) (this.image.getHeight() * zoom), null);
+		if (zoom >= 4) { //Pixel peeping mode (Smooth pan and zoom)
+			BufferedImage scene = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2d = scene.createGraphics();
+			g2d.translate(viewportOffset.getX(), viewportOffset.getY());
+			g2d.scale(zoom, zoom);
+			g2d.drawImage(this.image, 0, 0, null);
+			g.drawImage(scene, 0, 0, null);
+			g2d.dispose();
+		} else { //Normal mode (Faster, better interpolation)
+			g.drawImage(this.image, (int) viewportOffset.getX(), (int) viewportOffset.getY(), (int) (image.getWidth() * zoom),
+					(int) (image.getHeight() * zoom), null);
+		}
 	}
 
 	@Override
@@ -267,6 +287,23 @@ public class ImagePanView extends JPanel
 	@Override
 	public void manualResetZoom() {
 		resetView();
+	}
+
+	public interface ViewRectListener {
+		public void viewRectChanged(Rectangle viewRect);
+	}
+
+	public void registerViewRectListener(ViewRectListener listener) {
+		this.viewRectListeners.add(listener);
+	}
+	public void unregisterViewRectListener(ViewRectListener listener) {
+		this.viewRectListeners.remove(listener);
+	}
+	public void notifyViewRectListeners() {
+		Rectangle viewRect = new Rectangle((int)viewportOffset.getX(), (int)viewportOffset.getY(), (int)(image.getWidth()*zoom), (int)(image.getHeight()*zoom));
+		for (ViewRectListener listener : viewRectListeners) {
+			listener.viewRectChanged(viewRect);
+		}
 	}
 
 }

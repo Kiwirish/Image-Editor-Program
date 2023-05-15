@@ -23,7 +23,7 @@ import cosc202.andie.ImageOperation;
  * @author Blake Leahy
  * @version 1.0
  */
-public class NegativeResults implements ImageOperation, java.io.Serializable {
+public class NegativeResults implements ImageOperation {
     
     //construct a negativeFilter
     public NegativeResults(){ }

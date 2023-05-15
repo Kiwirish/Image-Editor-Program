@@ -9,6 +9,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.Timer;
+
 import javax.imageio.ImageIO;
 
 import cosc202.andie.Utils;
@@ -18,6 +20,7 @@ import cosc202.andie.Utils.ExtensionException;
  * //BUG: Listeners from both the model and controller may not be getting deregistered when components no longer need them.
  * Given enough open/closes of an image, this would use up too much memory.
  * (Some listeners contain BufferedImages, which are not being garbage collected)
+ * //TODO: Investigate Lapsed Listener Problem & WeakReferences
  */
 
 public class AndieModel {
@@ -35,8 +38,11 @@ public class AndieModel {
 	private ArrayList<ModelListener> imageStatusListeners = new ArrayList<ModelListener>();
 	private ArrayList<ModelListener> workingImageListeners = new ArrayList<ModelListener>();
 
+	private Timer timer = null;
+
 	public Operations operations;
 	public MouseModel mouse;
+	public OverlayModel overlay;
 	public ToolModel tool;
 
 	public AndieModel() {
@@ -44,13 +50,21 @@ public class AndieModel {
 	}
 
 	public void init() {
+		if (timer != null) timer.cancel();
+		timer = new Timer();
+
 		this.operations = new Operations(this);
 		this.mouse = new MouseModel(this);
+		this.overlay = new OverlayModel(this);
 		this.tool = new ToolModel(this);
 		image = null;
 		previewImage = null;
 		isImageOpen = false;
 		notifyListeners(imageStatusListeners);
+	}
+
+	public Timer getTimer() {
+		return timer;
 	}
 
 	public String getImageFilepath() {
@@ -147,13 +161,13 @@ public class AndieModel {
 	public void registerImageStatusListener(ModelListener listener) {
 		imageStatusListeners.add(listener);
 	}
-	public void deregisterImageStatusListener(ModelListener listener) {
+	public void unregisterImageStatusListener(ModelListener listener) {
 		imageStatusListeners.remove(listener);
 	}
 	public void registerWorkingImageListener(ModelListener listener) {
 		workingImageListeners.add(listener);
 	}
-	public void deregisterWorkingImageListener(ModelListener listener) {
+	public void unregisterWorkingImageListener(ModelListener listener) {
 		workingImageListeners.remove(listener);
 	}
 	public interface ModelListener extends EventListener {
@@ -174,4 +188,5 @@ public class AndieModel {
 		previewImage = null;
 		notifyListeners(workingImageListeners);
 	}
+
 }

@@ -140,8 +140,7 @@ public class TransformActions extends MenuActions {
         }
     }
 
-    /*TODO: Implement general selection rather than custom for crop */
-    /* General selection would be faster, and wouldn't scale with image */
+    /*TODO: Update crop to utilize selection */
     public class CropAction extends ImageAction{
         CropAction(String name, ImageIcon icon, String desc, Integer mnemonic){
             super(name, icon, desc, mnemonic);
@@ -161,7 +160,7 @@ public class TransformActions extends MenuActions {
                     if (p1 == null) 
                         return;
                     controller.operations.apply(new Crop(p1, new Point(status.position.x - p1.x, status.position.y - p1.y)));
-                    model.mouse.deregisiterMouseModelListener(this);
+                    model.mouse.unregisterMouseModelListener(this);
                 }
                 public void mouseDown(MouseStatus status) {
                     p1 = status.position;

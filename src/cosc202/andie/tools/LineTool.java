@@ -1,5 +1,6 @@
 package cosc202.andie.tools;
 
+import java.awt.Cursor;
 import java.awt.Point;
 
 import cosc202.andie.ImageOperation;
@@ -15,6 +16,10 @@ public class LineTool extends Tool {
 
 	public LineTool(AndieModel model, AndieController controller) {
 		super(model, controller);
+	}
+
+	public Cursor getCursor() {
+		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	}
 
 	@Override
@@ -57,7 +62,7 @@ public class LineTool extends Tool {
 	@Override
 	public void deactivateTool() {
 		super.deactivateTool();
-		model.mouse.deregisiterMouseModelListener(listener);
+		model.mouse.unregisterMouseModelListener(listener);
 	}
 
 }

@@ -1,5 +1,6 @@
 package cosc202.andie.tools;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -17,6 +18,10 @@ public class RectangleTool extends Tool {
 
 	public RectangleTool(AndieModel model, AndieController controller) {
 		super(model, controller);
+	}
+
+	public Cursor getCursor() {
+		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	}
 
 	@Override
@@ -70,7 +75,7 @@ public class RectangleTool extends Tool {
 	@Override
 	public void deactivateTool() {
 		super.deactivateTool();
-		model.mouse.deregisiterMouseModelListener(listener);
+		model.mouse.unregisterMouseModelListener(listener);
 	}
 
 }

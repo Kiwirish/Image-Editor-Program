@@ -6,16 +6,12 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import javax.swing.*;
 
-import cosc202.andie.components.ImagePanView;
 import cosc202.andie.components.WelcomeBlank;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;

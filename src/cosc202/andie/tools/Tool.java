@@ -14,7 +14,7 @@ public abstract class Tool {
 		this.controller = controller;
 	}
 	public Cursor getCursor() {
-		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+		return Cursor.getDefaultCursor();
 	}
 	//Called when the tool is activated
 	public void activateTool() {
