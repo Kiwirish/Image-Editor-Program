@@ -20,14 +20,20 @@ public class Operations {
 		private void applyOperation(ImageOperation operation) {
 			model.getImage().apply(operation);
 		}
-
-		public void update(ImageOperation operation) {
-			//Cancel any previous operation thread, and start a new one
+		public void update(ImageOperation operation, boolean threadRequired) {
+			//If this is a new operation, cancel the previous one
+			if (lastOperation != null && lastOperation.getClass() != operation.getClass()) {
+				cancel();
+			}
+			//Cancel any previous operation thread
 			if(operationThread != null) {
 				operationThread.interrupt();
+				operationThread = null;
 
 			}
 			this.lastOperation = operation;
+
+			BufferedImage baseImage = Utils.deepCopy(model.getImage().getCurrentImage());
 
 			Function<BufferedImage, BufferedImage> operationFunction = (image) -> {
 				try {
@@ -37,7 +43,10 @@ public class Operations {
 				}
 			};
 
-			BufferedImage baseImage = Utils.deepCopy(model.getImage().getCurrentImage());
+			if (!threadRequired) {
+				model.setPreviewImage(operationFunction.apply(baseImage));
+				return;
+			}
 
 			OperationRunnable.OperationRunnableListener listener = (result) -> {
 				model.setPreviewImage(result);
@@ -56,8 +65,10 @@ public class Operations {
 			applyOperation(operation);
 		}
 		public void cancel() {
-			if(operationThread != null)
+			if(operationThread != null) {
 				operationThread.interrupt();
+				operationThread = null;
+			}
 			model.clearPreviewImage();
 		}
 

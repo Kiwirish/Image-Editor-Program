@@ -17,7 +17,7 @@ import cosc202.andie.ImageOperation;
  * @author Oliver Peyroux
  * @version 1.0
  */
-public class BrightnessAndContrast implements ImageOperation, java.io.Serializable  {
+public class BrightnessAndContrast implements ImageOperation  {
 
     private int brightness;
     private int contrast;

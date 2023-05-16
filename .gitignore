@@ -7,5 +7,9 @@ doc
 
 # Ignore .DS_Store files
 .DS_Store
+
 .compiled
+docs
+public
 Andie.jar
+.idea

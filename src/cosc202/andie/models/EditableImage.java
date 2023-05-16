@@ -54,8 +54,8 @@ public class EditableImage {
     private Stack<ImageOperation> ops;
     /** A memory of 'undone' operations to support 'redo'. */
     private Stack<ImageOperation> redoOps;
-    /** Whether the image has been modified since it was last saved/opened */
-    private BufferedImage lastSavedImage;
+    /** The ops applied as of last save */
+    private String lastSavedOps;
 
     /**
      * <p>
@@ -71,7 +71,7 @@ public class EditableImage {
         this.ops = stringToOps(serializedOps);
         redoOps = new Stack<ImageOperation>();
         this.refresh();
-        lastSavedImage = Utils.deepCopy(current);
+        lastSavedOps = opsToString(ops);
     }
 
     public EditableImage(BufferedImage image) {
@@ -79,7 +79,7 @@ public class EditableImage {
         this.ops = new Stack<ImageOperation>();
         redoOps = new Stack<ImageOperation>();
         this.refresh();
-        lastSavedImage = Utils.deepCopy(current);
+        lastSavedOps = opsToString(ops);
     }
 
 
@@ -89,7 +89,7 @@ public class EditableImage {
 
 
     public void saved() {
-        lastSavedImage = Utils.deepCopy(current);
+        lastSavedOps = opsToString(ops);
     }
 
     public String getOpsString() {
@@ -236,7 +236,7 @@ public class EditableImage {
      * @return True if the image has been modified since the last save / open, otherwise false.
      */
     public boolean getModified() {
-        return !bufferedImagesAreEqual(lastSavedImage, current);
+        return !getOpsString().equals(lastSavedOps);
     }
 
     /**
@@ -247,7 +247,7 @@ public class EditableImage {
      * @param image2 The second {@link BufferedImage} to compare
      * @return True if the images are equal, otherwise false.
      */
-    static boolean bufferedImagesAreEqual(BufferedImage image1, BufferedImage image2) {
+    static public boolean bufferedImagesAreEqual(BufferedImage image1, BufferedImage image2) {
         if (image1 == null && image2 == null) return true;
         if (image1 == null || image2 == null) return false;
         if (image1.getWidth() != image2.getWidth() || image1.getHeight() != image2.getHeight()) return false;

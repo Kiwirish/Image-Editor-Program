@@ -149,7 +149,7 @@ public class ColourActions extends MenuActions {
                 controller.operations.update(new BrightnessAndContrast(slider.getValue(), 0));
             });
 
-            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(), msg("Brightness_Popup_Title"), new PopupSlider[] { slider });
+            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(), msg("Brightness_Popup_Title"), new PopupSlider[] { slider });
             controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
     }
@@ -188,7 +188,7 @@ public class ColourActions extends MenuActions {
             slider.addChangeListener((ev) -> {
                 controller.operations.update(new BrightnessAndContrast(0, slider.getValue()));
             });
-            PopupWithSliders popup = new PopupWithSliders(controller.getPopupParent(),msg("Contrast_Popup_Title"),new PopupSlider[]{slider});
+            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(),msg("Contrast_Popup_Title"),new PopupSlider[]{slider});
             controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
 

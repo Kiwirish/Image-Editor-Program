@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.*;
 
-import cosc202.andie.components.ImagePanView;
 import cosc202.andie.components.WelcomeBlank;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
@@ -40,61 +39,50 @@ import static cosc202.andie.LanguageConfig.msg;
  * @version 2.0
  */
 public class ContentPanel extends JPanel {
-    
-    /**
-     * The image to display in the ImagePanel.
-     */
-    private ImagePanView ipv;
+	
+	boolean hasImage;
 
-    public ContentPanel(AndieController controller, AndieModel model) {
-        super();
-        this.setLayout(new BorderLayout());
+	public ContentPanel(AndieController controller, AndieModel model) {
+		super();
+		this.setLayout(new BorderLayout());
+		hasImage = false;
 
-        ipv = null;
+		ModelListener isl = () -> {
+			if (model.hasImage()) {
+				if (!hasImage) {
+					removeAll();
+					this.add(new ImagePanel(controller,model), BorderLayout.CENTER);
+				};
+			} else {
+				removeAll();
+				this.add(new WelcomeBlank(), BorderLayout.CENTER);
+			}
+			this.revalidate();
+			hasImage = model.hasImage();
+		};
 
-        ModelListener isl = () -> {
-            if (model.hasImage() && ipv == null) {
-                removeAll();
-                ipv = new ImagePanView(model.getWorkingImage());
-                controller.registerZoomListener(ipv);
-                add(ipv, BorderLayout.CENTER);
-            } else {
-                removeAll();
-                ipv = null;
-                this.add(new WelcomeBlank(), BorderLayout.CENTER);
-            }
-            this.revalidate();
-        };
+		model.registerImageStatusListener(isl);
+		isl.update();
 
-        ModelListener wil = () -> {
-            if (model.hasImage() && ipv != null) {
-                ipv.updateImage(model.getWorkingImage());
-            } 
-        };
+		//Open dropped image files
+		setDropTarget(new DropTarget() {
+			public void drop(DropTargetDropEvent evt) {
+				if (model.hasImage()) return; //Don't allow dropping if an image is already open
+				try {
+					evt.acceptDrop(DnDConstants.ACTION_COPY);
+					if (!evt.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) 
+						return;
+					List<?> list = (List<?>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+					String filepath = ((File)list.get(0)).getAbsolutePath();
+					controller.IO.dropOpen(filepath);
 
-        model.registerImageStatusListener(isl);
-        model.registerWorkingImageListener(wil);
-        isl.update();
-
-        //Open dropped image files
-        setDropTarget(new DropTarget() {
-            public void drop(DropTargetDropEvent evt) {
-                if (model.hasImage()) return; //Don't allow dropping if an image is already open
-                try {
-                    evt.acceptDrop(DnDConstants.ACTION_COPY);
-                    if (!evt.getTransferable().isDataFlavorSupported(DataFlavor.javaFileListFlavor)) 
-                        return;
-                    List<?> list = (List<?>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    String filepath = ((File)list.get(0)).getAbsolutePath();
-                    controller.IO.dropOpen(filepath);
-
-                    evt.getDropTargetContext().dropComplete(true);
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
-                } catch (UnsupportedFlavorException e) {
-                    JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
-                }
-            }
-        });
-    }
+					evt.getDropTargetContext().dropComplete(true);
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
+				} catch (UnsupportedFlavorException e) {
+					JOptionPane.showMessageDialog(null,msg("Generic_File_Open_Error"));
+				}
+			}
+		});
+	}
 }

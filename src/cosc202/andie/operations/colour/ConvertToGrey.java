@@ -22,7 +22,7 @@ import cosc202.andie.ImageOperation;
  * @author Steven Mills
  * @version 1.0
  */
-public class ConvertToGrey implements ImageOperation, java.io.Serializable {
+public class ConvertToGrey implements ImageOperation {
 
     /**
      * <p>

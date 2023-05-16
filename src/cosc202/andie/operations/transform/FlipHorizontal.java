@@ -22,7 +22,7 @@ import cosc202.andie.ImageOperation;
  * @version 1.0
 */
 
-public class FlipHorizontal implements ImageOperation, java.io.Serializable{
+public class FlipHorizontal implements ImageOperation {
     
 
     public FlipHorizontal(){}

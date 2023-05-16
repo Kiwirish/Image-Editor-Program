@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
  * @author Jeb Nicholson
  * @version 2.0
  */
-public interface ImageOperation {
+public interface ImageOperation extends java.io.Serializable {
 
     public BufferedImage draw(BufferedImage input) throws ImageOperationException;
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException;

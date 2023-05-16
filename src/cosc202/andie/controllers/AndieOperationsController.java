@@ -9,8 +9,11 @@ public class AndieOperationsController {
 		this.model = model;	
 	}
 
+	public void update(ImageOperation operation, boolean threadRequired) {
+		model.operations.update(operation, threadRequired);
+	}
 	public void update(ImageOperation operation) {
-		model.operations.update(operation);
+		model.operations.update(operation, true);
 	}
 	public void apply() {
 		model.operations.apply();
