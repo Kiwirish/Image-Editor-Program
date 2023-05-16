@@ -137,7 +137,7 @@ public class ToolModel {
 	public void restrictSelection() {
 		//Restricts the selection to be within the image bounds
 		if (!model.hasImage() || selection == null) return;
-		Dimension imageSize = model.getImage().getSize();
+		Dimension imageSize = new Dimension(model.getWorkingImage().getWidth(), model.getWorkingImage().getHeight());
 		if (selection.x < 0) selection.x = 0;
 		if (selection.y < 0) selection.y = 0;
 		if (selection.x + selection.width > imageSize.width) selection.width = imageSize.width - selection.x;
