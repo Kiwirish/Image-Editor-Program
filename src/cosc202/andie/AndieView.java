@@ -1,6 +1,7 @@
 package cosc202.andie;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
@@ -11,8 +12,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
@@ -61,6 +64,11 @@ public class AndieView {
         MenuBar menuBar = new MenuBar(controller, model);
         
         frame.setJMenuBar(menuBar);
+
+		JToolBar button = new JToolBar("Button");
+		
+		frame.add(button, BorderLayout.WEST);
+
         frame.pack();
 
 				Point framePosition = model.getFrameLocation();

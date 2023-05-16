@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
+import java.awt.Component;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Image;
