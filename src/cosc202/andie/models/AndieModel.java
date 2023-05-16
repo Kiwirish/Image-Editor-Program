@@ -21,6 +21,9 @@ import cosc202.andie.Utils.ExtensionException;
  * Given enough open/closes of an image, this would use up too much memory.
  * (Some listeners contain BufferedImages, which are not being garbage collected)
  * //TODO: Investigate Lapsed Listener Problem & WeakReferences
+ * 
+ * // I don't think WeakReferences is a solution (see https://stackoverflow.com/a/6451114/14900196)
+ * //TODO: Investigate actually unsubscribing listeners ( & Observable / Observer classes)?
  */
 
 public class AndieModel {

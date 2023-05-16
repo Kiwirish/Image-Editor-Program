@@ -50,7 +50,7 @@ public class OverlayModel {
 
 	public double getImageScale() {
 		if (imageBounds == null || !model.hasImage()) return 1;
-		return (double) imageBounds.width / model.getImage().getCurrentImage().getWidth();
+		return (double) imageBounds.width / model.getWorkingImage().getWidth();
 	}
 
 	public void repaint() {
