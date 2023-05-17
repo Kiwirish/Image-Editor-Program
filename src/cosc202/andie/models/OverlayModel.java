@@ -87,4 +87,13 @@ public class OverlayModel {
 	public interface OverlayDrawer {
 		public void drawOverlay(Graphics2D g);
 	}
+
+	public void listListeners() {
+		for (ModelListener listener : overlayListeners) {
+			System.out.println("OverlayListener: " + listener);
+		}
+		for (OverlayDrawer drawer : overlayDrawers) {
+			System.out.println("OverlayDrawer: " + drawer);
+		}
+	}
 }

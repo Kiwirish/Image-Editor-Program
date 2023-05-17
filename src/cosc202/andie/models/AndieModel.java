@@ -16,16 +16,6 @@ import javax.imageio.ImageIO;
 import cosc202.andie.Utils;
 import cosc202.andie.Utils.ExtensionException;
 
-/* 
- * //BUG: Listeners from both the model and controller may not be getting deregistered when components no longer need them.
- * Given enough open/closes of an image, this would use up too much memory.
- * (Some listeners contain BufferedImages, which are not being garbage collected)
- * //TODO: Investigate Lapsed Listener Problem & WeakReferences
- * 
- * // I don't think WeakReferences is a solution (see https://stackoverflow.com/a/6451114/14900196)
- * //TODO: Investigate actually unsubscribing listeners ( & Observable / Observer classes)?
- */
-
 public class AndieModel {
 
 	public static boolean IS_MAC = System.getProperty("os.name").toLowerCase().startsWith("mac");
@@ -40,6 +30,7 @@ public class AndieModel {
 
 	private ArrayList<ModelListener> imageStatusListeners = new ArrayList<ModelListener>();
 	private ArrayList<ModelListener> workingImageListeners = new ArrayList<ModelListener>();
+	private ArrayList<ModelListener> imageListeners = new ArrayList<ModelListener>();
 
 	private Timer timer = null;
 
@@ -55,6 +46,8 @@ public class AndieModel {
 	public void init() {
 		if (timer != null) timer.cancel();
 		timer = new Timer();
+
+		if (this.tool != null) this.tool.notifyRemove();
 
 		this.operations = new Operations(this);
 		this.mouse = new MouseModel(this);
@@ -101,6 +94,7 @@ public class AndieModel {
 		init();
 		notifyListeners(imageStatusListeners);
 		notifyListeners(workingImageListeners);
+		notifyListeners(imageListeners);
 	}
 
 	public void openImage(String filepath) throws IOException {
@@ -118,9 +112,11 @@ public class AndieModel {
 		isImageOpen = true;
 		notifyListeners(imageStatusListeners);
 		notifyListeners(workingImageListeners);
+		notifyListeners(imageListeners);
 		image.registerImageListener(() -> {
 			previewImage = null;
 			notifyListeners(workingImageListeners);
+			notifyListeners(imageListeners);
 		});
 	}
 
@@ -173,6 +169,12 @@ public class AndieModel {
 	public void unregisterWorkingImageListener(ModelListener listener) {
 		workingImageListeners.remove(listener);
 	}
+	public void registerImageListener(ModelListener listener) {
+		imageListeners.add(listener);
+	}
+	public void unregisterImageListener(ModelListener listener) {
+		imageListeners.remove(listener);
+	}
 	public interface ModelListener extends EventListener {
 		public void update();
 	}
@@ -192,4 +194,18 @@ public class AndieModel {
 		notifyListeners(workingImageListeners);
 	}
 
+	public void listListeners() {
+		for (ModelListener listener : imageStatusListeners) {
+			System.out.println("Image Status Listener: " + listener);
+		}
+		for (ModelListener listener : workingImageListeners) {
+			System.out.println("Working Image Listener: " + listener);
+		}
+		for (ModelListener listener : imageListeners) {
+			System.out.println("Image Listener: " + listener);
+		}
+		tool.listListeners();
+		mouse.listListeners();
+		overlay.listListeners();
+	}
 }

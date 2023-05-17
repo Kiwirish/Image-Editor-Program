@@ -94,4 +94,5 @@ public class Operations {
 			public void filterThreadFinished(BufferedImage result);
 		}
 	}
+
 }

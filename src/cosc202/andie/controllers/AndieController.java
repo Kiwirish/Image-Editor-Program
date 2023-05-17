@@ -42,7 +42,7 @@ public class AndieController {
 	public void registerZoomListener(ManualZoomListener listener) {
 		zoomListeners.add(listener);
 	}
-	public void deregisterZoomListener(ManualZoomListener listener) {
+	public void unregisterZoomListener(ManualZoomListener listener) {
 		zoomListeners.remove(listener);
 	}
 	public void zoomIn() {
@@ -65,13 +65,15 @@ public class AndieController {
 		public void manualZoomOut();
 		public void manualResetZoom();
 	}
-	public void removeAllListeners() {
-		zoomListeners.clear();
-	}
 	public void setCursor(Cursor cursor) {
 		this.contentPane.setCursor(cursor);
 	}
 	public void resetCursor() {
 		this.contentPane.setCursor(Cursor.getDefaultCursor());
+	}
+	public void listListeners() {
+		for (ManualZoomListener listener : zoomListeners) {
+			System.out.println("ManualZoomListener: " + listener);
+		}
 	}
 }

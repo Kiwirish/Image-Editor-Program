@@ -138,6 +138,9 @@ public class LanguageConfig {
 	public static void registerLanguageListener(LanguageListener listener) {
 		languageListeners.add(listener);
 	}
+	public static void unregisterLanguageListener(LanguageListener listener) {
+		languageListeners.remove(listener);
+	}
 	public static void notifyLanguageListeners() {
 		// Copy the list of listeners to avoid ConcurrentModificationException
 		ArrayList<LanguageListener> listeners = new ArrayList<LanguageListener>(languageListeners);

@@ -38,6 +38,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * @version 2.0
  */
 public class FilterActions extends MenuActions {
+
+    private ModelListener imageStatusListener;
     
     /**
      * <p>
@@ -54,13 +56,19 @@ public class FilterActions extends MenuActions {
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
         actions.add(new NegativeFilterAction("Negative Filter", null, null, null));
 
-        ModelListener isl = ()-> {
+        imageStatusListener = ()-> {
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
             }
         };
-        model.registerImageStatusListener(isl);
-        isl.update();
+        model.registerImageStatusListener(imageStatusListener);
+        imageStatusListener.update();
+    }
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        model.unregisterImageStatusListener(imageStatusListener);
     }
 
     /**

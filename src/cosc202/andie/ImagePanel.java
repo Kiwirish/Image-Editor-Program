@@ -27,12 +27,14 @@ public class ImagePanel extends JLayeredPane {
 	private ModelListener overlayImageListener;
 
 	private AndieModel model;
+	private AndieController controller;
 
 	public ImagePanel(AndieController controller, AndieModel model) {
 		super();
 		SpringLayout layout = new SpringLayout();
 		this.setLayout(layout);
 		this.model = model;
+		this.controller = controller;
 
 		ipv = new ImagePanView(model.getWorkingImage());
 
@@ -102,5 +104,6 @@ public class ImagePanel extends JLayeredPane {
 		super.removeNotify();
 		model.unregisterWorkingImageListener(workingImageListener);
 		model.overlay.unregisterOverlayListener(overlayImageListener);
+		controller.unregisterZoomListener(ipv);
 	}
 }

@@ -20,39 +20,34 @@ public class ToolActions extends MenuActions {
 	public ToolActions(AndieController controller, AndieModel model) {
 		super("Tools", controller, model);
 
-		ArrayList<ToolAction> toolActions = new ArrayList<ToolAction>();
-
-		toolActions.add(new SelectToolAction("Select", null, "Select regions", null));
-		toolActions.add(new LineToolAction("Line", null, "Draw a line", null));
-		toolActions.add(new RectangleToolAction("Rectangle", null, "Draw a rectangle", null));
-		toolActions.add(new ElipseToolAction("Elipse", null, "Draw an elipse", null));
-
-		actions.addAll(toolActions);
-
-		ModelListener listener = () -> {
-			for (ToolAction toolAction : toolActions) {
-				toolAction.updateState(model.tool.getTool(), model.hasImage());
-			}
-		};
-
-		model.tool.registerActiveToolListener(listener);
-		model.registerImageStatusListener(listener);
-		listener.update();
+		actions.add(new SelectToolAction("Select", null, "Select regions", null));
+		actions.add(new LineToolAction("Line", null, "Draw a line", null));
+		actions.add(new RectangleToolAction("Rectangle", null, "Draw a rectangle", null));
+		actions.add(new ElipseToolAction("Elipse", null, "Draw an elipse", null));
 	}
 
 
 	private abstract class ToolAction extends ImageAction {
 
+		private ModelListener updateListener;
 
 		protected ToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
 			super(name, icon, desc, mnemonic);
+			updateListener = () -> {
+				setEnabled(model.tool.getTool() == null || !model.tool.getTool().getClass().equals(getToolClass()) && model.hasImage());
+			};
+			model.tool.registerActiveToolListener(updateListener);
+			model.registerImageStatusListener(updateListener);
+			updateListener.update();
+		}
+
+		@Override
+		public void removeNotify() {
+			model.tool.unregisterActiveToolListener(updateListener);
+			model.unregisterImageStatusListener(updateListener);
 		}
 
 		protected abstract Class<? extends Tool> getToolClass();
-
-		public void updateState(Tool activeTool, boolean hasImage) {
-			setEnabled((activeTool == null || !activeTool.getClass().equals(getToolClass())) && hasImage);
-		}
 		
 	}
 

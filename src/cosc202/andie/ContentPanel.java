@@ -40,14 +40,18 @@ import static cosc202.andie.LanguageConfig.msg;
  */
 public class ContentPanel extends JPanel {
 	
-	boolean hasImage;
+	private boolean hasImage;
+	private ModelListener imageStatusListener;
+	private AndieModel model;
 
 	public ContentPanel(AndieController controller, AndieModel model) {
 		super();
-		this.setLayout(new BorderLayout());
-		hasImage = false;
+		this.hasImage = false;
+		this.model = model;
 
-		ModelListener isl = () -> {
+		this.setLayout(new BorderLayout());
+		imageStatusListener = () -> {
+
 			if (model.hasImage()) {
 				if (!hasImage) {
 					removeAll();
@@ -61,8 +65,8 @@ public class ContentPanel extends JPanel {
 			hasImage = model.hasImage();
 		};
 
-		model.registerImageStatusListener(isl);
-		isl.update();
+		model.registerImageStatusListener(imageStatusListener);
+		imageStatusListener.update();
 
 		//Open dropped image files
 		setDropTarget(new DropTarget() {
@@ -85,4 +89,11 @@ public class ContentPanel extends JPanel {
 			}
 		});
 	}
+
+	@Override
+	public void removeNotify() {
+		super.removeNotify();
+		model.unregisterImageStatusListener(imageStatusListener);
+	}
+
 }

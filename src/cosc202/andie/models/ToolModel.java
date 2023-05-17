@@ -25,6 +25,9 @@ public class ToolModel {
 	private Rectangle selection;
 
 	private ArrayList<ModelListener> activeToolListeners = new ArrayList<ModelListener>();
+	private ArrayList<ModelListener> selectionListeners = new ArrayList<ModelListener>();
+
+	private OverlayDrawer overlayDrawer;
 
 	public ToolModel(AndieModel model) {
 		this.model = model;
@@ -34,7 +37,7 @@ public class ToolModel {
 		this.strokeWidth = 12;
 		this.selection = null;
 
-		OverlayDrawer overlayDrawer = new OverlayDrawer() {
+		overlayDrawer = new OverlayDrawer() {
 			public void drawOverlay(Graphics2D g) {
 				if (selection != null) {
 					Rectangle imageBounds = model.overlay.getImageBounds();
@@ -123,6 +126,7 @@ public class ToolModel {
 	public void unsetSelection() {
 		this.selection = null;
 		model.overlay.repaint();
+		notifySelectionListeners();
 	}
 
 	public void setSelection(Rectangle rectangle) {
@@ -132,6 +136,11 @@ public class ToolModel {
 		}
 		this.selection = rectangle;
 		model.overlay.repaint();
+		notifySelectionListeners();
+	}
+
+	public Rectangle getSelection() {
+		return selection;
 	}
 	
 	public void restrictSelection() {
@@ -153,9 +162,37 @@ public class ToolModel {
 		activeToolListeners.remove(listener);
 	}
 
+	public void registerSelectionListener(ModelListener listener) {
+		selectionListeners.add(listener);
+	}
+
+	public void unregisterSelectionListener(ModelListener listener) {
+		selectionListeners.remove(listener);
+	}
+
 	public void notifyActiveToolListeners() {
 		for (ModelListener listener : activeToolListeners) {
 			listener.update();
 		}
 	}
+
+	public void notifySelectionListeners() {
+		for (ModelListener listener : selectionListeners) {
+			listener.update();
+		}
+	}
+
+	public void listListeners() {
+		for (ModelListener listener : activeToolListeners) {
+			System.out.println("Active Tool Listener: " + listener);
+		}
+		for (ModelListener listener : selectionListeners) {
+			System.out.println("Selection Listener: " + listener);
+		}
+	}
+
+	public void notifyRemove() {
+		model.overlay.unregisterOverlayDrawer(overlayDrawer);
+	}
+
 }
