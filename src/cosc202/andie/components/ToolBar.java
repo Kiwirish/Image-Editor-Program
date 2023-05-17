@@ -3,7 +3,10 @@ package cosc202.andie.components;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
+import java.awt.Component;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Image;
@@ -25,14 +28,14 @@ public class ToolBar extends JFrame{
         }
 
         private void createToolBar(){
-            JToolBar toolBar = new JToolBar();
-            ImageIcon icon = new ImageIcon(ToolBar.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
+            var toolBar = new JToolBar();
+            var icon = new ImageIcon(ToolBar.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
 
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(30, 30, DO_NOTHING_ON_CLOSE);
-            ImageIcon icon2 = new ImageIcon(newimg);
+            var icon2 = new ImageIcon(newimg);
             
-            JButton exitButton = new JButton(icon2);
+            var exitButton = new JButton(icon2);
             toolBar.add(exitButton);
 
             exitButton.addActionListener((e) -> System.exit(0));
@@ -42,7 +45,7 @@ public class ToolBar extends JFrame{
 
         public static void main(String[] args){
                 EventQueue.invokeLater(() -> {
-                    ToolBar ex = new ToolBar();
+                    var ex = new ToolBar();
                     ex.setVisible(true);
                 });
         }
