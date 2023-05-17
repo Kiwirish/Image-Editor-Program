@@ -89,6 +89,9 @@ public class AndieModel {
 	public boolean hasImage() {
 		return isImageOpen;
 	}
+	public boolean isPreviewing() {
+		return previewImage != null;
+	}
 
 	public void closeImage() {
 		init();
@@ -103,7 +106,11 @@ public class AndieModel {
 		File operationsFile = new File(filepath + ".ops");
 		String opsString = "";
 		if (operationsFile.exists()) {
-			opsString = Files.readString(operationsFile.toPath(), Charset.defaultCharset());
+			try {
+				opsString = Files.readString(operationsFile.toPath(), Charset.defaultCharset());
+			} catch (IOException e) {
+				opsString = "";
+			}
 		}
 
 		image = opsString != null ? new EditableImage(newImage,opsString) : new EditableImage(newImage);

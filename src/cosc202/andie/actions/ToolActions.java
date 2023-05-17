@@ -1,7 +1,6 @@
 package cosc202.andie.actions;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -34,7 +33,7 @@ public class ToolActions extends MenuActions {
 		protected ToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
 			super(name, icon, desc, mnemonic);
 			updateListener = () -> {
-				setEnabled(model.tool.getTool() == null || !model.tool.getTool().getClass().equals(getToolClass()) && model.hasImage());
+				setEnabled(model.hasImage() && (model.tool.getTool() == null || !model.tool.getTool().getClass().equals(getToolClass())));
 			};
 			model.tool.registerActiveToolListener(updateListener);
 			model.registerImageStatusListener(updateListener);

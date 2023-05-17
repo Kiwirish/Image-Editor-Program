@@ -28,6 +28,10 @@ public class ToolModel {
 	private ArrayList<ModelListener> selectionListeners = new ArrayList<ModelListener>();
 
 	private OverlayDrawer overlayDrawer;
+	private ModelListener workingImageListener;
+	private ModelListener imageListener;
+	private Dimension lastImageSize;
+	private boolean pauseSelectionPaint;
 
 	public ToolModel(AndieModel model) {
 		this.model = model;
@@ -37,9 +41,11 @@ public class ToolModel {
 		this.strokeWidth = 12;
 		this.selection = null;
 
+		this.pauseSelectionPaint = false;
+
 		overlayDrawer = new OverlayDrawer() {
 			public void drawOverlay(Graphics2D g) {
-				if (selection != null) {
+				if (selection != null && !pauseSelectionPaint) {
 					Rectangle imageBounds = model.overlay.getImageBounds();
 					double imageScale = model.overlay.getImageScale();
 
@@ -71,7 +77,7 @@ public class ToolModel {
 			public void run(){
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-						if (selection != null)
+						if (selection != null && !pauseSelectionPaint)
 							model.overlay.repaint();
 					}
 				});
@@ -79,6 +85,25 @@ public class ToolModel {
 		};
 
 		model.getTimer().schedule(repaintOverlayTask, 0, 1000/20);
+
+		workingImageListener = () -> {
+			pauseSelectionPaint = model.isPreviewing();
+		};
+
+		model.registerWorkingImageListener(workingImageListener);
+
+		//Restricts selection on image size change
+		imageListener = () -> {
+			if (model.hasImage()) {
+				Dimension imageSize = model.getImage().getSize();
+				if (lastImageSize == null || !imageSize.equals(lastImageSize)) {
+					restrictSelection();
+					lastImageSize = new Dimension(model.getWorkingImage().getWidth(), model.getWorkingImage().getHeight());
+				}
+			}
+		};
+
+		model.registerImageListener(imageListener);
 
 	}
 
@@ -151,6 +176,7 @@ public class ToolModel {
 		if (selection.y < 0) selection.y = 0;
 		if (selection.x + selection.width > imageSize.width) selection.width = imageSize.width - selection.x;
 		if (selection.y + selection.height > imageSize.height) selection.height = imageSize.height - selection.y;
+		if (selection.width == 0 || selection.height == 0) unsetSelection();
 		model.overlay.repaint();
 	}
 
@@ -193,6 +219,8 @@ public class ToolModel {
 
 	public void notifyRemove() {
 		model.overlay.unregisterOverlayDrawer(overlayDrawer);
+		model.unregisterWorkingImageListener(workingImageListener);
+		model.unregisterImageListener(imageListener);
 	}
 
 }

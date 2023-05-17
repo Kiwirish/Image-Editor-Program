@@ -1,7 +1,6 @@
 package cosc202.andie;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
@@ -17,7 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
-import javax.swing.plaf.ToolBarUI;
 
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
