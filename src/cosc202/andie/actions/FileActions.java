@@ -47,7 +47,6 @@ public class FileActions extends MenuActions {
         actions.add(new FileExportAction(msg("File_Export"), null, msg("File_Export_Desc"), Integer.valueOf(KeyEvent.VK_E)));
         actions.add(new FileCloseImageAction(msg("File_Close_Image"), null, msg("File_Close_Image_Desc"), Integer.valueOf(0)));
         actions.add(new FileExitAction(msg("File_Exit"), null, msg("File_Exit_Desc"), Integer.valueOf(0)));
-
     }
 
     /**
@@ -112,6 +111,8 @@ public class FileActions extends MenuActions {
      */
     public class FileSaveAction extends ImageAction {
 
+        private ModelListener imageListener;
+
         /**
          * <p>
          * Create a new file-save action.
@@ -124,11 +125,16 @@ public class FileActions extends MenuActions {
          */
         FileSaveAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            ModelListener listener = ()-> {
+            imageListener = ()-> {
                 setEnabled(model.hasImage() && model.getImage().getModified());
             };
-            model.registerWorkingImageListener(listener);
-            listener.update();
+            model.registerImageListener(imageListener);
+            imageListener.update();
+        }
+
+        @Override
+        public void removeNotify() {
+            model.unregisterImageListener(imageListener);
         }
 
         /**
@@ -157,6 +163,8 @@ public class FileActions extends MenuActions {
      */
     public class FileSaveAsAction extends ImageAction {
 
+        private ModelListener imageStatusListener;
+
         /**
          * <p>
          * Create a new file-save-as action.
@@ -169,11 +177,16 @@ public class FileActions extends MenuActions {
          */
         FileSaveAsAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            ModelListener listener = ()-> {
+            imageStatusListener = ()-> {
                 setEnabled(model.hasImage());
             };
-            model.registerImageStatusListener(listener);
-            listener.update();
+            model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
+        }
+
+        @Override
+        public void removeNotify() {
+            model.unregisterImageStatusListener(imageStatusListener);
         }
 
         /**
@@ -214,6 +227,8 @@ public class FileActions extends MenuActions {
      */
     public class FileCloseImageAction extends ImageAction {
 
+		private ModelListener imageStatusListener;
+
         /**
          * <p>
          * Create a new file-close-image action.
@@ -226,11 +241,16 @@ public class FileActions extends MenuActions {
          */
         FileCloseImageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            ModelListener listener = ()-> {
+            imageStatusListener = ()-> {
                 setEnabled(model.hasImage());
             };
-            model.registerImageStatusListener(listener);
-            listener.update();
+            model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
+        }
+
+        @Override
+        public void removeNotify() {
+            model.unregisterImageStatusListener(imageStatusListener);
         }
 
         /**
@@ -297,6 +317,8 @@ public class FileActions extends MenuActions {
      */
     public class FileExportAction extends ImageAction {
 
+		private ModelListener imageStatusListener;
+
         /**
          * <p>
          * Create a new file-export action.
@@ -309,12 +331,17 @@ public class FileActions extends MenuActions {
          */
         FileExportAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            ModelListener listener = ()-> {
+            imageStatusListener = ()-> {
                 setEnabled(model.hasImage());
             };
-            model.registerImageStatusListener(listener);
-            listener.update();
+            model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
         }
+
+		@Override
+		public void removeNotify() {
+			model.unregisterImageStatusListener(imageStatusListener);
+		}
 
         /**
          * <p>

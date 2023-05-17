@@ -48,8 +48,6 @@ public class Andie {
             launchView();
 
             LanguageConfig.registerLanguageListener(()->{
-                model.removeAllListeners();
-                controller.removeAllListeners();
                 view.closeView();
                 launchView();
             });

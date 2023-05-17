@@ -41,6 +41,8 @@ import static cosc202.andie.LanguageConfig.msg;
 public class ColourActions extends MenuActions {
 
 
+    private ModelListener imageStatusListener;
+
     /**
      * <p>
      * Create a set of Colour menu actions.
@@ -57,13 +59,19 @@ public class ColourActions extends MenuActions {
                 Integer.valueOf(KeyEvent.VK_B)));
         actions.add(new ContrastAction(msg("Contrast_Title"), null, msg("Contrast_Desc"), null));
 
-        ModelListener isl = ()-> {
+        imageStatusListener = () -> {
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
             }
         };
-        model.registerImageStatusListener(isl);
-        isl.update();
+        model.registerImageStatusListener(imageStatusListener);
+        imageStatusListener.update();
+    }
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        model.unregisterImageStatusListener(imageStatusListener);
     }
 
     /**

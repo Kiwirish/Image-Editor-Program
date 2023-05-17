@@ -77,4 +77,10 @@ public class MouseModel {
 		}
 	}
 
+	public void listListeners() {
+		for (MouseModelListener listener : mouseModelListeners) {
+			System.out.println("MouseListener: " + listener);
+		}
+	}
+
 }

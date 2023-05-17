@@ -55,6 +55,8 @@ public class EditActions extends MenuActions{
      */
     public class UndoAction extends ImageAction {
 
+        private ModelListener imageListener;
+
         /**
          * <p>
          * Create a new undo action.
@@ -67,11 +69,15 @@ public class EditActions extends MenuActions{
          */
         UndoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            ModelListener imageListener = () -> {
+            imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().undoable());
             };
-            model.registerWorkingImageListener(imageListener);   
+            model.registerImageListener(imageListener);   
             imageListener.update();
+        }
+
+        public void removeNotify() {
+            model.unregisterImageListener(imageListener);
         }
 
         /**
@@ -100,6 +106,8 @@ public class EditActions extends MenuActions{
      */   
     public class RedoAction extends ImageAction {
 
+        private ModelListener imageListener;
+
         /**
          * <p>
          * Create a new redo action.
@@ -112,11 +120,16 @@ public class EditActions extends MenuActions{
          */
         RedoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
-            ModelListener imageListener = () -> {
+            imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().redoable());
             };
-            model.registerWorkingImageListener(imageListener);
+            model.registerImageListener(imageListener);
             imageListener.update();
+        }
+
+        @Override
+        public void removeNotify() {
+            model.unregisterImageListener(imageListener);
         }
 
         

@@ -53,4 +53,7 @@ public abstract class ImageAction extends AbstractAction {
             putValue(MNEMONIC_KEY, mnemonic);
         }
     }
+
+    /** Called when the corrosponding menu item is removed */
+    public void removeNotify() {}
 }

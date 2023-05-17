@@ -30,6 +30,8 @@ import static cosc202.andie.LanguageConfig.msg;
  */
 public class ViewActions extends MenuActions {
 
+    private ModelListener imageStatusListener;
+
     /**
      * <p>
      * Create a set of View menu actions.
@@ -43,13 +45,19 @@ public class ViewActions extends MenuActions {
         actions.add(new ZoomOutAction(msg("ZoomOut_Title"), null, msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS)));
         actions.add(new ResetZoomAction(msg("ZoomReset_Title"), null, msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2)));
 
-        ModelListener isl = ()-> {
+        imageStatusListener = ()-> {
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
             }
         };
-        model.registerImageStatusListener(isl);
-        isl.update();
+        model.registerImageStatusListener(imageStatusListener);
+        imageStatusListener.update();
+    }
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        model.unregisterImageStatusListener(imageStatusListener);
     }
 
     /**

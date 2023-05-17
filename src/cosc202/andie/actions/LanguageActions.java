@@ -51,7 +51,10 @@ public class LanguageActions extends MenuActions {
      * Action to change the language
      */
     public class LanguageAction extends ImageAction{
+
         private Language language;
+        private LanguageListener languageListener;
+
         /**
          * <p>
          * Create a new language action.
@@ -66,12 +69,16 @@ public class LanguageActions extends MenuActions {
         LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, Language language){
             super(name, icon, desc, mnemonic);
             this.language = language;
-            LanguageListener listener = ()->{
+            languageListener = ()->{
                 setEnabled(LanguageConfig.getLanguage() != language);
             };
-            LanguageConfig.registerLanguageListener(listener);
-            listener.update();
+            LanguageConfig.registerLanguageListener(languageListener);
+            languageListener.update();
         } 
+
+        public void removeNotify(){
+            LanguageConfig.unregisterLanguageListener(languageListener);
+        }
 
         /**
          * Set ANDIE's current language to the language specified in the constructor

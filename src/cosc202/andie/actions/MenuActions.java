@@ -33,31 +33,45 @@ public abstract class MenuActions {
 	protected AndieController controller;
 	protected AndieModel model;
 
-		/**
-		 * Create MenuActions, with a given menu title
-		 * @param menuTitle The title of the parent menubar item
-		 */
-    public MenuActions(String menuTitle, AndieController controller, AndieModel model) {
-        actions = new ArrayList<ImageAction>();
-				this.menuTitle = menuTitle;
-				this.controller = controller;
-				this.model = model;
+	/**
+	 * Create MenuActions, with a given menu title
+	 * @param menuTitle The title of the parent menubar item
+	 */
+	public MenuActions(String menuTitle, AndieController controller, AndieModel model) {
+		actions = new ArrayList<ImageAction>();
+		this.menuTitle = menuTitle;
+		this.controller = controller;
+		this.model = model;
+	}
+
+	/**
+	 * <p>
+	 * Create a menu containing the ImageActions.
+	 * </p>
+	 * <p>
+	 * When the menu is selected, the updateState() method of each ImageAction is called.
+	 * </p>
+	 * 
+	 * @return The the JMenu UI element
+	 */
+	public JMenu createMenu() {
+		JMenu menu = new JMenu(menuTitle) {
+			@Override
+			public void removeNotify() {
+				super.removeNotify();
+				MenuActions.this.removeNotify();
+			}
+		};
+		for (ImageAction action: actions) {
+			menu.add(new JMenuItem(action));
 		}
-    /**
-     * <p>
-     * Create a menu containing the ImageActions.
-     * </p>
-		 * <p>
-		 * When the menu is selected, the updateState() method of each ImageAction is called.
-		 * </p>
-     * 
-     * @return The the JMenu UI element
-     */
-    public JMenu createMenu() {
-        JMenu menu = new JMenu(menuTitle);
-        for (ImageAction action: actions) {
-            menu.add(new JMenuItem(action));
-        }
-        return menu;
-    }
+		return menu;
+	}
+
+	/** Called when the parent JMenu is removed */
+	public void removeNotify() {
+		for (ImageAction action: actions) {
+			action.removeNotify();
+		}
+	}
 }
