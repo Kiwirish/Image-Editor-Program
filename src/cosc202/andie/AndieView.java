@@ -66,14 +66,35 @@ public class AndieView {
         frame.setJMenuBar(menuBar);
 
 		JToolBar button = new JToolBar("Button");
+
 		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Exit.png"));
 		Image img = icon.getImage();
         Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon icon2 = new ImageIcon(newimg);    
         JButton exitButton = new JButton(icon2);
         button.add(exitButton);
+		exitButton.addActionListener((e) -> System.exit(0));
 
-        exitButton.addActionListener((e) -> System.exit(0));
+		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("Crop.png"));
+		Image img2 = crop.getImage();
+        Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon crop2 = new ImageIcon(newimg2);    
+        JButton cropButton = new JButton(crop2);
+        button.add(cropButton);
+
+		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("acRotate.png"));
+		Image rotateimg = rotate.getImage();
+        Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon rotate2 = new ImageIcon(newrotateimg);    
+        JButton rotateButton = new JButton(rotate2);
+        button.add(rotateButton);
+
+		ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("cRotate.png"));
+		Image crotateimg = crotate.getImage();
+        Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
+        JButton crotateButton = new JButton(crotate2);
+        button.add(crotateButton);
 
 		frame.add(button, BorderLayout.WEST);
 
