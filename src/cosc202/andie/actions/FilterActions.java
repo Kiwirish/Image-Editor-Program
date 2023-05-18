@@ -38,8 +38,6 @@ import static cosc202.andie.LanguageConfig.msg;
  * @version 2.0
  */
 public class FilterActions extends MenuActions {
-
-    private ModelListener imageStatusListener;
     
     /**
      * <p>
@@ -55,26 +53,15 @@ public class FilterActions extends MenuActions {
         actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
         actions.add(new NegativeFilterAction("Negative Filter", null, null, null));
-<<<<<<< HEAD
         // need to add an emboss menu to select N,E,S,W Emboss filters 
         // need to add a sobel filters menu to select Horizontal or Vertical edge detection filters
         ModelListener isl = ()-> {
-=======
-
-        imageStatusListener = ()-> {
->>>>>>> e8c8532d9852905c72e00404d1a7568f696fb29a
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
             }
         };
-        model.registerImageStatusListener(imageStatusListener);
-        imageStatusListener.update();
-    }
-
-    @Override
-    public void removeNotify() {
-        super.removeNotify();
-        model.unregisterImageStatusListener(imageStatusListener);
+        model.registerImageStatusListener(isl);
+        isl.update();
     }
 
     /**
