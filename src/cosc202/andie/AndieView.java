@@ -66,15 +66,15 @@ public class AndieView {
         frame.setJMenuBar(menuBar);
 
 		JToolBar button = new JToolBar("Button");
-		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
+		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Exit.png"));
 		Image img = icon.getImage();
-            Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-             ImageIcon icon2 = new ImageIcon(newimg);
-            
-            JButton exitButton = new JButton(icon2);
-            button.add(exitButton);
+        Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon icon2 = new ImageIcon(newimg);    
+        JButton exitButton = new JButton(icon2);
+        button.add(exitButton);
 
-            exitButton.addActionListener((e) -> System.exit(0));
+        exitButton.addActionListener((e) -> System.exit(0));
+
 		frame.add(button, BorderLayout.WEST);
 
         frame.pack();
