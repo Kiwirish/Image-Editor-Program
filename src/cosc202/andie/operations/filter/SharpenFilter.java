@@ -22,7 +22,7 @@ import cosc202.andie.ImageOperation;
  * @author Blake Leahy
  * @version 1.0
  */
-public class SharpenFilter implements ImageOperation {
+public class SharpenFilter implements ImageOperation, java.io.Serializable {
     
     //construct a sharpenFilter 
     public SharpenFilter(){ }
@@ -41,7 +41,7 @@ public class SharpenFilter implements ImageOperation {
      * @param input The image to apply the Sharpen filter to.
      * @return The resulting (sharpened)) image.
      */
-    public BufferedImage draw(BufferedImage input) throws ImageOperationException {
+    public BufferedImage apply(BufferedImage input) {
 
         //check for illegal argument 
         if (input == null){
@@ -150,11 +150,6 @@ public class SharpenFilter implements ImageOperation {
 
 
 
-    }
-
-    @Override
-    public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
-        return draw(input);
     }
     
 
