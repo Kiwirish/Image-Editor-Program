@@ -28,7 +28,8 @@ public class Utils {
 	}
 
 	public static String withFileExtension(String filepath, String extension) {
-		if (getFileExtension(filepath).equals(extension))
+		String currentExt = getFileExtension(filepath);
+		if (currentExt != null && currentExt.equals(extension))
 			return filepath;
 		return filepath + "." + extension;
 	}
