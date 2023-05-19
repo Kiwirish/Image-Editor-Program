@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -119,7 +120,7 @@ public class AndieView {
 		Image Undoimg = Undo.getImage();
         Image Undonewimg = Undoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon Undo2 = new ImageIcon(Undonewimg);    
-        JButton UndoButton = new JButton(controller.actions.editActions.new UndoAction("", Undo2 , "Undo", null));
+        JButton UndoButton = new JButton(controller.actions.editActions.new UndoAction("", Undo2 , "Undo", KeyEvent.VK_Z));
         button.add(UndoButton);
 		selectButton.addActionListener((e) -> System.out.println("Undo"));
 
@@ -128,7 +129,7 @@ public class AndieView {
 		Image Redoimg = Redo.getImage();
         Image Redonewimg = Redoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon Redo2 = new ImageIcon(Redonewimg);    
-        JButton RedoButton = new JButton(controller.actions.editActions.new RedoAction("", Redo2 , "redo", null));
+        JButton RedoButton = new JButton(controller.actions.editActions.new RedoAction("", Redo2 , "redo", KeyEvent.VK_W));
         button.add(RedoButton);
 		selectButton.addActionListener((e) -> System.out.println("Redo"));
 
