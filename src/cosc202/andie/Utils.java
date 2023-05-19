@@ -3,6 +3,11 @@ package cosc202.andie;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -82,6 +87,16 @@ public class Utils {
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
 		WritableRaster raster = bi.copyData(null);
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
+
+	public static String readString(File file, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(file.toPath());
+		return new String(encoded, encoding);
+	}
+
+	public static void writeString(File file, String content, Charset encoding) throws IOException {
+		byte[] encoded = content.getBytes(encoding);
+		Files.write(file.toPath(), encoded);
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package cosc202.andie.operations.filter;
 
 import java.awt.image.*;
-import java.util.*;
 
 import cosc202.andie.ImageOperation;
 
@@ -215,6 +214,12 @@ public class EmbossFilter implements ImageOperation  {
 
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
+    }
+
+
+    @Override
+    public String operationDescription() {
+        return String.format("Emboss filter");
     }
 
 }

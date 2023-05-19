@@ -55,6 +55,7 @@ public class FilterActions extends MenuActions {
         actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
         actions.add(new NegativeFilterAction("Negative Filter", null, null, null));
+        actions.add(new EmbossFilterAction("Emboss Filter", null, null, null));
         // need to add an emboss menu to select N,E,S,W Emboss filters 
         // need to add a sobel filters menu to select Horizontal or Vertical edge detection filters
 

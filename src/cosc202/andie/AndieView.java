@@ -17,7 +17,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
-import cosc202.andie.actions.TransformActions.CropAction;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 
