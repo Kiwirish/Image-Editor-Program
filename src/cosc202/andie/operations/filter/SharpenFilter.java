@@ -133,6 +133,7 @@ public class SharpenFilter implements ImageOperation  {
                         0, -1 / 2.0f, 0 };
 
         Kernel kernel = new Kernel(3 ,3 , array);
+
         ConvolveOp convOp = new ConvolveOp(kernel);
         BufferedImage enlargedOutput = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
         convOp.filter(enlargedImage, enlargedOutput);
