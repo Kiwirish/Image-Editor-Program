@@ -64,8 +64,8 @@ public class AndieView {
         MenuBar menuBar = new MenuBar(controller, model);
         
         frame.setJMenuBar(menuBar);
-
-		JToolBar button = new JToolBar("Button");
+		
+		JToolBar button = new JToolBar("Button" + 10);
 
 		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Exit.png"));
 		Image img = icon.getImage();
@@ -73,6 +73,7 @@ public class AndieView {
         ImageIcon icon2 = new ImageIcon(newimg);    
         JButton exitButton = new JButton(icon2);
         button.add(exitButton);
+		exitButton.setLocation(100, 10);
 		exitButton.addActionListener((e) -> System.exit(0));
 
 		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("Crop.png"));
@@ -96,7 +97,7 @@ public class AndieView {
         JButton crotateButton = new JButton(crotate2);
         button.add(crotateButton);
 
-		frame.add(button, BorderLayout.WEST);
+		frame.add(button, BorderLayout.NORTH);
 
         frame.pack();
 
