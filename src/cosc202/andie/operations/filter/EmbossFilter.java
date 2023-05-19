@@ -175,7 +175,9 @@ public class EmbossFilter implements ImageOperation  {
                 }
                 // calculate output pixel color values 
                 int outputA = a;
-
+                
+                //method that takes this int value and just changes it?
+                //e.g outputR = NegativeResults(outputR);
                 int outputR = rResult + 127; 
                 if(outputR > 255){
                     outputR = 255; 
