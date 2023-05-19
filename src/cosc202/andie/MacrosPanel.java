@@ -4,7 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,13 +12,11 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
 
-import cosc202.andie.actions.MacroActions;
+import cosc202.andie.actions.MacroActions.ApplyMacroAction;
 import cosc202.andie.actions.MacroActions.RecordMacroAction;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
@@ -32,6 +29,9 @@ public class MacrosPanel extends JPanel {
 	private ModelListener macrosUpdateListener;
 	private JPanel operationsList;
 	private JLabel controlsPanelLabel;
+
+	private RecordMacroAction recordMacroAction;
+	private ApplyMacroAction applyMacroAction;
 
 	public MacrosPanel(AndieController controller, AndieModel model) {
 		super();
@@ -81,13 +81,16 @@ public class MacrosPanel extends JPanel {
 		controlsPanelLabel.setAlignmentX(CENTER_ALIGNMENT);
 		controlsPanel.add(controlsPanelLabel);
 
+		recordMacroAction = controller.actions.macroActions.new RecordMacroAction("Start Recording", null, "Start recording a Macro", null);
+		applyMacroAction = controller.actions.macroActions.new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file", null);
+
 		//Add vertical space
 		controlsPanel.add(new JLabel(" "));
-		JButton recordButton = new JButton(controller.actions.macroActions.new RecordMacroAction("Start Recording", null, "Start recording a Macro", null));
+		JButton recordButton = new JButton(recordMacroAction);
 		recordButton.setAlignmentX(CENTER_ALIGNMENT);
 		recordButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, recordButton.getMaximumSize().height));
 		controlsPanel.add(recordButton);
-		JButton applyMacroButton = new JButton(controller.actions.macroActions.new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file", null));
+		JButton applyMacroButton = new JButton(applyMacroAction);
 		applyMacroButton.setAlignmentX(CENTER_ALIGNMENT);
 		applyMacroButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, applyMacroButton.getMaximumSize().height));
 		controlsPanel.add(applyMacroButton);
@@ -129,6 +132,8 @@ public class MacrosPanel extends JPanel {
 	public void removeNotify() {
 		super.removeNotify();
 		model.macros.unregisterMacrosUpdateListener(macrosUpdateListener);
+		recordMacroAction.removeNotify();
+		applyMacroAction.removeNotify();
 	}
 
 	@Override

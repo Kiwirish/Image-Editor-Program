@@ -9,7 +9,7 @@ import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
 
-import static cosc202.andie.LanguageConfig.msg;
+// import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>

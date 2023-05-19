@@ -1,7 +1,6 @@
 package cosc202.andie.operations.filter;
 
 import java.awt.image.*;
-import java.util.*;
 
 import cosc202.andie.ImageOperation;
 

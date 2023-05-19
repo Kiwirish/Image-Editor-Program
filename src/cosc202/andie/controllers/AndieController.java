@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 
 import cosc202.andie.models.AndieModel;
-import cosc202.andie.models.AndieModel.ModelListener;
 
 public class AndieController {
 	private AndieModel model;

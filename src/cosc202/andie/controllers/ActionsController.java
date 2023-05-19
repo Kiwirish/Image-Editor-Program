@@ -13,8 +13,8 @@ import cosc202.andie.models.AndieModel;
 
 public class ActionsController {
 
-	private AndieModel model;
-	private AndieController controller;
+	// private AndieModel model;
+	// private AndieController controller;
 
 	public ColourActions colourActions;
 	public EditActions editActions;
@@ -27,17 +27,6 @@ public class ActionsController {
 	public ViewActions viewActions;
 
 	public ActionsController(AndieModel model, AndieController controller) {
-		this.model = model;
-		this.controller = controller;
-		this.colourActions = new ColourActions(controller, model);
-		this.editActions = new EditActions(controller, model);
-		this.fileActions = new FileActions(controller, model);
-		this.filterActions = new FilterActions(controller, model);
-		this.languageActions = new LanguageActions(controller, model);
-		this.macroActions = new MacroActions(controller, model);
-		this.toolActions = new ToolActions(controller, model);
-		this.transformActions = new TransformActions(controller, model);
-		this.viewActions = new ViewActions(controller, model);
 	}
 
 
