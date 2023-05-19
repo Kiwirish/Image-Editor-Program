@@ -14,6 +14,7 @@ import cosc202.andie.operations.filter.MeanFilter;
 import cosc202.andie.operations.filter.MedianFilter;
 import cosc202.andie.operations.filter.NegativeResults;
 import cosc202.andie.operations.filter.SharpenFilter;
+import cosc202.andie.operations.filter.EmbossFilter; 
 
 import static cosc202.andie.LanguageConfig.msg;
 
@@ -57,7 +58,7 @@ public class FilterActions extends MenuActions {
         actions.add(new NegativeFilterAction("Negative Filter", null, null, null));
         // need to add an emboss menu to select N,E,S,W Emboss filters 
         // need to add a sobel filters menu to select Horizontal or Vertical edge detection filters
-
+        actions.add(new EmbossFilterAction("kjasdfklasdf", null, menuTitle, null));
         imageStatusListener = ()-> {
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
@@ -302,52 +303,34 @@ public class FilterActions extends MenuActions {
 
         public void actionPerformed(ActionEvent e) {
 
-            float[] kernel = new float[9]; 
-        
-            if(e.getActionCommand().equals("N Emboss")){
-                kernel[1] = 1;
-                kernel[7] = -1;
-            }else if(e.getActionCommand().equals("E Emboss")){
-                kernel[3] = -1;
-                kernel[5] = 1;
-            }else if(e.getActionCommand().equals("S Emboss")){
-                kernel[1] = -1;
-                kernel[7] = 1;
-            }else if(e.getActionCommand().equals("W Emboss")){    
-                kernel[3] = 1;
-                kernel[5] = -1;
-            }else if(e.getActionCommand().equals("NW Emboss")){ 
-                kernel[0] = 1;
-                kernel[8] = -1;
-            }else if(e.getActionCommand().equals("NE Emboss")){ 
-                kernel[2] = 1;
-                kernel[6] = -1;
-            }else if(e.getActionCommand().equals("SE Emboss")){ 
-                kernel[0] = -1;
-                kernel[8] = 1;
-            }else if(e.getActionCommand().equals("SW Emboss")){ 
-                kernel[2] = -1;
-                kernel[6] = 1;
-            }else if(e.getActionCommand().equals("Horizontal")){ 
-                kernel[0] = -1/2;
-                kernel[2] = 1/2;
-                kernel[3] = -1;
-                kernel[5] = 1;
-                kernel[6] = -1/2;
-                kernel[8] = 1/2;
-            }else if(e.getActionCommand().equals("Vertical")){ 
-                kernel[0] = -1/2;
-                kernel[1] = -1;
-                kernel[2] = -1/2;
-                kernel[6] = 1/2;
-                kernel[7] = 1;
-                kernel[8] = 1/2;
-            }
+
+            
+            
+               
+            // }else if(e.getActionCommand().equals("Horizontal")){ 
+            //     kernel[0] = -1/2;
+            //     kernel[2] = 1/2;
+            //     kernel[3] = -1;
+            //     kernel[5] = 1;
+            //     kernel[6] = -1/2;
+            //     kernel[8] = 1/2;
+            // }else if(e.getActionCommand().equals("Vertical")){ 
+            //     kernel[0] = -1/2;
+            //     kernel[1] = -1;
+            //     kernel[2] = -1/2;
+            //     kernel[6] = 1/2;
+            //     kernel[7] = 1;
+            //     kernel[8] = 1/2;
+            // }
+            PopupSlider slider = new PopupSlider("Emboss",0,8,0,"x45deg",1,1);
+            slider.addChangeListener((ev)->{
+                controller.operations.update(new EmbossFilter(slider.getValue()*45));
+            });
+            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == PopupWithSliders.OK);
         }
 
-
-
-
+        
 
 
         //     PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,5,1,"px",1,5);
