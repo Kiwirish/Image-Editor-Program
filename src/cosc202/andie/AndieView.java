@@ -82,7 +82,7 @@ public class AndieView {
         ImageIcon crop2 = new ImageIcon(newimg2);    
         JButton cropButton = new JButton(crop2);
         button.add(cropButton);
-		//cropButton.addActionListener(Crop);
+		cropButton.addActionListener((e) -> System.out.println("Crop"));
 
 
 		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("acRotate.png"));
@@ -91,6 +91,7 @@ public class AndieView {
         ImageIcon rotate2 = new ImageIcon(newrotateimg);    
         JButton rotateButton = new JButton(rotate2);
         button.add(rotateButton);
+		rotateButton.addActionListener((e) -> System.out.println("Anti Clockwise Rotate"));
 
 		ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("cRotate.png"));
 		Image crotateimg = crotate.getImage();
@@ -98,8 +99,10 @@ public class AndieView {
         ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
         JButton crotateButton = new JButton(crotate2);
         button.add(crotateButton);
+		crotateButton.addActionListener((e) -> System.out.println("Clockwise Rotate"));
 
-		frame.add(button, BorderLayout.WEST);
+
+		frame.add(button, BorderLayout.SOUTH);
 
         frame.pack();
 
