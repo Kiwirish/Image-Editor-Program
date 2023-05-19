@@ -64,6 +64,7 @@ public class TransformActions extends MenuActions {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
         }
 
         @Override
@@ -87,6 +88,7 @@ public class TransformActions extends MenuActions {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
         }
 
         @Override
@@ -110,6 +112,7 @@ public class TransformActions extends MenuActions {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
         }
 
         @Override
@@ -139,6 +142,7 @@ public class TransformActions extends MenuActions {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
         }
 
         @Override
@@ -162,6 +166,7 @@ public class TransformActions extends MenuActions {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
         }
 
         @Override
@@ -185,6 +190,7 @@ public class TransformActions extends MenuActions {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
+            imageStatusListener.update();
         }
 
         @Override
@@ -208,6 +214,7 @@ public class TransformActions extends MenuActions {
             };
             model.registerImageStatusListener(updateListener);
             model.tool.registerSelectionListener(updateListener);
+            updateListener.update();
         }
 
         @Override
