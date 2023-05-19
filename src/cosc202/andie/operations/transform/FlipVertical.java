@@ -51,5 +51,10 @@ public class FlipVertical implements ImageOperation{
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
+
+    @Override
+    public String operationDescription() {
+        return "Vertical Flip";
+    }
     
 }

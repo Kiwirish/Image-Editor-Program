@@ -1,23 +1,49 @@
 package cosc202.andie.models;
 
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import cosc202.andie.models.AndieModel.ModelListener;
 
 public class MouseModel {
 
 	AndieModel model;
 
-	ArrayList<MouseModelListener> mouseModelListeners = new ArrayList<MouseModelListener>();
+	private ArrayList<MouseModelListener> mouseModelListeners = new ArrayList<MouseModelListener>();
+	private ArrayList<ModelListener> cursorListeners = new ArrayList<ModelListener>();
+	private Cursor cursor;
 
 	public MouseModel(AndieModel model) {
 		this.model = model;
+		cursor = Cursor.getDefaultCursor();
 	}
 	public void registerMouseModelListener(MouseModelListener listener) {
 		mouseModelListeners.add(listener);
 	}
 	public void unregisterMouseModelListener(MouseModelListener listener) {
 		mouseModelListeners.remove(listener);
+	}
+
+	public void registerCursorListener(ModelListener listener) {
+		cursorListeners.add(listener);
+	}
+	public void unregisterCursorListener(ModelListener listener) {
+		cursorListeners.remove(listener);
+	}
+	public void notifyCursorListeners() {
+		for (ModelListener listener : cursorListeners) {
+			listener.update();
+		}
+	}
+
+	public Cursor getCursor() {
+		return this.cursor;
+	}
+	public void setCursor(Cursor cursor) {
+		this.cursor = cursor;
+		notifyCursorListeners();
 	}
 
 	// All positions are with respect to the current working image

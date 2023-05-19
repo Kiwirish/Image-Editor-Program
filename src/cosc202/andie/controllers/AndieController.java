@@ -6,18 +6,25 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 
 import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.AndieModel.ModelListener;
 
 public class AndieController {
 	private AndieModel model;
 	private JComponent contentPane;
 
-	public AndieIOController IO;
-	public AndieOperationsController operations;
+	private ArrayList<ManualZoomListener> zoomListeners = new ArrayList<ManualZoomListener>();
+
+	public ImageIOController IO;
+	public OpsController operations;
+	public MacrosController macros;
+	public ActionsController actions;
 
 	public AndieController(AndieModel model) {
 		this.model = model;
-		this.IO = new AndieIOController(model, this);
-		this.operations = new AndieOperationsController(model);
+		this.IO = new ImageIOController(model, this);
+		this.operations = new OpsController(model);
+		this.macros = new MacrosController(model, this);
+		this.actions = new ActionsController(model, this);
 	}
 	public void closeWindow() {
 		if(IO.safeClose()) {
@@ -37,7 +44,6 @@ public class AndieController {
 		model.getImage().redo();
 	}
 
-	private ArrayList<ManualZoomListener> zoomListeners = new ArrayList<ManualZoomListener>();
 
 	public void registerZoomListener(ManualZoomListener listener) {
 		zoomListeners.add(listener);
@@ -65,12 +71,17 @@ public class AndieController {
 		public void manualZoomOut();
 		public void manualResetZoom();
 	}
+
+
 	public void setCursor(Cursor cursor) {
-		this.contentPane.setCursor(cursor);
+		model.mouse.setCursor(cursor);
 	}
 	public void resetCursor() {
-		this.contentPane.setCursor(Cursor.getDefaultCursor());
+		model.mouse.setCursor(Cursor.getDefaultCursor());
 	}
+
+
+
 	public void listListeners() {
 		for (ManualZoomListener listener : zoomListeners) {
 			System.out.println("ManualZoomListener: " + listener);

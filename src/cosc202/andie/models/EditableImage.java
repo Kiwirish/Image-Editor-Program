@@ -45,6 +45,7 @@ import static cosc202.andie.LanguageConfig.msg;
 public class EditableImage {
 
 	private ArrayList<ImageListener> imageListeners = new ArrayList<ImageListener>();
+    private ArrayList<OperationListener> operationListeners = new ArrayList<OperationListener>();
 
     /** The original image. This should never be altered by ANDIE. */
     private BufferedImage original;
@@ -126,25 +127,38 @@ public class EditableImage {
     public boolean apply(ImageOperation imageOperation) {
         try {
             current = imageOperation.draw(current);
-            notifyListeners(imageListeners);
+            notifyImageListeners(imageListeners);
         } catch (ImageOperationException ex) {
             JOptionPane.showMessageDialog(null, msg("Apply_Exception") + "\n" + ex.getMessage(), msg("Apply_Exception_Title"), JOptionPane.WARNING_MESSAGE);
             return false;
         }
         ops.add(imageOperation);
         redoOps.clear();
-        notifyListeners(imageListeners);
+        notifyImageListeners(imageListeners);
+        for (OperationListener listener : operationListeners) {
+            listener.operationApplied(imageOperation);
+        }
         return true;
     }
 
 	public void registerImageListener(ImageListener listener) {
 		imageListeners.add(listener);
 	}
-	private void notifyListeners(ArrayList<ImageListener> listeners) {
+    public void unregisterImageListener(ImageListener listener) {
+        imageListeners.remove(listener);
+    }
+	private void notifyImageListeners(ArrayList<ImageListener> listeners) {
 		for (ImageListener listener : listeners) {
 			listener.update();
 		}
     }
+    public void registerOperationListener(OperationListener listener) {
+        operationListeners.add(listener);
+    }
+    public void unregisterOperationListener(OperationListener listener) {
+        operationListeners.remove(listener);
+    }
+
 
     /**
      * <p>
@@ -155,7 +169,10 @@ public class EditableImage {
         if (ops.isEmpty()) return;
         redoOps.push(ops.pop());
         refresh();
-        notifyListeners(imageListeners);
+        notifyImageListeners(imageListeners);
+        for (OperationListener listener : operationListeners) {
+            listener.operationRemoved();
+        }
     }
 
     /**
@@ -173,7 +190,10 @@ public class EditableImage {
             return;
         } finally {
             ops.add(operationToRedo);
-            notifyListeners(imageListeners);
+            notifyImageListeners(imageListeners);
+            for (OperationListener listener : operationListeners) {
+                listener.operationApplied(operationToRedo);
+            }
         }
     }
 
@@ -287,5 +307,10 @@ public class EditableImage {
 
 	public interface ImageListener extends EventListener {
 		public void update();
+	}
+
+	public interface OperationListener extends EventListener {
+		public void operationApplied(ImageOperation operation);
+        public void operationRemoved();
 	}
 }

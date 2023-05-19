@@ -84,4 +84,11 @@ public class BrightnessAndContrast implements ImageOperation  {
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
+
+    @Override
+    public String operationDescription() {
+        String brightness = (this.brightness >= 0 ? "+" + this.brightness : "" + this.brightness) + "%";
+        String contrast = (this.contrast >= 0 ? "+" + this.contrast : "" + this.contrast) + "%";
+        return String.format("Brightness & Contrast filter [Brightness: %s, Contrast: %s]", brightness, contrast);
+    }
 }

@@ -66,7 +66,7 @@ public class LanguageActions extends MenuActions {
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          * @param language The key for the language to change to
          */
-        LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, Language language){
+       public LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, Language language){
             super(name, icon, desc, mnemonic);
             this.language = language;
             languageListener = ()->{

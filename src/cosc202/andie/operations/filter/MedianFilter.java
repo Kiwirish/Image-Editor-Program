@@ -234,9 +234,13 @@ public class MedianFilter implements ImageOperation {
 
     }
 
-
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
+    }
+
+    @Override
+    public String operationDescription() {
+        return String.format("Median Filter [Radius: %dpx]", radius);
     }
     
 

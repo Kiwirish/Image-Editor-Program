@@ -32,6 +32,8 @@ public interface ImageOperation extends java.io.Serializable {
     public BufferedImage draw(BufferedImage input) throws ImageOperationException;
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException;
 
+    public String operationDescription();
+
     /**
      * An exception to be thrown when an ImageOperation fails.
      */
@@ -40,4 +42,5 @@ public interface ImageOperation extends java.io.Serializable {
             super(message);
         }
     }
+
 }

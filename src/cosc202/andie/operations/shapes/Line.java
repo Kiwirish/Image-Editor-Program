@@ -39,5 +39,11 @@ public class Line implements ImageOperation  {
 		return draw(input);
 	}
 
+	@Override
+	public String operationDescription() {
+		return String.format("Line [From: (%d, %d), To: (%d, %d)] [Stroke: #%x, Stroke Width: %dpx]", p1.x, p1.y, p2.x, p2.y,
+				color.getRGB(), width);
+	}
+
 	
 }

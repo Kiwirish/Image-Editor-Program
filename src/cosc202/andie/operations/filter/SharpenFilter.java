@@ -156,5 +156,9 @@ public class SharpenFilter implements ImageOperation{
         return draw(input);
     }
     
+    @Override
+    public String operationDescription() {
+        return "Sharpen Filter";
+    }
 
 }

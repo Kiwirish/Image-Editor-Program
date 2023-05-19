@@ -37,5 +37,10 @@ public class Rotate180 implements ImageOperation{
         return draw(input);
     }
 
+    @Override
+    public String operationDescription() {
+        return "180 Degree Rotation";
+    }
+
 
 }

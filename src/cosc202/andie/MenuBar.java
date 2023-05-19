@@ -7,6 +7,7 @@ import cosc202.andie.actions.EditActions;
 import cosc202.andie.actions.FileActions;
 import cosc202.andie.actions.FilterActions;
 import cosc202.andie.actions.LanguageActions;
+import cosc202.andie.actions.MacroActions;
 import cosc202.andie.actions.ToolActions;
 import cosc202.andie.actions.TransformActions;
 import cosc202.andie.actions.ViewActions;
@@ -21,22 +22,33 @@ public class MenuBar extends JMenuBar {
 		this.controller = controller;
 		this.model = model;
 
-		FileActions fileActions = new FileActions(controller, model);
-		this.add(fileActions.createMenu());
-		EditActions editActions = new EditActions(controller, model);
-		this.add(editActions.createMenu());
-		ViewActions viewActions = new ViewActions(controller, model);
-		this.add(viewActions.createMenu());
-		TransformActions sizeActions = new TransformActions(controller, model);
-		this.add(sizeActions.createMenu());
-		FilterActions filterActions = new FilterActions(controller, model);
-		this.add(filterActions.createMenu());
-		ColourActions colourActions = new ColourActions(controller, model);
-		this.add(colourActions.createMenu());
-		ToolActions toolActions = new ToolActions(controller, model);
-		this.add(toolActions.createMenu());
-		LanguageActions languageActions = new LanguageActions(controller, model);
-		this.add(languageActions.createMenu());
+		// FileActions fileActions = new FileActions(controller, model);
+		// this.add(fileActions.createMenu());
+		// EditActions editActions = new EditActions(controller, model);
+		// this.add(editActions.createMenu());
+		// ViewActions viewActions = new ViewActions(controller, model);
+		// this.add(viewActions.createMenu());
+		// TransformActions sizeActions = new TransformActions(controller, model);
+		// this.add(sizeActions.createMenu());
+		// FilterActions filterActions = new FilterActions(controller, model);
+		// this.add(filterActions.createMenu());
+		// ColourActions colourActions = new ColourActions(controller, model);
+		// this.add(colourActions.createMenu());
+		// ToolActions toolActions = new ToolActions(controller, model);
+		// this.add(toolActions.createMenu());
+		// MacroActions macroActions =	new MacroActions(controller, model);
+		// this.add(macroActions.createMenu());
+		// LanguageActions languageActions = new LanguageActions(controller, model);
+		// this.add(languageActions.createMenu());
+		this.add(controller.actions.fileActions.createMenu());
+		this.add(controller.actions.editActions.createMenu());
+		this.add(controller.actions.viewActions.createMenu());
+		this.add(controller.actions.transformActions.createMenu());
+		this.add(controller.actions.filterActions.createMenu());
+		this.add(controller.actions.colourActions.createMenu());
+		this.add(controller.actions.toolActions.createMenu());
+		this.add(controller.actions.macroActions.createMenu());
+		this.add(controller.actions.languageActions.createMenu());
 	}
 
 }

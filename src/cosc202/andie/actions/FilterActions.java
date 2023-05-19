@@ -37,6 +37,8 @@ import static cosc202.andie.LanguageConfig.msg;
  * @version 2.0
  */
 public class FilterActions extends MenuActions {
+
+    private ModelListener imageStatusListener;
     
     /**
      * <p>
@@ -53,13 +55,20 @@ public class FilterActions extends MenuActions {
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
         // need to add an emboss menu to select N,E,S,W Emboss filters 
         // need to add a sobel filters menu to select Horizontal or Vertical edge detection filters
-        ModelListener isl = ()-> {
+
+        imageStatusListener = ()-> {
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
             }
         };
-        model.registerImageStatusListener(isl);
-        isl.update();
+        model.registerImageStatusListener(imageStatusListener);
+        imageStatusListener.update();
+    }
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        model.unregisterImageStatusListener(imageStatusListener);
     }
 
     /**
@@ -81,7 +90,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-        MeanFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  MeanFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -127,7 +136,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-        SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -168,7 +177,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-        GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -213,7 +222,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-        MedianFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  MedianFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -243,7 +252,7 @@ public class FilterActions extends MenuActions {
     public class EmbossFilterAction extends ImageAction { 
         
 
-        EmbossFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  EmbossFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 

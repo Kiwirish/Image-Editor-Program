@@ -27,4 +27,9 @@ public class Crop implements ImageOperation {
 	public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
 		return draw(input);
 	}
+
+	@Override
+	public String operationDescription() {
+		return String.format("Crop [X:%d, Y:%d, Width:%dpx, Height:%dpx]", location.x, location.y, size.width, size.height);
+	}
 } 

@@ -55,4 +55,9 @@ public class RotateRight implements ImageOperation{
         return draw(input);
     }
 
+    @Override
+    public String operationDescription() {
+        return "90 Degree Clockwise Rotation";
+    }
+
 }
