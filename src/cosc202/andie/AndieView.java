@@ -65,13 +65,15 @@ public class AndieView {
         MenuBar menuBar = new MenuBar(controller, model);
         frame.setJMenuBar(menuBar);
 		
-		JToolBar button = new JToolBar("Button" + 10);
+		
 
 
 				// ----------- Macros Panel -------------
 				MacrosPanel macrosPanel = new MacrosPanel(controller, model);
 				frame.add(macrosPanel, BorderLayout.EAST);
 				// ----------- End Macros Panel -------------
+
+		JToolBar button = new JToolBar("Button" + 10);
 
 		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Exit.png"));
 		Image img = icon.getImage();
@@ -85,9 +87,11 @@ public class AndieView {
 		Image img2 = crop.getImage();
         Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon crop2 = new ImageIcon(newimg2);    
-        JButton cropButton = new JButton(crop2);
+        JButton cropButton = new JButton(controller.actions.transformActions.new CropAction("Crop", crop2 , "Crop", null));
         button.add(cropButton);
 		cropButton.addActionListener((e) -> System.out.println("Crop"));
+		//cropButton.addActionListener((e) -> );
+
 
 
 		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("acRotate.png"));

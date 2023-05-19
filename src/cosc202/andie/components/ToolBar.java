@@ -10,41 +10,45 @@ import java.awt.Image;
 
 public class ToolBar extends JFrame{
 
-        public ToolBar(){
-                initUI();
-        }
+    JToolBar button = new JToolBar("Button" + 10);
 
-        private void initUI(){
-            //createMenuBar();
-            createToolBar();
+    ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Exit.png"));
+    Image img = icon.getImage();
+    Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+    ImageIcon icon2 = new ImageIcon(newimg);    
+    JButton exitButton = new JButton(icon2);
+    button.add(exitButton);
+    exitButton.addActionListener((e) -> System.exit(0));
 
-            setTitle("1st ed toolBar");
-            setSize(300, 200);
-            setLocationRelativeTo(null);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-        }
+    ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("Crop.png"));
+    Image img2 = crop.getImage();
+    Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+    ImageIcon crop2 = new ImageIcon(newimg2);    
+    JButton cropButton = new JButton(controller.actions.macroActions.new RecordMacroAction("Crop", crop2 , "Crop", null));
+    button.add(cropButton);
+    cropButton.addActionListener((e) -> System.out.println("Crop"));
+    cropButton.addActionListener((e) -> );
 
-        private void createToolBar(){
-            var toolBar = new JToolBar();
-            var icon = new ImageIcon(ToolBar.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
 
-            Image img = icon.getImage();
-            Image newimg = img.getScaledInstance(30, 30, DO_NOTHING_ON_CLOSE);
-            var icon2 = new ImageIcon(newimg);
-            
-            var exitButton = new JButton(icon2);
-            toolBar.add(exitButton);
 
-            exitButton.addActionListener((e) -> System.exit(0));
-            add(toolBar, BorderLayout.NORTH);
+    ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("acRotate.png"));
+    Image rotateimg = rotate.getImage();
+    Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+    ImageIcon rotate2 = new ImageIcon(newrotateimg);    
+    JButton rotateButton = new JButton(rotate2);
+    button.add(rotateButton);
+    rotateButton.addActionListener((e) -> System.out.println("Anti Clockwise Rotate"));
 
-        }
+    ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("cRotate.png"));
+    Image crotateimg = crotate.getImage();
+    Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+    ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
+    JButton crotateButton = new JButton(crotate2);
+    button.add(crotateButton);
+    crotateButton.addActionListener((e) -> System.out.println("Clockwise Rotate"));
 
-        public static void main(String[] args){
-                EventQueue.invokeLater(() -> {
-                    var ex = new ToolBar();
-                    ex.setVisible(true);
-                });
-        }
 
+    frame.add(button, BorderLayout.SOUTH);
+
+    }
 }
