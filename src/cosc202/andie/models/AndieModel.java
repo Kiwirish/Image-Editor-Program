@@ -38,6 +38,7 @@ public class AndieModel {
 	public MouseModel mouse;
 	public OverlayModel overlay;
 	public ToolModel tool;
+	public MacrosModel macros;
 
 	public AndieModel() {
 		init();
@@ -48,11 +49,13 @@ public class AndieModel {
 		timer = new Timer();
 
 		if (this.tool != null) this.tool.notifyRemove();
+		if (this.macros != null) this.macros.notifyRemove();
 
 		this.operations = new Operations(this);
 		this.mouse = new MouseModel(this);
 		this.overlay = new OverlayModel(this);
 		this.tool = new ToolModel(this);
+		this.macros = new MacrosModel(this);
 		image = null;
 		previewImage = null;
 		isImageOpen = false;

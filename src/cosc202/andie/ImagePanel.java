@@ -25,6 +25,7 @@ public class ImagePanel extends JLayeredPane {
 
 	private ModelListener workingImageListener;
 	private ModelListener overlayImageListener;
+	private ModelListener cursorListener;
 
 	private AndieModel model;
 	private AndieController controller;
@@ -61,6 +62,7 @@ public class ImagePanel extends JLayeredPane {
 		layout.putConstraint(SpringLayout.WEST, overlayPanel, 0, SpringLayout.WEST, this);
 
 		controller.registerZoomListener(ipv);
+
 		ipv.addMouseMotionListener(new MouseMotionListener() {
 			public void mouseDragged(MouseEvent e) { model.mouse.mouseDragged(ipv.convertPoint(e.getPoint()), e); }
 			public void mouseMoved(MouseEvent e) { model.mouse.mouseMoved(ipv.convertPoint(e.getPoint()), e); }
@@ -87,6 +89,13 @@ public class ImagePanel extends JLayeredPane {
 		overlayImageListener.update();
 		model.overlay.registerOverlayListener(overlayImageListener);
 
+		cursorListener = () -> {
+			this.setCursor(model.mouse.getCursor());
+		};
+
+		cursorListener.update();
+		model.mouse.registerCursorListener(cursorListener);
+
 		//listen for component resize
 		overlayPanel.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent evt) {
@@ -105,5 +114,6 @@ public class ImagePanel extends JLayeredPane {
 		model.unregisterWorkingImageListener(workingImageListener);
 		model.overlay.unregisterOverlayListener(overlayImageListener);
 		controller.unregisterZoomListener(ipv);
+		model.mouse.unregisterCursorListener(cursorListener);
 	}
 }

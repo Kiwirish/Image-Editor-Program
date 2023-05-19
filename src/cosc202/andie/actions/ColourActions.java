@@ -93,7 +93,7 @@ public class ColourActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-        ConvertToGreyAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public ConvertToGreyAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -135,7 +135,7 @@ public class ColourActions extends MenuActions {
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
-        BrightnessAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public BrightnessAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -175,7 +175,7 @@ public class ColourActions extends MenuActions {
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
-        ContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  ContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 

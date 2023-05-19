@@ -67,7 +67,7 @@ public class FileActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-        FileOpenAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FileOpenAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -123,7 +123,7 @@ public class FileActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-        FileSaveAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FileSaveAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageListener = ()-> {
                 setEnabled(model.hasImage() && model.getImage().getModified());
@@ -175,7 +175,7 @@ public class FileActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-        FileSaveAsAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FileSaveAsAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = ()-> {
                 setEnabled(model.hasImage());
@@ -239,7 +239,7 @@ public class FileActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-        FileCloseImageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FileCloseImageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = ()-> {
                 setEnabled(model.hasImage());
@@ -287,7 +287,7 @@ public class FileActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-        FileExitAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FileExitAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -329,7 +329,7 @@ public class FileActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-        FileExportAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FileExportAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = ()-> {
                 setEnabled(model.hasImage());

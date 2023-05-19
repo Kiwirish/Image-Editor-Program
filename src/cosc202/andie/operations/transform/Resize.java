@@ -54,4 +54,9 @@ public class Resize implements ImageOperation{
         return draw(input);
     }
 
+    @Override
+    public String operationDescription() {
+        return String.format("Resize [%d%%]", option);
+    }
+
 }

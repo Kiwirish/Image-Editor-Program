@@ -2,10 +2,10 @@ package cosc202.andie.controllers;
 import cosc202.andie.ImageOperation;
 import cosc202.andie.models.AndieModel;
 
-public class AndieOperationsController {
+public class OpsController {
 	private AndieModel model;
 
-	public AndieOperationsController(AndieModel model) {
+	public OpsController(AndieModel model) {
 		this.model = model;	
 	}
 

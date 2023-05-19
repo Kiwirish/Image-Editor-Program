@@ -62,20 +62,26 @@ public class AndieView {
 
         // Add in menus for various types of action the user may perform.
         MenuBar menuBar = new MenuBar(controller, model);
-        
         frame.setJMenuBar(menuBar);
 
-		JToolBar button = new JToolBar("Button");
-		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
-		Image img = icon.getImage();
-            Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-             ImageIcon icon2 = new ImageIcon(newimg);
-            
-            JButton exitButton = new JButton(icon2);
-            button.add(exitButton);
+				// ----------- Toolbar -------------
+				JToolBar button = new JToolBar("Button");
+				ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("Resources/Sign-check-icon.png"));
+				Image img = icon.getImage();
+				Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+				ImageIcon icon2 = new ImageIcon(newimg);
+								
+				JButton exitButton = new JButton(icon2);
+				button.add(exitButton);
+				exitButton.addActionListener((e) -> System.exit(0));
 
-            exitButton.addActionListener((e) -> System.exit(0));
-		frame.add(button, BorderLayout.WEST);
+				frame.add(button, BorderLayout.WEST);
+				// ----------- End Toolbar -------------
+
+				// ----------- Macros Panel -------------
+				MacrosPanel macrosPanel = new MacrosPanel(controller, model);
+				frame.add(macrosPanel, BorderLayout.EAST);
+				// ----------- End Macros Panel -------------
 
         frame.pack();
 

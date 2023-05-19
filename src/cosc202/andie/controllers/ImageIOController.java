@@ -11,10 +11,10 @@ import static cosc202.andie.LanguageConfig.msg;
 
 import java.io.IOException;
 
-public class AndieIOController {
+public class ImageIOController {
 	private AndieModel model;
 	private AndieController controller;
-	public AndieIOController(AndieModel model, AndieController controller) {
+	public ImageIOController(AndieModel model, AndieController controller) {
 		this.model = model;
 		this.controller = controller;
 	}

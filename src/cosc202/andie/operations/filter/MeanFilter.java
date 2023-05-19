@@ -187,6 +187,11 @@ public class MeanFilter implements ImageOperation {
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
+
+    @Override
+    public String operationDescription() {
+        return String.format("Mean Filter [Radius: %dpx]", radius);
+    }
     
 
 }

@@ -71,5 +71,10 @@ public class ConvertToGrey implements ImageOperation {
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
+
+    @Override
+    public String operationDescription() {
+        return "Greyscale filter";
+    }
     
 }

@@ -54,5 +54,10 @@ public class FlipHorizontal implements ImageOperation {
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
+
+    @Override
+    public String operationDescription() {
+        return "Horizontal Flip";
+    }
  }
 

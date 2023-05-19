@@ -58,7 +58,7 @@ public class TransformActions extends MenuActions {
     public class FlipVerticalAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-        FlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
@@ -81,7 +81,7 @@ public class TransformActions extends MenuActions {
     public class FlipHorizontalAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-        FlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  FlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
@@ -104,7 +104,7 @@ public class TransformActions extends MenuActions {
     public class ResizeAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-        ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
@@ -133,7 +133,7 @@ public class TransformActions extends MenuActions {
     public class RotateRightAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-        RotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  RotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
@@ -156,7 +156,7 @@ public class TransformActions extends MenuActions {
     public class RotateLeftAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-        RotateLeftAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  RotateLeftAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
@@ -179,7 +179,7 @@ public class TransformActions extends MenuActions {
     public class Rotate180Action extends ImageAction {
         private ModelListener imageStatusListener;
 
-        Rotate180Action(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  Rotate180Action(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
@@ -201,7 +201,7 @@ public class TransformActions extends MenuActions {
     public class CropAction extends ImageAction {
         private ModelListener updateListener;
 
-        CropAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public  CropAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
             updateListener = () -> {
                 setEnabled(model.hasImage() && model.tool.getSelection() != null);

@@ -30,7 +30,7 @@ public class ToolActions extends MenuActions {
 
 		private ModelListener updateListener;
 
-		protected ToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+		public ToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
 			super(name, icon, desc, mnemonic);
 			updateListener = () -> {
 				setEnabled(model.hasImage() && (model.tool.getTool() == null || !model.tool.getTool().getClass().equals(getToolClass())));
@@ -52,7 +52,7 @@ public class ToolActions extends MenuActions {
 
 	public class SelectToolAction extends ToolAction {
 
-		SelectToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+	public 	SelectToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
 			super(name, icon, desc, mnemonic);
 		}
 
@@ -66,7 +66,7 @@ public class ToolActions extends MenuActions {
 
 	public class LineToolAction extends ToolAction {
 
-		LineToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+	public 	LineToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
 			super(name, icon, desc, mnemonic);
 		}
 
@@ -79,7 +79,7 @@ public class ToolActions extends MenuActions {
 	}
 	public class RectangleToolAction extends ToolAction {
 
-		RectangleToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+	public 	RectangleToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
 			super(name, icon, desc, mnemonic);
 		}
 
@@ -92,7 +92,7 @@ public class ToolActions extends MenuActions {
 	}
 	public class ElipseToolAction extends ToolAction {
 
-		ElipseToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+	public 	ElipseToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
 			super(name, icon, desc, mnemonic);
 		}
 

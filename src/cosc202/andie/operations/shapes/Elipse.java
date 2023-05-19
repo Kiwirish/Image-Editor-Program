@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import cosc202.andie.ImageOperation;
 
-public class Elipse implements ImageOperation  {
+public class Elipse implements ImageOperation {
 
 	private Rectangle rect;
 	private Color strokeColor;
@@ -41,5 +41,10 @@ public class Elipse implements ImageOperation  {
 		return draw(input);
 	}
 
-	
+	@Override
+	public String operationDescription() {
+		return String.format("Elipse [X:%d, Y:%d, Width:%dpx, Height:%dpx] [Fill: #%x, Stroke: #%x, Stroke Width: %dpx]", rect.x,
+				rect.y, rect.width, rect.height, fillColor.getRGB(), strokeColor.getRGB(), strokeWidth);
+	}
+
 }
