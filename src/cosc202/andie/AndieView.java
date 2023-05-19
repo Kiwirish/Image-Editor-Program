@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import cosc202.andie.actions.TransformActions.CropAction;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 
@@ -73,7 +74,6 @@ public class AndieView {
         ImageIcon icon2 = new ImageIcon(newimg);    
         JButton exitButton = new JButton(icon2);
         button.add(exitButton);
-		exitButton.setLocation(100, 10);
 		exitButton.addActionListener((e) -> System.exit(0));
 
 		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("Crop.png"));
@@ -82,6 +82,8 @@ public class AndieView {
         ImageIcon crop2 = new ImageIcon(newimg2);    
         JButton cropButton = new JButton(crop2);
         button.add(cropButton);
+		//cropButton.addActionListener(Crop);
+
 
 		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("acRotate.png"));
 		Image rotateimg = rotate.getImage();
@@ -97,7 +99,7 @@ public class AndieView {
         JButton crotateButton = new JButton(crotate2);
         button.add(crotateButton);
 
-		frame.add(button, BorderLayout.NORTH);
+		frame.add(button, BorderLayout.WEST);
 
         frame.pack();
 
