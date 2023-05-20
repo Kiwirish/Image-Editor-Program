@@ -16,7 +16,6 @@ public class MacrosModel {
 	private ArrayList<ImageOperation> macroOperations = new ArrayList<ImageOperation>();
 
 	private OperationListener operationListener;
-	private boolean opListenerRegistered;
 	private ModelListener imageStatusListener;
 	private boolean recording;
 
@@ -24,8 +23,6 @@ public class MacrosModel {
 		this.model = model;
 		this.macrosViewOpen = false;
 		this.recording = false;
-		this.opListenerRegistered = false;
-
 
 		operationListener = new OperationListener() {
 			public void operationApplied(ImageOperation operation) {
@@ -42,16 +39,14 @@ public class MacrosModel {
 			}
 		};
 
+		model.registerImageOperationListener(operationListener);
 		imageStatusListener = () -> {
-			if (!this.opListenerRegistered && model.hasImage()) {
-				model.getImage().registerOperationListener(operationListener);
-				this.opListenerRegistered = true;
-			} else if (this.opListenerRegistered && !model.hasImage()) {
-				model.getImage().unregisterOperationListener(operationListener);
-				this.opListenerRegistered = false;
+			if (!model.hasImage()) {
+				this.recording = false;
+				this.macroOperations.clear();
+				notifyMacrosUpdateListeners();
 			}
 		};
-
 		model.registerImageStatusListener(imageStatusListener);
 	}
 
@@ -115,10 +110,7 @@ public class MacrosModel {
 	}
 
 	public void notifyRemove() {
-		if (this.model.getImage() != null) {
-			this.model.getImage().unregisterOperationListener(operationListener);
-			this.opListenerRegistered = false;
-		}
+		this.model.unregisterImageOperationListener(operationListener);
 		this.model.unregisterImageStatusListener(imageStatusListener);
 	}
 

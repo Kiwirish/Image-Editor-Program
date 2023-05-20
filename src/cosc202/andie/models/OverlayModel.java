@@ -19,13 +19,25 @@ public class OverlayModel {
 	private Rectangle imageBounds;
 	private BufferedImage overlayImage;
 
+	private ModelListener imageStatusListener;
 
 	private ArrayList<ModelListener> overlayListeners = new ArrayList<ModelListener>();
 	private ArrayList<OverlayDrawer> overlayDrawers = new ArrayList<OverlayDrawer>();
 
 	public OverlayModel(AndieModel model) {
 		this.model = model;
+		init();
+		imageStatusListener = ()-> { 
+				if (!model.hasImage()) 
+				init();
+		};
+		model.registerImageStatusListener(imageStatusListener);
+	}
+
+	private void init() {
 		this.overlayImage = null;
+		this.imageBounds = null;
+		this.size = null;
 	}
 
 	public BufferedImage getOverlay() {
@@ -82,6 +94,10 @@ public class OverlayModel {
 	}
 	public void unregisterOverlayDrawer(OverlayDrawer drawer) {
 		overlayDrawers.remove(drawer);
+	}
+
+	public void notifyRemove() {
+		model.unregisterImageStatusListener(imageStatusListener);
 	}
 
 	public interface OverlayDrawer {

@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.EventListener;
-import java.util.Timer;
 
 import javax.imageio.ImageIO;
 
+import cosc202.andie.ImageOperation;
 import cosc202.andie.Utils;
 import cosc202.andie.Utils.ExtensionException;
+import cosc202.andie.models.EditableImage.ImageListener;
+import cosc202.andie.models.EditableImage.OperationListener;
 
 public class AndieModel {
 
@@ -30,8 +32,10 @@ public class AndieModel {
 	private ArrayList<ModelListener> imageStatusListeners = new ArrayList<ModelListener>();
 	private ArrayList<ModelListener> workingImageListeners = new ArrayList<ModelListener>();
 	private ArrayList<ModelListener> imageListeners = new ArrayList<ModelListener>();
+	private ArrayList<OperationListener> imageOperationListeners = new ArrayList<OperationListener>();
 
-	private Timer timer = null;
+	private ImageListener imageListener;
+	private OperationListener imageOperationListener;
 
 	public Operations operations;
 	public MouseModel mouse;
@@ -40,62 +44,63 @@ public class AndieModel {
 	public MacrosModel macros;
 
 	public AndieModel() {
-		init();
-	}
-
-	public void init() {
-		if (timer != null) timer.cancel();
-		timer = new Timer();
-
-		if (this.tool != null) this.tool.notifyRemove();
-		if (this.macros != null) this.macros.notifyRemove();
-
 		this.operations = new Operations(this);
 		this.mouse = new MouseModel(this);
 		this.overlay = new OverlayModel(this);
 		this.tool = new ToolModel(this);
 		this.macros = new MacrosModel(this);
+		init();
+	}
+
+	public void init() {
 		image = null;
 		previewImage = null;
 		isImageOpen = false;
-		notifyListeners(imageStatusListeners);
-	}
 
-	public Timer getTimer() {
-		return timer;
+		notifyListeners(imageStatusListeners);
 	}
 
 	public String getImageFilepath() {
 		return imageFilepath;
 	}
+
 	public Dimension getFrameSize() {
 		return frameSize;
 	}
+
 	public void setFrameSize(Dimension frameSize) {
 		this.frameSize = frameSize;
 	}
+
 	public Point getFrameLocation() {
 		return frameLocation;
 	}
+
 	public void setFrameLocation(Point frameLocation) {
 		this.frameLocation = frameLocation;
 	}
+
 	public EditableImage getImage() {
 		return image;
 	}
+
 	public BufferedImage getWorkingImage() {
 		if (previewImage != null)
 			return previewImage;
 		return image.getCurrentImage();
 	}
+
 	public boolean hasImage() {
 		return isImageOpen;
 	}
+
 	public boolean isPreviewing() {
 		return previewImage != null;
 	}
 
 	public void closeImage() {
+		image.unregisterImageListener(imageListener);
+		image.unregisterOperationListener(imageOperationListener);
 		init();
 		notifyListeners(imageStatusListeners);
 		notifyListeners(workingImageListeners);
@@ -103,7 +108,7 @@ public class AndieModel {
 	}
 
 	public void openImage(String filepath) throws IOException {
-		//Open image at filepath
+		// Open image at filepath
 		BufferedImage newImage = ImageIO.read(new File(filepath));
 		File operationsFile = new File(filepath + ".ops");
 		String opsString = "";
@@ -115,28 +120,48 @@ public class AndieModel {
 			}
 		}
 
-		image = opsString != null ? new EditableImage(newImage,opsString) : new EditableImage(newImage);
+		image = opsString != null ? new EditableImage(newImage, opsString) : new EditableImage(newImage);
 
 		this.imageFilepath = filepath;
 		isImageOpen = true;
 		notifyListeners(imageStatusListeners);
 		notifyListeners(workingImageListeners);
 		notifyListeners(imageListeners);
-		image.registerImageListener(() -> {
+
+		imageListener = () -> {
 			previewImage = null;
 			notifyListeners(workingImageListeners);
 			notifyListeners(imageListeners);
-		});
+		};
+
+		image.registerImageListener(imageListener);
+
+		imageOperationListener = new OperationListener() {
+			public void operationApplied(ImageOperation operation) {
+				for (OperationListener listener : imageOperationListeners) {
+					listener.operationApplied(operation);
+				}
+			}
+
+			public void operationRemoved() {
+				for (OperationListener listener : imageOperationListeners) {
+					listener.operationRemoved();
+				}
+			}
+		};
+
+		image.registerOperationListener(imageOperationListener);
 	}
 
 	private void saveImage(String filepath) throws ExtensionException, IOException {
 		if (!Utils.hasValidFileExtension(filepath)) {
-				throw new ExtensionException("SAVE_EXCEPTION");
+			throw new ExtensionException("SAVE_EXCEPTION");
 		}
 		String extension = Utils.getFileExtension(filepath);
 		if (!ImageIO.write(image.getOriginalImage(), extension, new File(filepath))) {
-				throw new IOException("SAVE_EXCEPTION");
-		};
+			throw new IOException("SAVE_EXCEPTION");
+		}
+		;
 		String opsFilename = filepath + ".ops";
 		Utils.writeString(new File(opsFilename), image.getOpsString(), Charset.defaultCharset());
 		this.imageFilepath = filepath;
@@ -155,7 +180,8 @@ public class AndieModel {
 		BufferedImage exportImage = image.getExportImage(format);
 		File exportFile = new File(filepath);
 		boolean result = ImageIO.write(exportImage, format, exportFile);
-		if (!result) throw new IOException();
+		if (!result)
+			throw new IOException();
 	}
 
 	private void notifyListeners(ArrayList<ModelListener> listeners) {
@@ -163,24 +189,39 @@ public class AndieModel {
 			listener.update();
 		}
 	}
+
 	public void registerImageStatusListener(ModelListener listener) {
 		imageStatusListeners.add(listener);
 	}
+
 	public void unregisterImageStatusListener(ModelListener listener) {
 		imageStatusListeners.remove(listener);
 	}
+
 	public void registerWorkingImageListener(ModelListener listener) {
 		workingImageListeners.add(listener);
 	}
+
 	public void unregisterWorkingImageListener(ModelListener listener) {
 		workingImageListeners.remove(listener);
 	}
+
 	public void registerImageListener(ModelListener listener) {
 		imageListeners.add(listener);
 	}
+
 	public void unregisterImageListener(ModelListener listener) {
 		imageListeners.remove(listener);
 	}
+
+	public void registerImageOperationListener(OperationListener listener) {
+		imageOperationListeners.add(listener);
+	}
+
+	public void unregisterImageOperationListener(OperationListener listener) {
+		imageOperationListeners.remove(listener);
+	}
+
 	public interface ModelListener extends EventListener {
 		public void update();
 	}

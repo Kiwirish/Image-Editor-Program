@@ -50,6 +50,7 @@ public class MacrosPanel extends JPanel {
 		};
 
 		model.macros.registerMacrosUpdateListener(macrosUpdateListener);
+		model.registerImageStatusListener(macrosUpdateListener);
 		macrosUpdateListener.update();
 	}
 
@@ -66,6 +67,8 @@ public class MacrosPanel extends JPanel {
 		title.setAlignmentX(CENTER_ALIGNMENT);
 		title.setForeground(Color.WHITE);
 		titlePanel.add(title);
+		//Add vertical space
+		titlePanel.add(new JLabel(" "));
 		this.add(titlePanel, BorderLayout.NORTH);
 
 		operationsList = new JPanel();
@@ -76,6 +79,10 @@ public class MacrosPanel extends JPanel {
 		JPanel controlsPanel = new JPanel();
 		controlsPanel.setLayout(new BoxLayout(controlsPanel, BoxLayout.Y_AXIS));
 		controlsPanel.setOpaque(false);
+
+		//Add vertical space
+		controlsPanel.add(new JLabel(" "));
+
 		controlsPanelLabel = new JLabel("Not currently recording");
 		controlsPanelLabel.setForeground(Color.WHITE);
 		controlsPanelLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -132,6 +139,7 @@ public class MacrosPanel extends JPanel {
 	public void removeNotify() {
 		super.removeNotify();
 		model.macros.unregisterMacrosUpdateListener(macrosUpdateListener);
+		model.unregisterImageStatusListener(macrosUpdateListener);
 		recordMacroAction.removeNotify();
 		applyMacroAction.removeNotify();
 	}

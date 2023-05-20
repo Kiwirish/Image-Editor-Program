@@ -15,8 +15,19 @@ public class MouseModel {
 	private ArrayList<ModelListener> cursorListeners = new ArrayList<ModelListener>();
 	private Cursor cursor;
 
+	private ModelListener imageStatusListener;
+
 	public MouseModel(AndieModel model) {
 		this.model = model;
+		init();
+		imageStatusListener = () -> {
+			if (!model.hasImage())
+				init();
+		};
+		model.registerImageStatusListener(imageStatusListener);
+	}
+
+	private void init() {
 		cursor = Cursor.getDefaultCursor();
 	}
 	public void registerMouseModelListener(MouseModelListener listener) {
@@ -101,6 +112,10 @@ public class MouseModel {
 			this.isCommtrolDown = AndieModel.IS_MAC ? e.isMetaDown() : e.isControlDown();
 			this.isAltDown = e.isAltDown();
 		}
+	}
+
+	public void notifyRemove() {
+		model.unregisterImageStatusListener(imageStatusListener);
 	}
 
 	public void listListeners() {

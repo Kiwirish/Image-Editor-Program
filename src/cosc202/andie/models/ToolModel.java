@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.SwingUtilities;
@@ -30,16 +31,16 @@ public class ToolModel {
 	private OverlayDrawer overlayDrawer;
 	private ModelListener workingImageListener;
 	private ModelListener imageListener;
+	private ModelListener imageStatusListener;
 	private Dimension lastImageSize;
 	private boolean pauseSelectionPaint;
 
+	private Timer timer;
+
 	public ToolModel(AndieModel model) {
 		this.model = model;
-		this.tool = null;
-		this.strokeColor = Color.BLACK;
-		this.fillColor = Color.WHITE;
-		this.strokeWidth = 12;
-		this.selection = null;
+		this.timer = new Timer();
+		init();
 
 		this.pauseSelectionPaint = false;
 
@@ -66,7 +67,6 @@ public class ToolModel {
 					g.setColor(Color.white);
 					g.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, new float[]{dashLength, dashLength}, dashPhase));
 					g.drawRect(adjustedSelection.x, adjustedSelection.y, adjustedSelection.width, adjustedSelection.height);
-					// g.setStroke(new BasicStroke(3));
 				}
 			}
 		};
@@ -75,16 +75,14 @@ public class ToolModel {
 
 		TimerTask repaintOverlayTask = new TimerTask(){
 			public void run(){
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						if (selection != null && !pauseSelectionPaint)
-							model.overlay.repaint();
-					}
+				SwingUtilities.invokeLater(() -> {
+					if (selection != null && !pauseSelectionPaint)
+						model.overlay.repaint();
 				});
 			}
 		};
 
-		model.getTimer().schedule(repaintOverlayTask, 0, 1000/20);
+		this.timer.schedule(repaintOverlayTask, 0, 1000/20);
 
 		workingImageListener = () -> {
 			pauseSelectionPaint = model.isPreviewing();
@@ -102,9 +100,25 @@ public class ToolModel {
 				}
 			}
 		};
-
 		model.registerImageListener(imageListener);
 
+		imageStatusListener = () -> {
+			if (!model.hasImage()) {
+				init();
+			}
+		};
+
+		model.registerImageStatusListener(imageStatusListener);
+
+	}
+
+	private void init() {
+		this.tool = null;
+		this.strokeColor = Color.BLACK;
+		this.fillColor = Color.WHITE;
+		this.strokeWidth = 12;
+		this.selection = null;
+		this.lastImageSize = null;
 	}
 
 	public Tool getTool() {
@@ -221,6 +235,8 @@ public class ToolModel {
 		model.overlay.unregisterOverlayDrawer(overlayDrawer);
 		model.unregisterWorkingImageListener(workingImageListener);
 		model.unregisterImageListener(imageListener);
+		model.unregisterImageStatusListener(imageStatusListener);
+		this.timer.cancel();
 	}
 
 }
