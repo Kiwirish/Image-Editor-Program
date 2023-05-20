@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 /**
  * <p>
- * A dialog box with a number of sliders
+ * A dialog box with a list of components, and OK and Cancel buttons
  * </p>
  * 
  * <p> 
@@ -20,19 +20,21 @@ import javax.swing.JPanel;
  * @see PopupSlider
  * @see JOptionPane
  * @author Jeb Nicholson
- * @version 1.0
+ * @version 2.0
  */
 public class OptionPopup {
 
 	/** The title of the dialog window */
 	private String title;
-	/** The sliders to show */
+	/** The components to show */
 	private JComponent[] components;
 	/** The parent component of the dialog window */
 	private Component parent;
 
 
+	/** OK Popup button */
 	public static final int OK = 0;
+	/** CANCEL Popup button */
 	public static final int CANCEL = 1;
 
 
@@ -40,7 +42,7 @@ public class OptionPopup {
 	 * Create a new PopupWithSliders with the given settings
 	 * @param parent The parent component of the dialog window
 	 * @param title The title of the dialog window
-	 * @param components The sliders to show
+	 * @param components The components to show
 	 */
 	public OptionPopup(Component parent, String title, JComponent[] components) {
 		this.title = title;

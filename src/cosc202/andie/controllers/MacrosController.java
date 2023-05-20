@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
-
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -14,25 +13,49 @@ import cosc202.andie.ImageOperation;
 import cosc202.andie.Utils;
 import cosc202.andie.models.AndieModel;
 
+/**
+ * <p>
+ * The controller for Macros
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @see AndieController
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class MacrosController {
 
 	private AndieModel model;
 	private AndieController controller;
 
+	/**
+	 * Create a new MacrosController
+	 * @param model The base model
+	 * @param controller The base controller
+	 */
 	public MacrosController(AndieModel model, AndieController controller) {
 		this.model = model;
 		this.controller = controller;
 	}
 
+	/**
+	 * Set whether the macros view is open
+	 * @param open Whether the macros view is open
+	 */
 	public void setMacrosViewOpen(boolean open) {
 		model.macros.setMacrosViewOpen(open);
 	}
 
+	/** Start recording a new macro */
 	public void startMacroRecording() {
 		if (!model.hasImage()) return;
 		model.macros.startRecording();
 	}
 
+	/** Stop recording a macro. Will prompt the user to save the macro, if there is one. */ 
 	public void stopMacroRecording() {
 		model.macros.stopRecording();
 		if (!model.hasImage()) return;
@@ -61,6 +84,7 @@ public class MacrosController {
 		JOptionPane.showMessageDialog(controller.getContentPane(), "Successfully saved macro file.");
 	}
 
+	/** Apply an existing macro. Will prompt the user to pick a .macro file from their system */
 	public void applyExistingMacro() {
 		JFileChooser fileChooser = new JFileChooser();
 

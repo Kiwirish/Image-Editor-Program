@@ -13,17 +13,29 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import cosc202.andie.controllers.AndieController.ManualZoomListener;
 
-public class ImagePanView extends JPanel
-		implements MouseWheelListener, MouseMotionListener, ComponentListener, ManualZoomListener {
+/**
+ * <p>
+ * A JPanel that displays an image and allows the user to pan and zoom the image.
+ * </p>
+ * <p>
+ * Similar to an image viewer, or image editor like photoshop, this view allows the user to zoom by holding CTRL/CMD and scrolling the mouse wheel, and pan by scrolling. (Works best on trackpads)
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @version 2.0
+ */
+public class ImagePanView extends JPanel implements MouseWheelListener, MouseMotionListener, ComponentListener, ManualZoomListener {
 
 	private static boolean IS_MAC = System.getProperty("os.name").toLowerCase().startsWith("mac");
 
@@ -42,6 +54,9 @@ public class ImagePanView extends JPanel
 
 	private ArrayList<ViewRectListener> viewRectListeners = new ArrayList<ViewRectListener>();
 
+	/**
+	 * @param image The image to display
+	 */
 	public ImagePanView(BufferedImage image) {
 		super();
 
@@ -135,6 +150,11 @@ public class ImagePanView extends JPanel
 		}
 	}
 
+	/**
+	 * Zooms the view in or out, relative to the current zoom, by a linear amount.
+	 * @param linearDeltaZoom The change in linear zoom
+	 * @param zoomCenter The point to zoom in/out from
+	 */
 	private void zoomByLinear(double linearDeltaZoom, Point2D.Double zoomCenter) {
 		double currentLog = Math.log(this.zoom / 100);
 		currentLog += linearDeltaZoom;
@@ -159,6 +179,7 @@ public class ImagePanView extends JPanel
 		notifyViewRectListeners();
 	}
 
+	/** Centers the image within the panel **/
 	private void centerViewport() {
 		Point2D.Double thisSize = new Point2D.Double(this.getWidth(), this.getHeight());
 		Point2D.Double imageSize = new Point2D.Double(image.getWidth(), image.getHeight());
@@ -167,6 +188,7 @@ public class ImagePanView extends JPanel
 		updateViewport(viewportOffset);
 	}
 
+	/** Resets the such that the image fills the entire panel and centers the image*/
 	public void resetView() {
 		Point2D.Double margin = new Point2D.Double(20, 20);
 		Point2D.Double thisSize = new Point2D.Double(this.getWidth(), this.getHeight());
@@ -180,6 +202,11 @@ public class ImagePanView extends JPanel
 		repaint();
 	}
 
+	/**
+	 * Gets a new value for the zoom such that zoom is clamped between 16x and the minimum zoom such that the image is 100px in the panel;
+	 * @param newZoom The raw new zoom value
+	 * @return The clamped zoom value
+	 */
 	private double getZoomClamp(double newZoom) {
 		double minZoom = 100f / Math.max(image.getWidth(), image.getHeight());
 		double maxZoom = 16;
@@ -200,6 +227,12 @@ public class ImagePanView extends JPanel
 		return new Point((int) p.getX(), (int) p.getY());
 	}
 
+	/**
+	 * <p>Updates the image zoom</p>
+	 * <p>Zoom clamping will only be inforced if the newZoom isn't moving in the direction of valid zooms</p>
+	 * @param newZoom The new zoom value
+	 * @param anchorPos The position to zoom in/out from
+	 */
 	private void updateZoom(double newZoom, Point2D.Double anchorPos) {
 		double zoomBoundary = getZoomClamp(newZoom);
 		// The zoom clamp shouldn't affect zooms going in the right direction
@@ -233,7 +266,11 @@ public class ImagePanView extends JPanel
 		repaint();
 	}
 
-	private void moveViewport(Double pan) {
+	/**
+	 * Moves the image by a given pan
+	 * @param pan A point representing the change in position
+	 */
+	private void moveViewport(Point2D.Double pan) {
 		Point2D.Double newViewportOffset = new Point2D.Double(viewportOffset.getX() + pan.getX(),
 				viewportOffset.getY() + pan.getY());
 
@@ -242,6 +279,10 @@ public class ImagePanView extends JPanel
 		repaint();
 	}
 
+	/**
+	 * Updates the image offset
+	 * @param newViewportOffset The new image offset
+	 */
 	private void updateViewport(Point2D.Double newViewportOffset) {
 		Point2D.Double thisSize = new Point2D.Double(this.getWidth(), this.getHeight());
 		Point2D.Double imageSize = new Point2D.Double(image.getWidth() * zoom, image.getHeight() * zoom);
@@ -308,14 +349,25 @@ public class ImagePanView extends JPanel
 		public void viewRectChanged(Rectangle viewRect);
 	}
 
+	/**
+	 * Adds a listener to be notified when the view rectangle changes
+	 * @param listener The listener to add
+	 */
 	public void registerViewRectListener(ViewRectListener listener) {
 		this.viewRectListeners.add(listener);
 	}
 
+	/**
+	 * Removes a listener from the list of listeners to be notified when the view rectangle changes
+	 * @param listener The listener to remove
+	 */
 	public void unregisterViewRectListener(ViewRectListener listener) {
 		this.viewRectListeners.remove(listener);
 	}
 
+	/**
+	 * Notifies all listeners that the view rectangle has changed
+	 */
 	public void notifyViewRectListeners() {
 		Rectangle viewRect = new Rectangle((int) viewportOffset.getX(), (int) viewportOffset.getY(),
 				(int) (image.getWidth() * zoom), (int) (image.getHeight() * zoom));

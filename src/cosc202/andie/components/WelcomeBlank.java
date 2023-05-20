@@ -6,6 +6,19 @@ import java.awt.Font;
 import javax.swing.JPanel;
 import static cosc202.andie.LanguageConfig.msg;
 
+/**
+ * <p>
+ * A panel displaying ANDIE's welcome message
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @see JPanel
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class WelcomeBlank extends JPanel {
 	
 	@Override

@@ -31,6 +31,8 @@ public class PopupSlider extends JPanel {
 
 	/**
 	 * Create a new PopupSlider with the given settings
+	 * (The range, tick spacing, and initial value (minus the minimum value) should all be divisible by the step size)
+	 * 
 	 * @param message The message to display above the slider
 	 * @param minimum The minimum value that the slider may be set to
 	 * @param maximum The maximum value that the slider may be set to
@@ -38,6 +40,7 @@ public class PopupSlider extends JPanel {
 	 * @param units The units to display after the value (e.g. "px", or "%")
 	 * @param minorTickSpace The spacing between minor ticks
 	 * @param majorTickSpace The spacing between major ticks
+	 * @param stepSize The amount to increment the slider by each "step"
 	 */
 	public PopupSlider(String message, int minimum, int maximum, int initialValue, String units, int minorTickSpace, int majorTickSpace, int stepSize) {
 		super();
@@ -82,10 +85,18 @@ public class PopupSlider extends JPanel {
 		this.add(valueLabel);
 	}
 
+	/**
+	 * Get the current value of the slider
+	 * @return The current value of the slider
+	 */
 	public int getValue() {
 		return slider.getValue()*stepSize+minimum;
 	}
 
+	/**
+	 * Add a ChangeListener to the slider
+	 * @param listener The ChangeListener to add
+	 */
 	public void addChangeListener(ChangeListener listener) {
 		slider.addChangeListener((ev)->{
 			if (slider.getValue()!=lastSliderValue) {
@@ -94,6 +105,10 @@ public class PopupSlider extends JPanel {
 			}
 		});
 	}
+	/**
+	 * Remove a ChangeListener from the slider
+	 * @param listener The ChangeListener to remove
+	 */
 	public void removeChangeListener(ChangeListener listener) {
 		slider.removeChangeListener(listener);
 	}
