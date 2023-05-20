@@ -40,7 +40,7 @@ public class OptionPopup {
 	 * Create a new PopupWithSliders with the given settings
 	 * @param parent The parent component of the dialog window
 	 * @param title The title of the dialog window
-	 * @param sliders The sliders to show
+	 * @param components The sliders to show
 	 */
 	public OptionPopup(Component parent, String title, JComponent[] components) {
 		this.title = title;

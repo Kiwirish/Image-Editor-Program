@@ -109,7 +109,6 @@ public class AndieModel {
 		String opsString = "";
 		if (operationsFile.exists()) {
 			try {
-				// opsString = Files.readString(operationsFile.toPath(), Charset.defaultCharset());
 				opsString = Utils.readString(operationsFile, Charset.defaultCharset());
 			} catch (IOException e) {
 				opsString = "";
@@ -138,17 +137,13 @@ public class AndieModel {
 		if (!ImageIO.write(image.getOriginalImage(), extension, new File(filepath))) {
 				throw new IOException("SAVE_EXCEPTION");
 		};
-		if (image.hasOps()){
-			String opsFilename = filepath + ".ops";
-			// Files.writeString(new File(opsFilename).toPath(),image.getOpsString());
-			Utils.writeString(new File(opsFilename), image.getOpsString(), Charset.defaultCharset());
-		}
+		String opsFilename = filepath + ".ops";
+		Utils.writeString(new File(opsFilename), image.getOpsString(), Charset.defaultCharset());
 		this.imageFilepath = filepath;
 		image.saved();
 	}
 
 	public void saveImage() throws ExtensionException, IOException {
-
 		saveImage(imageFilepath);
 	}
 
