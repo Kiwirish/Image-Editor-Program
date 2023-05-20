@@ -89,7 +89,7 @@ public class Operations {
 			if (Thread.interrupted()) return;
 			listener.filterThreadFinished(result);
 			} catch (RuntimeException e) {
-				if (e.getMessage().equals("Interupted") || Thread.interrupted()) return;
+				if (e.getMessage().equals("Interrupted") || Thread.interrupted()) return;
 				e.printStackTrace();
 			}
 		}

@@ -13,7 +13,6 @@ pages: # publish Javadoc website
     - javadoc -d docs -sourcepath src/ -subpackages cosc202.andie
     - mkdir -p public
     - mv docs public/
-    - ls -R public | head
   artifacts:
     paths:
       - public
