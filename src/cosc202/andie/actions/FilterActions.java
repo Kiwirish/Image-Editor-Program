@@ -2,10 +2,12 @@ package cosc202.andie.actions;
 
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import cosc202.andie.ImageAction;
 import cosc202.andie.components.PopupSlider;
-import cosc202.andie.components.PopupWithSliders;
+import cosc202.andie.components.OptionPopup;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
@@ -13,6 +15,7 @@ import cosc202.andie.operations.filter.GaussianBlur;
 import cosc202.andie.operations.filter.MeanFilter;
 import cosc202.andie.operations.filter.MedianFilter;
 import cosc202.andie.operations.filter.SharpenFilter;
+import cosc202.andie.operations.filter.SobelFilter;
 import cosc202.andie.operations.filter.EmbossFilter; 
 
 import static cosc202.andie.LanguageConfig.msg;
@@ -52,11 +55,10 @@ public class FilterActions extends MenuActions {
         super(msg("Filter_Title"), controller, model);
         actions.add(new SharpenFilterAction(msg("SharpenFilter_Title"), null, msg("SharpenFilter_Desc"), Integer.valueOf(KeyEvent.VK_S)));
         actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G)));
-        actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_E)));
+        actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_D)));
         actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
-        // need to add an emboss menu to select N,E,S,W Emboss filters 
-        // need to add a sobel filters menu to select Horizontal or Vertical edge detection filters
-        actions.add(new EmbossFilterAction("kjasdfklasdf", null, menuTitle, null));
+        actions.add(new EmbossFilterAction("Emboss Filter", null, "Apply an Emboss Filter", Integer.valueOf(KeyEvent.VK_E)));
+        actions.add(new SobelFilterAction("Sobel Filter", null, "Apply a Sobel Filter", Integer.valueOf(KeyEvent.VK_B)));
         imageStatusListener = ()-> {
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
@@ -91,7 +93,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  MeanFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public MeanFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -108,12 +110,15 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5);
-            slider.addChangeListener((ev)->{
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,10,1,"px",1,5,1);
+            ChangeListener listener = ((ev)->{
                 controller.operations.update(new MeanFilter(slider.getValue()));
             });
-            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(),msg("MeanFilter_Popup_Title"),new PopupSlider[]{slider});
-            controller.operations.end(popup.show() == PopupWithSliders.OK);
+            slider.addChangeListener(listener);
+            listener.stateChanged(null);
+
+            OptionPopup popup = new OptionPopup(controller.getContentPane(),msg("MeanFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == OptionPopup.OK);
         }
 
     }
@@ -137,7 +142,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -178,7 +183,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -195,12 +200,15 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),2,10,2,"px",1,5);
-            slider.addChangeListener((ev)->{
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),2,10,2,"px",1,5,1);
+            ChangeListener listener = (ev)->{
                 controller.operations.update(new GaussianBlur(slider.getValue()));
-            });
-            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(), msg("GaussianBlurFilter_Popup_Title"),new PopupSlider[]{slider});
-            controller.operations.end(popup.show() == PopupWithSliders.OK);
+            };
+            slider.addChangeListener(listener);
+            listener.stateChanged(null);
+
+            OptionPopup popup = new OptionPopup(controller.getContentPane(), msg("GaussianBlurFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == OptionPopup.OK);
         }
     }
 
@@ -223,7 +231,7 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  MedianFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public MedianFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
@@ -240,63 +248,62 @@ public class FilterActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,5,1,"px",1,5);
-            slider.addChangeListener((ev)->{
+            PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,5,1,"px",1,5, 1);
+            ChangeListener listener = (ev)->{
                 controller.operations.update(new MedianFilter(slider.getValue()));
-            });
-            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
-            controller.operations.end(popup.show() == PopupWithSliders.OK);
+            };
+            slider.addChangeListener(listener);
+            listener.stateChanged(null);
+
+            OptionPopup popup = new OptionPopup(controller.getContentPane(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == OptionPopup.OK);
         }
 
     }
     
     public class EmbossFilterAction extends ImageAction { 
         
-
-       public  EmbossFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+       public EmbossFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
             super(name, icon, desc, mnemonic);
         }
 
-       
-
         public void actionPerformed(ActionEvent e) {
+            PopupSlider slider = new PopupSlider("Emboss",45,360,45,"˚",45,45,45);
+            ChangeListener listener = (ev)->{
+                controller.operations.update(new EmbossFilter(slider.getValue()));
+            };
+            slider.addChangeListener(listener);
+            listener.stateChanged(null);
 
+            OptionPopup popup = new OptionPopup(controller.getContentPane(),"Emboss Filter",new PopupSlider[]{slider});
+            controller.operations.end(popup.show() == OptionPopup.OK);
+        }
+        
+    }
 
-            
-            
-               
-            // }else if(e.getActionCommand().equals("Horizontal")){ 
-            //     kernel[0] = -1/2;
-            //     kernel[2] = 1/2;
-            //     kernel[3] = -1;
-            //     kernel[5] = 1;
-            //     kernel[6] = -1/2;
-            //     kernel[8] = 1/2;
-            // }else if(e.getActionCommand().equals("Vertical")){ 
-            //     kernel[0] = -1/2;
-            //     kernel[1] = -1;
-            //     kernel[2] = -1/2;
-            //     kernel[6] = 1/2;
-            //     kernel[7] = 1;
-            //     kernel[8] = 1/2;
-            // }
-            PopupSlider slider = new PopupSlider("Emboss",0,8,0,"x45deg",1,1);
-            slider.addChangeListener((ev)->{
-                controller.operations.update(new EmbossFilter(slider.getValue()*45));
-            });
-            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
-            controller.operations.end(popup.show() == PopupWithSliders.OK);
+    public class SobelFilterAction extends ImageAction { 
+        
+       public SobelFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+            super(name, icon, desc, mnemonic);
         }
 
-        
+        public void actionPerformed(ActionEvent e) {
+            JCheckBox checkBox = new JCheckBox("Horizontal");
+            ChangeListener listener = new ChangeListener(){
+                Boolean lastValue = null;
+                public void stateChanged(ChangeEvent e) {
+                    if (lastValue == null || lastValue != checkBox.isSelected()) { //Checkboxes need to be debounced for some godforsaken reason
+                        lastValue = checkBox.isSelected();
+                        controller.operations.update(new SobelFilter(checkBox.isSelected()));
+                    }
+                }
+            };
+            checkBox.addChangeListener(listener);
+            listener.stateChanged(null);
 
-
-        //     PopupSlider slider = new PopupSlider(msg("Radius_Popup_Label"),1,5,1,"px",1,5);
-        //     slider.addChangeListener((ev)->{
-        //         controller.operations.update(new EmbossFilter(kernel));
-        //     });
-        //     PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(),msg("MedianFilter_Popup_Title"),new PopupSlider[]{slider});
-        //     controller.operations.end(popup.show() == PopupWithSliders.OK);
+            OptionPopup popup = new OptionPopup(controller.getContentPane(),"Sobel Filter",new JComponent[]{checkBox});
+            controller.operations.end(popup.show() == OptionPopup.OK);
+        }
         
     }
 

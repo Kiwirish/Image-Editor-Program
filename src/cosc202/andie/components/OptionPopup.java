@@ -3,6 +3,7 @@ package cosc202.andie.components;
 import java.awt.Component;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -21,12 +22,12 @@ import javax.swing.JPanel;
  * @author Jeb Nicholson
  * @version 1.0
  */
-public class PopupWithSliders {
+public class OptionPopup {
 
 	/** The title of the dialog window */
 	private String title;
 	/** The sliders to show */
-	private PopupSlider[] sliders;
+	private JComponent[] components;
 	/** The parent component of the dialog window */
 	private Component parent;
 
@@ -41,9 +42,9 @@ public class PopupWithSliders {
 	 * @param title The title of the dialog window
 	 * @param sliders The sliders to show
 	 */
-	public PopupWithSliders(Component parent, String title, PopupSlider[] sliders) {
+	public OptionPopup(Component parent, String title, JComponent[] components) {
 		this.title = title;
-		this.sliders = sliders;
+		this.components = components;
 		this.parent = parent;
 	}
 
@@ -54,8 +55,8 @@ public class PopupWithSliders {
 	public int show() {
 		JPanel contents = new JPanel();
 		contents.setLayout(new BoxLayout(contents, BoxLayout.Y_AXIS));
-		for (PopupSlider slider: sliders) {
-			contents.add(slider);
+		for (JComponent component: components) {
+			contents.add(component);
 		}
 		int result = JOptionPane.showOptionDialog(parent, contents, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
 

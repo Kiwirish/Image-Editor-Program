@@ -1,5 +1,6 @@
 package cosc202.andie;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -107,4 +108,56 @@ public class Utils {
 			super(message);
 		}
 	}
+
+	/**
+	 * Creates a new BufferedImage with each edge expanded by r pixels, taking the color values from the nearest pixel.
+	 * @param input The BufferedImage to expand.
+	 * @param r The number of pixels to expand each edge by.
+	 * @return A new BufferedImage with the expanded edges.
+	 */
+	public static BufferedImage expandEdges(BufferedImage input, int r) {
+		BufferedImage output = new BufferedImage(input.getWidth() + 2 * r, input.getHeight() + 2 * r, input.getType());
+		Graphics g = output.createGraphics();
+		g.drawImage(input, r, r, null);
+		g.dispose();
+
+		int h = input.getHeight();
+		int w = input.getWidth();
+
+		// Top left corner padding 
+		for(int y = -r; y < 0; ++y)
+				for(int x = -r ; x < 0 ; ++x)
+						output.setRGB((x + r), (y + r), input.getRGB(0,0));
+		// Top right corner padding 
+		for(int y = -r; y < 0; ++y)
+				for(int x = 0; x < r; ++x)
+						output.setRGB((w + x + r), (y + r), input.getRGB((w - 1), 0));
+		// Bottom left corner padding
+		for(int y = 0; y < r; ++y)
+				for(int x = -r; x < 0; ++x)
+						output.setRGB((x + r), (h + y + r), input.getRGB(0, (h - 1)));
+		// Bottom right corner padding
+		for(int y = 0; y < r; ++y)
+				for(int x = 0; x < r; ++x)
+						output.setRGB((w + x + r), (h + y + r), input.getRGB((w - 1), (h - 1)));
+		// Top edge 
+		for(int y = 0 ; y < r; y++)
+				for(int x = 0; x < w ; ++x)
+						output.setRGB((x + r), y, input.getRGB(x,0)); 
+		// Bottom edge
+		for(int y = 0 ; y < r; ++y)
+				for(int x = 0; x < w ; ++x)
+						output.setRGB((x + r), (y + r + h) , input.getRGB(x, (h - 1))); 
+		// Left edge 
+		for(int y = 0 ; y < h; ++y)
+				for(int x = 0; x < r ; ++x)
+						output.setRGB(x, y+r, input.getRGB(0, y)); 
+		// Right edge 
+		for(int y = 0 ; y < h; ++y)
+				for(int x = 0; x < r ; ++x)
+						output.setRGB((x + r + w), (y + r), input.getRGB((w - 1), y)); 
+
+		return output;
+	}
+
 }

@@ -1,6 +1,7 @@
 package cosc202.andie.operations.transform;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import cosc202.andie.ImageOperation;
 
@@ -45,7 +46,8 @@ public class Resize implements ImageOperation{
         BufferedImage output = new BufferedImage(scaledWidth, scaledHeight, input.getType());
         
         Graphics2D graphics2D = output.createGraphics();
-        graphics2D.drawImage(input,0,0,scaledWidth , scaledHeight, null);
+        graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics2D.drawImage(input,0,0,scaledWidth, scaledHeight, null);
 
         return output;
     }

@@ -83,14 +83,13 @@ public class EditableImage {
         lastSavedOps = opsToString(ops);
     }
 
-
     public Dimension getSize() {
         return new Dimension(current.getWidth(), current.getHeight());
     }
 
-
     public void saved() {
         lastSavedOps = opsToString(ops);
+        notifyImageListeners(imageListeners);
     }
 
     public String getOpsString() {
@@ -158,7 +157,6 @@ public class EditableImage {
     public void unregisterOperationListener(OperationListener listener) {
         operationListeners.remove(listener);
     }
-
 
     /**
      * <p>

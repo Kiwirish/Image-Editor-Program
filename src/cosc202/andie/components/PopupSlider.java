@@ -17,7 +17,7 @@ import javax.swing.event.ChangeListener;
  * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
  * </p>
  * 
- * @see PopupWithSliders
+ * @see OptionPopup
  * @see JSlider
  * @author Jeb Nicholson
  * @version 1.0
@@ -25,7 +25,9 @@ import javax.swing.event.ChangeListener;
 public class PopupSlider extends JPanel {
 	
 	private JSlider slider;
-	private int lastValue;
+	private int lastSliderValue;
+	private int minimum;
+	private int stepSize;
 
 	/**
 	 * Create a new PopupSlider with the given settings
@@ -37,24 +39,28 @@ public class PopupSlider extends JPanel {
 	 * @param minorTickSpace The spacing between minor ticks
 	 * @param majorTickSpace The spacing between major ticks
 	 */
-	public PopupSlider(String message, int minimum, int maximum, int initialValue, String units, int minorTickSpace, int majorTickSpace) {
+	public PopupSlider(String message, int minimum, int maximum, int initialValue, String units, int minorTickSpace, int majorTickSpace, int stepSize) {
 		super();
-		slider = new JSlider(minimum,maximum,initialValue);
-		lastValue = initialValue;
-		slider.setMinorTickSpacing(minorTickSpace);
-		slider.setMajorTickSpacing(majorTickSpace);
+		if ((maximum-minimum) % stepSize != 0 || (initialValue-minimum) % stepSize != 0 || minorTickSpace % stepSize != 0 || majorTickSpace % stepSize != 0) {
+			throw new IllegalArgumentException("All values must be divisible by stepSize");
+		}
+		slider = new JSlider(0,(maximum-minimum)/stepSize,(initialValue-minimum)/stepSize);
+		lastSliderValue = (initialValue-minimum)/stepSize;
+		slider.setMinorTickSpacing(minorTickSpace/stepSize);
+		slider.setMajorTickSpacing(majorTickSpace/stepSize);
 		slider.setPaintTicks(true);
-		slider.setSnapToTicks((maximum-minimum) < 50);
+		slider.setSnapToTicks(((maximum-minimum)/stepSize) < 50);
+		this.minimum = minimum;
+		this.stepSize = stepSize;
 	
 		JLabel valueLabel = new JLabel();
-		//Set valueLabel font to bold, 16pt
 		valueLabel.setFont(valueLabel.getFont().deriveFont(Font.BOLD, 12f));
 
 		ChangeListener listener = e -> {
-			valueLabel.setText(String.format("%d%s", slider.getValue(), units));
+			valueLabel.setText(String.format("%d%s", this.getValue(), units));
 		};
-		listener.stateChanged(null);
 		slider.addChangeListener(listener);
+		listener.stateChanged(null);
 
 		JLabel label = new JLabel(message);
 		label.setFont(label.getFont().deriveFont(Font.PLAIN, 12f));
@@ -77,17 +83,16 @@ public class PopupSlider extends JPanel {
 	}
 
 	public int getValue() {
-		return slider.getValue();
+		return slider.getValue()*stepSize+minimum;
 	}
 
 	public void addChangeListener(ChangeListener listener) {
 		slider.addChangeListener((ev)->{
-			if (slider.getValue()!=lastValue) {
-				lastValue = slider.getValue();
+			if (slider.getValue()!=lastSliderValue) {
+				lastSliderValue = slider.getValue();
 				listener.stateChanged(ev);
 			}
 		});
-		listener.stateChanged(null);
 	}
 	public void removeChangeListener(ChangeListener listener) {
 		slider.removeChangeListener(listener);

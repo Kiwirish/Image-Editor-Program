@@ -12,10 +12,8 @@ pages: # publish Javadoc website
   script:
     - javadoc -d docs -sourcepath src/ -subpackages cosc202.andie
     - mkdir -p public
-    - echo 'test' >public/test.txt
     - mv docs public/
     - ls -R public | head
-    - echo 'first ten public/ files listed'
   artifacts:
     paths:
       - public

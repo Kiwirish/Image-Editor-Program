@@ -3,11 +3,12 @@ package cosc202.andie.actions;
 import java.awt.Rectangle;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 
 //import cosc202.andie.EditableImage;
 import cosc202.andie.ImageAction;
 import cosc202.andie.components.PopupSlider;
-import cosc202.andie.components.PopupWithSliders;
+import cosc202.andie.components.OptionPopup;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
@@ -122,13 +123,16 @@ public class TransformActions extends MenuActions {
 
         /** Call back for when ResizeAction is triggered */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Resize_Popup_Label"), 1, 300, 100, "%", 10, 50);
-            slider.addChangeListener((ev) -> {
+            PopupSlider slider = new PopupSlider(msg("Resize_Popup_Label"), 1, 300, 100, "%", 10, 50, 1);
+            ChangeListener listener = (ev)->{
                 controller.operations.update(new Resize(slider.getValue()));
-            });
-            PopupWithSliders popup = new PopupWithSliders(controller.getContentPane(), msg("Resize_Popup_Title"),
+            };
+            slider.addChangeListener(listener);
+            listener.stateChanged(null);
+
+            OptionPopup popup = new OptionPopup(controller.getContentPane(), msg("Resize_Popup_Title"),
                     new PopupSlider[] { slider });
-            controller.operations.end(popup.show() == PopupWithSliders.OK);
+            controller.operations.end(popup.show() == OptionPopup.OK);
         }
     }
 

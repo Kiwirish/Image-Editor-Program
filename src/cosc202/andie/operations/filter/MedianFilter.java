@@ -4,6 +4,7 @@ import java.awt.image.*;
 import java.util.*;
 
 import cosc202.andie.ImageOperation;
+import cosc202.andie.Utils;
 
 /**
  * <p>
@@ -85,78 +86,7 @@ public class MedianFilter implements ImageOperation {
         int r = radius; // as original radius accessed later
         
         //create enlarged image with all existing argb pixel values of old image set to the new images values 
-        BufferedImage enlargedImage = new BufferedImage(input.getWidth() + r * 2, input.getHeight() + r * 2, input.getType());
-        
-        for(int y = 0; y < input.getHeight(); y++){
-            for(int x = 0; x < input.getWidth(); x++){
-                enlargedImage.setRGB((x + r), (y + r), input.getRGB(x,y));
-            }
-        }
-
-        int h = input.getHeight(); // set height variable for easy access in corner/edge loops
-        int w = input.getWidth(); // set height variable for easy access in corner/edge loops
-
-        //Padding:
-
-        // set the corner pixels of the enlarged image's argb values
-        
-        //top left corner padding 
-        for(int y = -r; y < 0; ++y){
-            for(int x = -r ; x < 0 ; ++x){
-                enlargedImage.setRGB((x + r), (y + r), input.getRGB(0,0));
-            }
-        }
-
-        //top right corner padding 
-        for(int y = -r; y < 0; ++y){
-            for(int x = 0; x < r; ++x){
-                enlargedImage.setRGB((w + x + r), (y + r), input.getRGB((w - 1), 0));
-            }
-        }
-
-        //Bottom left corner padding
-        for(int y = 0; y < r; ++y){
-            for(int x = -r; x < 0; ++x){
-                enlargedImage.setRGB((x + r), (h + y + r), input.getRGB(0, (h - 1)));
-            }
-        }
-
-        //Bottom right corner padding
-        for(int y = 0; y < r; ++y){
-            for(int x = 0; x < r; ++x){
-                enlargedImage.setRGB((w + x + r), (h + y + r), input.getRGB((w - 1), (h - 1)));
-            }
-        }
-
-        // set the enlarged image's edges to the argb values 
-
-        // top edge 
-        for(int y = 0 ; y < r; y++){
-            for(int x = 0; x < w ; ++x){
-                enlargedImage.setRGB((x + r), y, input.getRGB(x,0)); 
-            }
-        }
-
-        // bottom edge 
-        for(int y = 0 ; y < r; ++y){
-            for(int x = 0; x < w ; ++x){
-                enlargedImage.setRGB((x + r), (y + r + h) , input.getRGB(x, (h - 1))); 
-            }
-        }
-
-        // Left edge 
-        for(int y = 0 ; y < h; ++y){
-            for(int x = 0; x < r ; ++x){
-                enlargedImage.setRGB((x + r), y, input.getRGB(0, y)); 
-            }
-        }
-
-        // right edge 
-        for(int y = 0 ; y < h; ++y){
-            for(int x = 0; x < r ; ++x){
-                enlargedImage.setRGB((x + r + w), (y + r), input.getRGB((w - 1), y)); 
-            }
-        }
+        BufferedImage enlargedImage = Utils.expandEdges(input, r);
 
         // As this filter is not done via a convolution,
         // process each argb channel of each pixel separately. 
@@ -164,74 +94,49 @@ public class MedianFilter implements ImageOperation {
         // alpha, red, green and blue. 
         // Sort through these lists and find the middle value (median) for the output image. 
 
-        
-        BufferedImage enlargedOutput = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-        // arrayLists to store argb values to sort through later 
-        ArrayList<Integer> aList = new ArrayList<Integer>();
-        ArrayList<Integer> rList = new ArrayList<Integer>();
-        ArrayList<Integer> gList = new ArrayList<Integer>();
-        ArrayList<Integer> bList = new ArrayList<Integer>();
+        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
+
+        int[] alphas = new int[size];
+        int[] reds = new int[size];
+        int[] greens = new int[size];
+        int[] blues = new int[size];
 
         // outer for loop to access each pixel
         // for each pixel, an inner loop is created to iterate over all neighboring pixels to 
         // the current pixel the outer loop is on - only iterate within the size of the window. 
-        for(int y = r ; y <= input.getHeight() - r - 1 ; y++){
-            if (Thread.interrupted()) throw new RuntimeException("Interrupted");
-            for(int x = r ; x <= input.getWidth() - r - 1 ; x++){
-                // clear lists? 
-                aList.clear();
-                rList.clear();
-                gList.clear();
-                bList.clear();
-                for(int i = -r ; i <= r ; i++){
-                    for(int j = -r ; j <= r ; j++){
-                        int argb = 0;
-                        int pixel_x = x + i;
-                        int pixel_y = y + j;
-                        argb = input.getRGB(pixel_x, pixel_y);
-                        int alpha = (argb & 0xFF000000) >> 24;
-                        int red = (argb & 0x00FF0000) >> 16;
-                        int green = (argb & 0x0000FF00) >> 8;
-                        int blue = (argb & 0x000000FF);
-                        aList.add(alpha);
-                        rList.add(red);
-                        gList.add(green);
-                        bList.add(blue);
-                    }
+        for(int y = 0; y < input.getHeight(); y++){
+            if (Thread.interrupted()) throw new RuntimeException("Interrupted"); // check for interrupt (Because median filter is slow)
+            for(int x = 0; x < input.getWidth(); x++){
+                for (int i = 0; i < size; i++){
+                    int nx = i % (2 * r + 1) - r;
+                    int ny = i / (2 * r + 1) - r;
+                    int argb = enlargedImage.getRGB(x+nx+r, y+ny+r);
+                    int alpha = (argb & 0xFF000000) >> 24;
+                    int red = (argb & 0x00FF0000) >> 16;
+                    int green = (argb & 0x0000FF00) >> 8;
+                    int blue = (argb & 0x000000FF);
+                    alphas[i] = alpha;
+                    reds[i] = red;
+                    greens[i] = green;
+                    blues[i] = blue;
+                    // }
                 } 
-                // after neighboring pixels iterated over and list's filled, sort these four lists in ascending order
-                // set the middle value (median) as the new argb values then apply these to enlargedOutput image 
-                Collections.sort(aList);
-                Collections.sort(rList);
-                Collections.sort(gList);
-                Collections.sort(bList);
-                int newA = aList.get((size + 1) / 2);
-                int newR = rList.get((size + 1) / 2);
-                int newG = gList.get((size + 1) / 2);
-                int newB = bList.get((size + 1) / 2);
+                Arrays.sort(alphas);
+                Arrays.sort(reds);
+                Arrays.sort(greens);
+                Arrays.sort(blues);
+                int newA = alphas[size / 2];
+                int newR = reds[size / 2];
+                int newG = greens[size / 2];
+                int newB = blues[size / 2];
 
                 // combine the new argb values into a new argb value and set the enlargedOutput pixels to these values
                 int newARGB = (newA << 24) | (newR << 16) | (newG << 8) | (newB);
-                enlargedOutput.setRGB(x, y, newARGB);
-
-
-
+                output.setRGB(x, y, newARGB);
             }
         }
 
-        // Trim enlarged image and return this trimmed output as the final output of the apply class 
-        BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
-
-        for(int y = 0 ; y < input.getHeight(); y++){
-            for(int x = 0; x < input.getWidth(); x++){
-                output.setRGB(x, y, enlargedOutput.getRGB(x, y)); 
-            }
-        }
-        // return final medianFiltered output iamge
         return output; 
-
-
-
     }
 
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {

@@ -30,33 +30,24 @@ import cosc202.andie.ImageOperation;
 
 public class EmbossFilter implements ImageOperation  {
     
-    // data field declaring kernel float array to store the inputted kernel 
-    // when EmbosFilter is called. The values of this kernel will depend on what the 
-    // user picks within the menu/controller interface, ie N, E, S, W, inbetween directions,
-    // or a Horizontal or Vetical sobel filter. 
-
     int angle; 
 
-
-    // construct EmbossFilter object using input kernel float array chosen by user at menu/controller interface
+    // construct EmbossFilter object using input angle
     public EmbossFilter(int angle){
         this.angle = angle; 
-
-
-
-
-
     }
-    // *********************************************
-    // below code up until the manual convolution is code used in my prior filters to pad and extend filter edges
-    // *********************************************
 
 
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
-        //FIGURE out the kernel
+        //check for illegal argument 
+        if (input == null){
+            throw new IllegalArgumentException("Image to apply Median filter to does not exist");
+        }
+
+        //Figure out the kernel
         float[] kernel = new float[9];
 
-        if(angle == 0){ //N
+        if(angle == 0 || angle == 360){ //N
             kernel[1] = 1;
             kernel[7] = -1;
         }else if (angle == 45){ //NE 
@@ -77,13 +68,12 @@ public class EmbossFilter implements ImageOperation  {
         }else if(angle == 270){ // W 
             kernel[3] = 1;
             kernel[5] = -1;
-        }else { // must be NW
+        } else if(angle == 315) { // NW
             kernel[0] = 1;
             kernel[8] = -1;       
         }
 
-        return EmbossSobelHelper.applyKernel(input, kernel);
-
+        return CustomConvolution.applyKernel(input, kernel);
 
     }// end draw method 
 

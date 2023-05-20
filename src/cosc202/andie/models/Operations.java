@@ -88,7 +88,10 @@ public class Operations {
 
 			if (Thread.interrupted()) return;
 			listener.filterThreadFinished(result);
-			} catch (RuntimeException e) {}
+			} catch (RuntimeException e) {
+				if (e.getMessage().equals("Interupted") || Thread.interrupted()) return;
+				e.printStackTrace();
+			}
 		}
 		public interface OperationRunnableListener {
 			public void filterThreadFinished(BufferedImage result);
