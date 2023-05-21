@@ -52,6 +52,7 @@ public class AndieModel {
 	private ArrayList<ModelListener> imageStatusListeners = new ArrayList<ModelListener>();
 	private ArrayList<ModelListener> workingImageListeners = new ArrayList<ModelListener>();
 	private ArrayList<ModelListener> imageListeners = new ArrayList<ModelListener>();
+	private ArrayList<ModelListener> filepathListeners = new ArrayList<ModelListener>();
 	private ArrayList<OperationListener> imageOperationListeners = new ArrayList<OperationListener>();
 
 	private ImageListener imageListener;
@@ -83,6 +84,7 @@ public class AndieModel {
 		image = null;
 		previewImage = null;
 		isImageOpen = false;
+		imageFilepath = null;
 
 		notifyListeners(imageStatusListeners);
 	}
@@ -170,6 +172,7 @@ public class AndieModel {
 		notifyListeners(imageStatusListeners);
 		notifyListeners(workingImageListeners);
 		notifyListeners(imageListeners);
+		notifyListeners(filepathListeners);
 	}
 
 	/**
@@ -197,6 +200,7 @@ public class AndieModel {
 		notifyListeners(imageStatusListeners);
 		notifyListeners(workingImageListeners);
 		notifyListeners(imageListeners);
+		notifyListeners(filepathListeners);
 
 		imageListener = () -> {
 			previewImage = null;
@@ -241,6 +245,7 @@ public class AndieModel {
 		String opsFilename = filepath + ".ops";
 		Utils.writeString(new File(opsFilename), image.getOpsString(), Charset.defaultCharset());
 		this.imageFilepath = filepath;
+		notifyListeners(filepathListeners);
 		image.saved();
 	}
 
@@ -351,6 +356,22 @@ public class AndieModel {
 	 */
 	public void unregisterImageOperationListener(OperationListener listener) {
 		imageOperationListeners.remove(listener);
+	}
+
+	/**
+	 * Registers a listener to be notified when the filepath changes
+	 * @param listener The listener to register
+	 */
+	public void registerFilepathListener(ModelListener listener) {
+		filepathListeners.add(listener);
+	}
+
+	/**
+	 * Unregisters a listener to be notified when the filepath changes
+	 * @param listener The listener to unregister
+	 */
+	public void unregisterFilepathListener(ModelListener listener) {
+		filepathListeners.remove(listener);
 	}
 
 	/* A listener for model updates */

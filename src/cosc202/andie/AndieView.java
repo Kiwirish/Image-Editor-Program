@@ -11,6 +11,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.nio.file.Paths;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,11 +22,13 @@ import javax.swing.JToolBar;
 
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
+import cosc202.andie.models.AndieModel.ModelListener;
 
 public class AndieView {
 	private AndieController controller;
 	private AndieModel model;
 	private JFrame frame;
+	private ModelListener filepathListener;
 
 	public AndieView(AndieController controller, AndieModel model) {
 		this.controller = controller;
@@ -51,6 +55,17 @@ public class AndieView {
 					Image iconImage = ImageIO.read(Andie.class.getClassLoader().getResource("icon.png"));
 					frame.setIconImage(iconImage);
 				} catch (IOException e) {}
+
+				filepathListener = ()->{
+					String filepath = model.getImageFilepath();
+					if (filepath == null) {
+						frame.setTitle("ANDIE");
+					} else {
+						frame.setTitle("ANDIE | " + Paths.get(filepath).getFileName().toString());
+					}
+				};
+				model.registerFilepathListener(filepathListener);
+				filepathListener.update();
 
         JPanel contentPane = new JPanel();
         frame.setContentPane(contentPane);
