@@ -51,7 +51,7 @@ public class AndieView {
 				});
 
 				try {
-					Image iconImage = ImageIO.read(Andie.class.getClassLoader().getResource("resources/icon.png"));
+					Image iconImage = ImageIO.read(Andie.class.getClassLoader().getResource("assets/icon.png"));
 					frame.setIconImage(iconImage);
 				} catch (IOException e) {}
 
@@ -90,7 +90,7 @@ public class AndieView {
 
 		JToolBar button = new JToolBar("Button" + 10);
 
-		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("resources/Exit.png"));
+		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Exit.png"));
 		Image img = icon.getImage();
         Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon icon2 = new ImageIcon(newimg);    
@@ -98,7 +98,7 @@ public class AndieView {
         button.add(exitButton);
 		exitButton.addActionListener((e) -> controller.closeWindow());
 
-		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("resources/Crop.png"));
+		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Crop.png"));
 		Image img2 = crop.getImage();
         Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon crop2 = new ImageIcon(newimg2);    
@@ -109,7 +109,7 @@ public class AndieView {
 		cropButton.addActionListener((e) -> System.out.println("Crop"));
 		// cropButton.addActionListener((e) -> );
 
-		ImageIcon select = new ImageIcon(Andie.class.getClassLoader().getResource("resources/Select.png"));
+		ImageIcon select = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Select.png"));
 		Image selectimg = select.getImage();
         Image selectnewimg = selectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon select2 = new ImageIcon(selectnewimg);    
@@ -119,7 +119,7 @@ public class AndieView {
         button.add(selectButton);
 		selectButton.addActionListener((e) -> System.out.println("Select"));
 
-		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("resources/cRotate.png"));
+		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/cRotate.png"));
 		Image rotateimg = rotate.getImage();
         Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon rotate2 = new ImageIcon(newrotateimg);    
@@ -129,7 +129,7 @@ public class AndieView {
         button.add(rotateButton);
 		rotateButton.addActionListener((e) -> System.out.println("Anti Clockwise Rotate"));
 
-		ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("resources/cRotate.png"));
+		ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/cRotate.png"));
 		Image crotateimg = crotate.getImage();
         Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
@@ -139,7 +139,7 @@ public class AndieView {
         button.add(crotateButton);
 		crotateButton.addActionListener((e) -> System.out.println("Clockwise Rotate"));
 
-		ImageIcon Undo = new ImageIcon(Andie.class.getClassLoader().getResource("resources/undo.png"));
+		ImageIcon Undo = new ImageIcon(Andie.class.getClassLoader().getResource("assets/undo.png"));
 		Image Undoimg = Undo.getImage();
         Image Undonewimg = Undoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon Undo2 = new ImageIcon(Undonewimg);    
@@ -150,7 +150,7 @@ public class AndieView {
 		selectButton.addActionListener((e) -> System.out.println("Undo"));
 
 
-		ImageIcon Redo = new ImageIcon(Andie.class.getClassLoader().getResource("resources/redo.png"));
+		ImageIcon Redo = new ImageIcon(Andie.class.getClassLoader().getResource("assets/redo.png"));
 		Image Redoimg = Redo.getImage();
         Image Redonewimg = Redoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon Redo2 = new ImageIcon(Redonewimg);    
