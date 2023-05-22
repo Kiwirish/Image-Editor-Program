@@ -33,6 +33,9 @@ import static cosc202.andie.models.AndieModel.COMTROL;
  * @version 1.0
  */
 public class EditActions extends MenuActions{
+
+    public UndoAction undoAction;
+    public RedoAction redoAction;
     
     /**
      * <p>
@@ -43,8 +46,10 @@ public class EditActions extends MenuActions{
      */
     public EditActions(AndieController controller, AndieModel model) {
         super(msg("Edit_Title"), controller, model);
-        actions.add(new UndoAction(msg("Undo_Title"), null, msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z), KeyStroke.getKeyStroke(KeyEvent.VK_Z, COMTROL)));
-        actions.add(new RedoAction(msg("Redo_Title"), null, msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y), KeyStroke.getKeyStroke(KeyEvent.VK_Y, COMTROL)));
+        undoAction = new UndoAction(msg("Undo_Title"), msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z), KeyStroke.getKeyStroke(KeyEvent.VK_Z, COMTROL));
+        redoAction = new RedoAction(msg("Redo_Title"), msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y), KeyStroke.getKeyStroke(KeyEvent.VK_Y, COMTROL));
+
+        actions.add(undoAction); actions.add(redoAction);
     }
 
     /**
@@ -64,12 +69,11 @@ public class EditActions extends MenuActions{
          * </p>
          * 
          * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  UndoAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+       public UndoAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
             imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().undoable());
             };
@@ -115,12 +119,11 @@ public class EditActions extends MenuActions{
          * </p>
          * 
          * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  RedoAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+       public RedoAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
             imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().redoable());
             };

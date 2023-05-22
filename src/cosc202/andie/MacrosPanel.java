@@ -30,9 +30,6 @@ public class MacrosPanel extends JPanel {
 	private JPanel operationsList;
 	private JLabel controlsPanelLabel;
 
-	private RecordMacroAction recordMacroAction;
-	private ApplyMacroAction applyMacroAction;
-
 	public MacrosPanel(AndieController controller, AndieModel model) {
 		super();
 		this.model = model;
@@ -88,16 +85,14 @@ public class MacrosPanel extends JPanel {
 		controlsPanelLabel.setAlignmentX(CENTER_ALIGNMENT);
 		controlsPanel.add(controlsPanelLabel);
 
-		recordMacroAction = controller.actions.macroActions.new RecordMacroAction("Start Recording", null, "Start recording a Macro", null, null);
-		applyMacroAction = controller.actions.macroActions.new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file", null, null);
 
 		//Add vertical space
 		controlsPanel.add(new JLabel(" "));
-		JButton recordButton = new JButton(recordMacroAction);
+		JButton recordButton = new JButton(controller.actions.macroActions.recordMacroAction);
 		recordButton.setAlignmentX(CENTER_ALIGNMENT);
 		recordButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, recordButton.getMaximumSize().height));
 		controlsPanel.add(recordButton);
-		JButton applyMacroButton = new JButton(applyMacroAction);
+		JButton applyMacroButton = new JButton(controller.actions.macroActions.applyMacroAction);
 		applyMacroButton.setAlignmentX(CENTER_ALIGNMENT);
 		applyMacroButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, applyMacroButton.getMaximumSize().height));
 		controlsPanel.add(applyMacroButton);
@@ -140,8 +135,6 @@ public class MacrosPanel extends JPanel {
 		super.removeNotify();
 		model.macros.unregisterMacrosUpdateListener(macrosUpdateListener);
 		model.unregisterImageStatusListener(macrosUpdateListener);
-		recordMacroAction.removeNotify();
-		applyMacroAction.removeNotify();
 	}
 
 	@Override

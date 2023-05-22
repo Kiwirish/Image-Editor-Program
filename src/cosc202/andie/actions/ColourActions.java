@@ -1,6 +1,7 @@
 package cosc202.andie.actions;
 
 import java.awt.event.*;
+import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -41,8 +42,11 @@ import static cosc202.andie.LanguageConfig.msg;
  */
 public class ColourActions extends MenuActions {
 
-
     private ModelListener imageStatusListener;
+
+    public ConvertToGreyAction convertToGreyAction;
+    public BrightnessAction brightnessAction;
+    public ContrastAction contrastAction;
 
     /**
      * <p>
@@ -54,11 +58,11 @@ public class ColourActions extends MenuActions {
      */
     public ColourActions(AndieController controller, AndieModel model) {
         super(msg("Colour_Title"), controller, model);
-        actions.add(new ConvertToGreyAction(msg("ConvertToGrey_Title"), null, msg("ConvertToGrey_Desc"),
-                Integer.valueOf(KeyEvent.VK_G), null));
-        actions.add(new BrightnessAction(msg("Brightness_Title"), null, msg("Brightness_Desc"),
-                Integer.valueOf(KeyEvent.VK_B), null));
-        actions.add(new ContrastAction(msg("Contrast_Title"), null, msg("Contrast_Desc"), null, null));
+        convertToGreyAction = new ConvertToGreyAction(msg("ConvertToGrey_Title"), msg("ConvertToGrey_Desc"), Integer.valueOf(KeyEvent.VK_G), null);
+        brightnessAction = new BrightnessAction(msg("Brightness_Title"), msg("Brightness_Desc"), Integer.valueOf(KeyEvent.VK_B), null);
+        contrastAction = new ContrastAction(msg("Contrast_Title"), msg("Contrast_Desc"), null, null);
+
+        actions.addAll(Arrays.asList(convertToGreyAction, brightnessAction, contrastAction));
 
         imageStatusListener = () -> {
             for (ImageAction action : actions) {
@@ -90,12 +94,11 @@ public class ColourActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public ConvertToGreyAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public ConvertToGreyAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -131,13 +134,12 @@ public class ColourActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
-       public BrightnessAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public BrightnessAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -153,14 +155,15 @@ public class ColourActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Brightness_Popup_Label"), -100, 100, 0, "%", 10, 50,1);
+            PopupSlider slider = new PopupSlider(msg("Brightness_Popup_Label"), -100, 100, 0, "%", 10, 50, 1);
             ChangeListener listener = (ev) -> {
                 controller.operations.update(new BrightnessAndContrast(slider.getValue(), 0));
             };
             slider.addChangeListener(listener);
             listener.stateChanged(null);
 
-            OptionPopup popup = new OptionPopup(controller.getContentPane(), msg("Brightness_Popup_Title"), new PopupSlider[] { slider });
+            OptionPopup popup = new OptionPopup(controller.getContentPane(), msg("Brightness_Popup_Title"),
+                    new PopupSlider[] { slider });
             controller.operations.end(popup.show() == OptionPopup.OK);
         }
     }
@@ -173,13 +176,12 @@ public class ColourActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
-       public  ContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public ContrastAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -195,18 +197,18 @@ public class ColourActions extends MenuActions {
          * @param e The event triggering this callback.
          */
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider(msg("Contrast_Popup_Label"),-100,100,0,"%",10,50,1);
+            PopupSlider slider = new PopupSlider(msg("Contrast_Popup_Label"), -100, 100, 0, "%", 10, 50, 1);
             ChangeListener listener = (ev) -> {
                 controller.operations.update(new BrightnessAndContrast(0, slider.getValue()));
             };
             slider.addChangeListener(listener);
             listener.stateChanged(null);
 
-            OptionPopup popup = new OptionPopup(controller.getContentPane(),msg("Contrast_Popup_Title"),new PopupSlider[]{slider});
+            OptionPopup popup = new OptionPopup(controller.getContentPane(), msg("Contrast_Popup_Title"),
+                    new PopupSlider[] { slider });
             controller.operations.end(popup.show() == OptionPopup.OK);
         }
 
     }
 
 }
-

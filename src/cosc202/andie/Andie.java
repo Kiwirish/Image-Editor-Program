@@ -49,6 +49,7 @@ public class Andie {
 
             LanguageConfig.registerLanguageListener(()->{
                 view.closeView();
+                controller.actions.init();
                 launchView();
             });
 

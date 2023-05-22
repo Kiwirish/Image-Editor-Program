@@ -26,8 +26,8 @@ import cosc202.andie.models.AndieModel;
  */
 public class ActionsController {
 
-	// private AndieModel model;
-	// private AndieController controller;
+	private AndieModel model;
+	private AndieController controller;
 
 	/** Andie's Color-related actions */
 	public ColourActions colourActions;
@@ -53,6 +53,32 @@ public class ActionsController {
 	 * @param model The base model
 	 * @param controller The base controller
 	 */
-	public ActionsController(AndieModel model, AndieController controller) {}
+	public ActionsController(AndieModel model, AndieController controller) {
+		this.model = model;
+		this.controller = controller;
+		init();
+	}
+
+	/** Initialize the actions */
+	public void init() {
+		if (colourActions != null) colourActions.removeNotify();
+		colourActions = new ColourActions(controller, model);
+		if (editActions != null) editActions.removeNotify();
+		editActions = new EditActions(controller, model);
+		if (fileActions != null) fileActions.removeNotify();
+		fileActions = new FileActions(controller, model);
+		if (filterActions != null) filterActions.removeNotify();
+		filterActions = new FilterActions(controller, model);
+		if (languageActions != null) languageActions.removeNotify();
+		languageActions = new LanguageActions(controller, model);
+		if (macroActions != null) macroActions.removeNotify();
+		macroActions = new MacroActions(controller, model);
+		if (toolActions != null) toolActions.removeNotify();
+		toolActions = new ToolActions(controller, model);
+		if (transformActions != null) transformActions.removeNotify();
+		transformActions = new TransformActions(controller, model);
+		if (viewActions != null) viewActions.removeNotify();
+		viewActions = new ViewActions(controller, model);
+	}
 
 }

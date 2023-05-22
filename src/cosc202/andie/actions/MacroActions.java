@@ -1,6 +1,8 @@
 package cosc202.andie.actions;
 
 import java.awt.event.*;
+import java.util.Arrays;
+
 import javax.swing.*;
 
 //import cosc202.andie.EditableImage;
@@ -33,18 +35,26 @@ import cosc202.andie.models.AndieModel.ModelListener;
  */
 public class MacroActions extends MenuActions {
 
+    public ShowHideMacrosAction showHideMacrosAction;
+    public RecordMacroAction recordMacroAction;
+    public ApplyMacroAction applyMacroAction;
+
+
     public MacroActions(AndieController controller, AndieModel model) {
         super("Macros", controller, model);
-        actions.add(new ShowHideMacrosAction("Show Macros Panel", null, "Show or hide the macros panel", null, null));
-        actions.add(new RecordMacroAction("Start Recording", null, "Start or Stop recording a macro", null, null));
-        actions.add(new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file to the image", null, null));
+
+        showHideMacrosAction = new ShowHideMacrosAction("Show Macros Panel", "Show or hide the macros panel", null, null);
+        recordMacroAction = new RecordMacroAction("Start Recording", "Start or Stop recording a macro", null, null);
+        applyMacroAction = new ApplyMacroAction("Apply a Macro", "Apply a macro from a file to the image", null, null);
+
+        actions.addAll(Arrays.asList(showHideMacrosAction, recordMacroAction, applyMacroAction));
     }
 
     public class ShowHideMacrosAction extends ImageAction {
         private ModelListener macrosUpdateListener;
 
-        public  ShowHideMacrosAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public  ShowHideMacrosAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
             macrosUpdateListener = () -> {
                 this.putValue(Action.NAME, model.macros.getMacrosViewOpen() ? "Hide Macros Panel" : "Show Macros Panel");
             };
@@ -66,8 +76,8 @@ public class MacroActions extends MenuActions {
         private ModelListener macrosUpdateListener;
         private ModelListener imageStatusListener;
 
-        public RecordMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public RecordMacroAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
             macrosUpdateListener = () -> {
                 this.putValue(Action.NAME, model.macros.getRecording() ? "Stop Recording" : "Start Recording");
             };
@@ -98,8 +108,8 @@ public class MacroActions extends MenuActions {
     public class ApplyMacroAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-        public ApplyMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public ApplyMacroAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 this.setEnabled(model.hasImage());
             };

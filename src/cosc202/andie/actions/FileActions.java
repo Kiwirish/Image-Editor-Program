@@ -2,6 +2,7 @@ package cosc202.andie.actions;
 
 import java.awt.event.*;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -38,15 +39,24 @@ import static cosc202.andie.LanguageConfig.msg;
  */
 public class FileActions extends MenuActions {
 
+    public FileOpenAction fileOpenAction;
+    public FileSaveAction fileSaveAction;
+    public FileSaveAsAction fileSaveAsAction;
+    public FileExportAction fileExportAction;
+    public FileCloseImageAction fileCloseImageAction;
+    public FileExitAction fileExitAction;
+
     public FileActions(AndieController controller, AndieModel model) {
         super(msg("File_Title"), controller, model);
 
-        actions.add(new FileOpenAction(msg("File_Open"), null, msg("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O), null));
-        actions.add(new FileSaveAction(msg("File_Save"), null, msg("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S), null));
-        actions.add(new FileSaveAsAction(msg("File_Save_As"), null, msg("File_Save_As_Desc"), Integer.valueOf(KeyEvent.VK_A), null));
-        actions.add(new FileExportAction(msg("File_Export"), null, msg("File_Export_Desc"), Integer.valueOf(KeyEvent.VK_E), null));
-        actions.add(new FileCloseImageAction(msg("File_Close_Image"), null, msg("File_Close_Image_Desc"), Integer.valueOf(0), null));
-        actions.add(new FileExitAction(msg("File_Exit"), null, msg("File_Exit_Desc"), Integer.valueOf(0), null));
+        fileOpenAction = new FileOpenAction(msg("File_Open"), msg("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O), null);
+        fileSaveAction = new FileSaveAction(msg("File_Save"), msg("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S), null);
+        fileSaveAsAction = new FileSaveAsAction(msg("File_Save_As"), msg("File_Save_As_Desc"), Integer.valueOf(KeyEvent.VK_A), null);
+        fileExportAction = new FileExportAction(msg("File_Export"), msg("File_Export_Desc"), Integer.valueOf(KeyEvent.VK_E), null);
+        fileCloseImageAction = new FileCloseImageAction(msg("File_Close_Image"), msg("File_Close_Image_Desc"), Integer.valueOf(0), null);
+        fileExitAction = new FileExitAction(msg("File_Exit"), msg("File_Exit_Desc"), Integer.valueOf(0), null);
+
+        actions.addAll(Arrays.asList(fileOpenAction, fileSaveAction, fileSaveAsAction, fileExportAction, fileCloseImageAction, fileExitAction));
     }
 
     /**
@@ -63,12 +73,11 @@ public class FileActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public  FileOpenAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public FileOpenAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -87,7 +96,8 @@ public class FileActions extends MenuActions {
             JFileChooser fileChooser = new JFileChooser();
 
             // Only allow files with image extensions that ImageIO can parse to be opened
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(msg("File_filter"), ImageIO.getReaderFileSuffixes());
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(msg("File_filter"),
+                    ImageIO.getReaderFileSuffixes());
             fileChooser.setFileFilter(filter);
             int result = fileChooser.showOpenDialog(null);
 
@@ -119,13 +129,12 @@ public class FileActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public  FileSaveAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
-            imageListener = ()-> {
+        public FileSaveAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
+            imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().getModified());
             };
             model.registerImageListener(imageListener);
@@ -171,13 +180,12 @@ public class FileActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public  FileSaveAsAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
-            imageStatusListener = ()-> {
+        public FileSaveAsAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
+            imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
@@ -227,7 +235,7 @@ public class FileActions extends MenuActions {
      */
     public class FileCloseImageAction extends ImageAction {
 
-		private ModelListener imageStatusListener;
+        private ModelListener imageStatusListener;
 
         /**
          * <p>
@@ -235,13 +243,12 @@ public class FileActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public  FileCloseImageAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
-            imageStatusListener = ()-> {
+        public FileCloseImageAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
+            imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
@@ -283,12 +290,11 @@ public class FileActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public  FileExitAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+        public FileExitAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -317,7 +323,7 @@ public class FileActions extends MenuActions {
      */
     public class FileExportAction extends ImageAction {
 
-		private ModelListener imageStatusListener;
+        private ModelListener imageStatusListener;
 
         /**
          * <p>
@@ -325,23 +331,22 @@ public class FileActions extends MenuActions {
          * </p>
          * 
          * @param name     The name of the action (ignored if null).
-         * @param icon     An icon to use to represent the action (ignored if null).
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public  FileExportAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
-            imageStatusListener = ()-> {
+        public FileExportAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
+            imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
             model.registerImageStatusListener(imageStatusListener);
             imageStatusListener.update();
         }
 
-		@Override
-		public void removeNotify() {
-			model.unregisterImageStatusListener(imageStatusListener);
-		}
+        @Override
+        public void removeNotify() {
+            model.unregisterImageStatusListener(imageStatusListener);
+        }
 
         /**
          * <p>

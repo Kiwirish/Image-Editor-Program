@@ -1,6 +1,8 @@
 package cosc202.andie.actions;
 
 import java.awt.event.*;
+import java.util.Arrays;
+
 import javax.swing.*;
 
 import cosc202.andie.ImageAction;
@@ -32,6 +34,10 @@ public class ViewActions extends MenuActions {
 
     private ModelListener imageStatusListener;
 
+    public ZoomInAction zoomInAction;
+    public ZoomOutAction zoomOutAction;
+    public ResetZoomAction resetZoomAction;
+
     /**
      * <p>
      * Create a set of View menu actions.
@@ -41,9 +47,12 @@ public class ViewActions extends MenuActions {
      */
     public ViewActions(AndieController controller, AndieModel model) {
         super(msg("View_Title"), controller, model);
-        actions.add(new ZoomInAction(msg("ZoomIn_Title"), null, msg("ZoomIn_Desc"), Integer.valueOf(KeyEvent.VK_PLUS), null));
-        actions.add(new ZoomOutAction(msg("ZoomOut_Title"), null, msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS), null));
-        actions.add(new ResetZoomAction(msg("ZoomReset_Title"), null, msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2), null));
+
+        zoomInAction = new ZoomInAction(msg("ZoomIn_Title"), msg("ZoomIn_Desc"), Integer.valueOf(KeyEvent.VK_PLUS), null);
+        zoomOutAction = new ZoomOutAction(msg("ZoomOut_Title"), msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS), null);
+        resetZoomAction = new ResetZoomAction(msg("ZoomReset_Title"), msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2), null);
+
+        actions.addAll(Arrays.asList(zoomInAction, zoomOutAction, resetZoomAction));
 
         imageStatusListener = ()-> {
             for (ImageAction action : actions) {
@@ -77,12 +86,11 @@ public class ViewActions extends MenuActions {
          * </p>
          * 
          * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  ZoomInAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+       public  ZoomInAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -119,12 +127,11 @@ public class ViewActions extends MenuActions {
          * </p>
          * 
          * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  ZoomOutAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+       public  ZoomOutAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -161,12 +168,11 @@ public class ViewActions extends MenuActions {
          * </p>
          * 
          * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  ResetZoomAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+       public  ResetZoomAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, desc, mnemonic, keyboardShortcut);
         }
 
         /**

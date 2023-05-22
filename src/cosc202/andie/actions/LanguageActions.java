@@ -1,6 +1,8 @@
 package cosc202.andie.actions;
 
 import java.awt.event.*;
+import java.util.Arrays;
+
 import javax.swing.*;
 
 import cosc202.andie.ImageAction;
@@ -31,6 +33,15 @@ import static cosc202.andie.LanguageConfig.Language;
  */
 public class LanguageActions extends MenuActions {
 
+    LanguageAction setEnglishAction;
+    LanguageAction setMaoriAction;
+    LanguageAction setFrenchAction;
+    LanguageAction setGermanAction;
+    LanguageAction setSpanishAction;
+    LanguageAction setTurkishAction;
+    LanguageAction setItalianAction;
+
+
     /**
      * Create a set of language actions
      * @param model
@@ -38,13 +49,16 @@ public class LanguageActions extends MenuActions {
      */
     public LanguageActions(AndieController controller, AndieModel model){
         super(msg("Language_Title"), controller, model);
-        actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, null, Language.ENGLISH));
-        actions.add(new LanguageAction(msg("Maori_Title"), null , msg("Maori_Desc"), null, null, Language.MAORI));
-        actions.add(new LanguageAction(msg("French_Title"), null , msg("French_Desc"), null, null, Language.FRENCH));
-        actions.add(new LanguageAction(msg("German_Title"), null , msg("German_Desc"), null, null, Language.GERMAN));
-        actions.add(new LanguageAction(msg("Spanish_Title"), null , msg("Spanish_Desc"), null, null, Language.SPANISH));
-        actions.add(new LanguageAction(msg("Turkish_Title"), null , msg("Turkish_Desc"), null, null, Language.TURKISH));
-        actions.add(new LanguageAction(msg("Italian_Title"), null , msg("Italian_Desc"), null, null, Language.ITALIAN));
+
+        setEnglishAction = new LanguageAction(msg("English_Title"), msg("English_Desc"), null, null, Language.ENGLISH);
+        setMaoriAction = new LanguageAction(msg("Maori_Title"), msg("Maori_Desc"), null, null, Language.MAORI);
+        setFrenchAction = new LanguageAction(msg("French_Title"), msg("French_Desc"), null, null, Language.FRENCH);
+        setGermanAction = new LanguageAction(msg("German_Title"), msg("German_Desc"), null, null, Language.GERMAN);
+        setSpanishAction = new LanguageAction(msg("Spanish_Title"), msg("Spanish_Desc"), null, null, Language.SPANISH);
+        setTurkishAction = new LanguageAction(msg("Turkish_Title"), msg("Turkish_Desc"), null, null, Language.TURKISH);
+        setItalianAction = new LanguageAction(msg("Italian_Title"), msg("Italian_Desc"), null, null, Language.ITALIAN);
+        
+        actions.addAll(Arrays.asList(setEnglishAction, setMaoriAction, setFrenchAction, setGermanAction, setSpanishAction, setTurkishAction, setItalianAction));
     }
 
     /**
@@ -61,13 +75,12 @@ public class LanguageActions extends MenuActions {
          * </p>
          * 
          * @param name The name of the action (ignored if null).
-         * @param icon An icon to use to represent the action (ignored if null).
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          * @param language The key for the language to change to
          */
-       public LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut, Language language){
-            super(name, icon, desc, mnemonic, keyboardShortcut);
+       public LanguageAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut, Language language){
+            super(name, desc, mnemonic, keyboardShortcut);
             this.language = language;
             languageListener = ()->{
                 setEnabled(LanguageConfig.getLanguage() != language);
