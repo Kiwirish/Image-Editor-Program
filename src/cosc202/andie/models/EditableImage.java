@@ -62,10 +62,8 @@ public class EditableImage {
      * <p>
      * Create a new EditableImage.
      * </p>
-     * 
-     * <p>
-     * A new EditableImage has no image (it is a null reference), and an empty stack of operations.
-     * </p>
+     * @param image The original image 
+     * @param serializedOps A string representation of the operations to be applied to the image
      */
     public EditableImage(BufferedImage image, String serializedOps) {
         this.original = image;
@@ -75,6 +73,10 @@ public class EditableImage {
         lastSavedOps = opsToString(ops);
     }
 
+    /**
+     * Create a new EditableImage.
+     * @param image The original image
+     */
     public EditableImage(BufferedImage image) {
         this.original = image;
         this.ops = new Stack<ImageOperation>();
@@ -83,22 +85,46 @@ public class EditableImage {
         lastSavedOps = opsToString(ops);
     }
 
+    /**
+     * Get the size of the current image
+     * @return The size of the current image
+     */
     public Dimension getSize() {
         return new Dimension(current.getWidth(), current.getHeight());
     }
 
+    /**
+     * Informs the EditableImage that its changes have been saved.
+     * <p> Used to determine if the image has been modified since the last save. </p>
+     */
     public void saved() {
         lastSavedOps = opsToString(ops);
         notifyImageListeners(imageListeners);
     }
 
+    /**
+     * Gets the current image's operations as an Base64 encoded string
+     * @return The operations as an Base64 encoded string
+     */
     public String getOpsString() {
         return opsToString(ops);
     }
+
+    /**
+     * Does the current image have any operations applied to it?
+     * @return true if there are operations
+     */
     public boolean hasOps() {
         return !ops.empty();
     }
 
+    /**
+     * Creates an appropriately rendered image of the current image for export
+     * <p> If the current image has transparency, and the format does not support transparency,
+     * the image will be rendered on a white background. </p>
+     * @param format The image format to export as. (pngs and gifs support transparency, jpgs do not)
+     * @return The image to export
+     */
     public BufferedImage getExportImage(String format) {
         boolean formatSupportsTransparency = format == "png" || format == "gif";
         if (!formatSupportsTransparency && current.getTransparency() != Transparency.OPAQUE) {
@@ -140,20 +166,44 @@ public class EditableImage {
         return true;
     }
 
+    /**
+     * Registers a listener to be notified when the image content changes.
+     * @param listener The listener to register
+     */
 	public void registerImageListener(ImageListener listener) {
 		imageListeners.add(listener);
 	}
+
+    /**
+     * Unregisters a listener from being notified when the image content changes.
+     * @param listener The listener to unregister
+     */
     public void unregisterImageListener(ImageListener listener) {
         imageListeners.remove(listener);
     }
+
+    /**
+     * Notifies all registered listeners that the image has changed.
+     * @param listeners The listeners to notify
+     */
 	private void notifyImageListeners(ArrayList<ImageListener> listeners) {
 		for (ImageListener listener : listeners) {
 			listener.update();
 		}
     }
+
+    /**
+     * Registers a listener to be notified when an operation is applied to the image.
+     * @param listener The listener to register
+     */
     public void registerOperationListener(OperationListener listener) {
         operationListeners.add(listener);
     }
+
+    /**
+     * Unregisters a listener from being notified when an operation is applied to the image.
+     * @param listener The listener to unregister
+     */
     public void unregisterOperationListener(OperationListener listener) {
         operationListeners.remove(listener);
     }
@@ -221,6 +271,10 @@ public class EditableImage {
         return current;
     }
 
+    /**
+     * Get the original image before any operations have been applied.
+     * @return
+     */
     public BufferedImage getOriginalImage() {
         return original;
     }
@@ -278,6 +332,11 @@ public class EditableImage {
         return true;
     }
 
+    /**
+     * Converts a stack of {@link ImageOperation}s to a Base64 encoded string.
+     * @param ops The stack of {@link ImageOperation}s to convert
+     * @return A Base64 encoded string representing the stack of {@link ImageOperation}s
+     */
     public static String opsToString(Stack<ImageOperation> ops) {
         ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
         try {
@@ -290,6 +349,12 @@ public class EditableImage {
         return Base64.getEncoder().encodeToString(bytesOut.toByteArray()); 
     }
 
+    /**
+     * Converts a Base64 encoded string to a stack of {@link ImageOperation}s.
+     * <p> If the string cannot be decoded, an empty stack is returned. </p>
+     * @param s The Base64 encoded string to convert
+     * @return A stack of {@link ImageOperation}s represented by the string
+     */
     public static Stack<ImageOperation> stringToOps(String s) {
         try {
         byte[] bytes = Base64.getDecoder().decode(s);
@@ -303,12 +368,21 @@ public class EditableImage {
         }
     }
 
+    /** A listener for image content update events */
 	public interface ImageListener extends EventListener {
+        /** Called when the image content has been updated. */
 		public void update();
 	}
 
+    /** A listener for image operation additions and removals */
 	public interface OperationListener extends EventListener {
+        /**
+         * Called when an operation is applied to the image.
+         * @param operation The operation that was applied
+         */
 		public void operationApplied(ImageOperation operation);
+        
+        /** Called when an operation is removed from the image. */
         public void operationRemoved();
 	}
 }

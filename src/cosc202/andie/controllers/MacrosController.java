@@ -101,9 +101,12 @@ public class MacrosController {
 			if (!macroFile.exists())
 				throw new IOException();
 			String macroString = Files.readString(macroFile.toPath(), Charset.defaultCharset());
-			model.macros.applyMacroString(macroString);
+			if (model.macros.applyMacroString(macroString)) {
+				JOptionPane.showMessageDialog(controller.getContentPane(), "Macro applied successfully.");
+			} else {
+				JOptionPane.showMessageDialog(controller.getContentPane(), "There was an issue applying an operation in this macro.");
+			}
 
-			JOptionPane.showMessageDialog(controller.getContentPane(), "Macro applied successfully.");
 
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(controller.getContentPane(), "IO Error reading macro file.");
