@@ -28,7 +28,7 @@ unit-test-job:
     - echo "Attempting to run unit tests..."
     - javac -d compiled $(find src -name "*.java") -cp "lib/*"
     - cp -r src/languages compiled
-    - cp -r src/icon.png compiled
+    - cp -r src/resources compiled
     - java -jar lib/junit-platform-console-standalone-1.9.2.jar -classpath compiled --select-package tests.cosc202.andie
 
 build-jar-job:
@@ -40,7 +40,7 @@ build-jar-job:
     - echo "Compiling to JAR file..."
     - javac -d compiled $(find src/cosc202 -name "*.java") -cp "lib/*"
     - cp -r src/languages compiled
-    - cp -r src/icon.png compiled
+    - cp -r src/resources compiled
     - jar cfe Andie.jar cosc202.andie.Andie -C compiled .
     - mkdir -p public
     - mv Andie.jar public/
