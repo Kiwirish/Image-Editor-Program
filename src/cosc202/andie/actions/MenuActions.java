@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import cosc202.andie.ImageAction;
 import cosc202.andie.controllers.AndieController;
@@ -63,7 +64,11 @@ public abstract class MenuActions {
 			}
 		};
 		for (ImageAction action: actions) {
-			menu.add(new JMenuItem(action));
+			JMenuItem item = new JMenuItem(action);
+			KeyStroke shortcut = action.getShortcut();
+			if (shortcut != null)
+				item.setAccelerator(shortcut);
+			menu.add(item);
 		}
 		return menu;
 	}

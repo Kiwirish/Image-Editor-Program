@@ -53,12 +53,12 @@ public class FilterActions extends MenuActions {
      */
     public FilterActions(AndieController controller, AndieModel model) {
         super(msg("Filter_Title"), controller, model);
-        actions.add(new SharpenFilterAction(msg("SharpenFilter_Title"), null, msg("SharpenFilter_Desc"), Integer.valueOf(KeyEvent.VK_S)));
-        actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G)));
-        actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_D)));
-        actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M)));
-        actions.add(new EmbossFilterAction("Emboss Filter", null, "Apply an Emboss Filter", Integer.valueOf(KeyEvent.VK_E)));
-        actions.add(new SobelFilterAction("Sobel Filter", null, "Apply a Sobel Filter", Integer.valueOf(KeyEvent.VK_B)));
+        actions.add(new SharpenFilterAction(msg("SharpenFilter_Title"), null, msg("SharpenFilter_Desc"), Integer.valueOf(KeyEvent.VK_S), null));
+        actions.add(new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), null, msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G),null));
+        actions.add(new MedianFilterAction(msg("MedianFilter_Title"), null, msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_D),null));
+        actions.add(new MeanFilterAction(msg("MeanFilter_Title"), null, msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M),null));
+        actions.add(new EmbossFilterAction("Emboss Filter", null, "Apply an Emboss Filter", Integer.valueOf(KeyEvent.VK_E),null));
+        actions.add(new SobelFilterAction("Sobel Filter", null, "Apply a Sobel Filter", Integer.valueOf(KeyEvent.VK_B),null));
         imageStatusListener = ()-> {
             for (ImageAction action : actions) {
                 action.setEnabled(model.hasImage());
@@ -93,8 +93,8 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public MeanFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public MeanFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -142,8 +142,8 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public SharpenFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -183,8 +183,8 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public GaussianBlurFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -231,8 +231,8 @@ public class FilterActions extends MenuActions {
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public MedianFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public MedianFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -263,8 +263,8 @@ public class FilterActions extends MenuActions {
     
     public class EmbossFilterAction extends ImageAction { 
         
-       public EmbossFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public EmbossFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         public void actionPerformed(ActionEvent e) {
@@ -283,8 +283,8 @@ public class FilterActions extends MenuActions {
 
     public class SobelFilterAction extends ImageAction { 
         
-       public SobelFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public SobelFilterAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         public void actionPerformed(ActionEvent e) {

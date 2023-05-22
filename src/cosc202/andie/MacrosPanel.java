@@ -88,8 +88,8 @@ public class MacrosPanel extends JPanel {
 		controlsPanelLabel.setAlignmentX(CENTER_ALIGNMENT);
 		controlsPanel.add(controlsPanelLabel);
 
-		recordMacroAction = controller.actions.macroActions.new RecordMacroAction("Start Recording", null, "Start recording a Macro", null);
-		applyMacroAction = controller.actions.macroActions.new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file", null);
+		recordMacroAction = controller.actions.macroActions.new RecordMacroAction("Start Recording", null, "Start recording a Macro", null, null);
+		applyMacroAction = controller.actions.macroActions.new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file", null, null);
 
 		//Add vertical space
 		controlsPanel.add(new JLabel(" "));

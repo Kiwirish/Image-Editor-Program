@@ -2,6 +2,7 @@ package cosc202.andie.models;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 
 import javax.imageio.ImageIO;
+
 
 import cosc202.andie.ImageOperation;
 import cosc202.andie.Utils;
@@ -40,6 +42,7 @@ public class AndieModel {
 
 	/** True if running on Mac OS */
 	public static boolean IS_MAC = System.getProperty("os.name").toLowerCase().startsWith("mac");
+	public static int COMTROL = IS_MAC ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
 
 	private EditableImage image;
 	private BufferedImage previewImage;

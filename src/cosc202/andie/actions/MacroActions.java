@@ -35,16 +35,16 @@ public class MacroActions extends MenuActions {
 
     public MacroActions(AndieController controller, AndieModel model) {
         super("Macros", controller, model);
-        actions.add(new ShowHideMacrosAction("Show Macros Panel", null, "Show or hide the macros panel", null));
-        actions.add(new RecordMacroAction("Start Recording", null, "Start or Stop recording a macro", null));
-        actions.add(new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file to the image", null));
+        actions.add(new ShowHideMacrosAction("Show Macros Panel", null, "Show or hide the macros panel", null, null));
+        actions.add(new RecordMacroAction("Start Recording", null, "Start or Stop recording a macro", null, null));
+        actions.add(new ApplyMacroAction("Apply a Macro", null, "Apply a macro from a file to the image", null, null));
     }
 
     public class ShowHideMacrosAction extends ImageAction {
         private ModelListener macrosUpdateListener;
 
-        public  ShowHideMacrosAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+        public  ShowHideMacrosAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             macrosUpdateListener = () -> {
                 this.putValue(Action.NAME, model.macros.getMacrosViewOpen() ? "Hide Macros Panel" : "Show Macros Panel");
             };
@@ -66,8 +66,8 @@ public class MacroActions extends MenuActions {
         private ModelListener macrosUpdateListener;
         private ModelListener imageStatusListener;
 
-        public RecordMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+        public RecordMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             macrosUpdateListener = () -> {
                 this.putValue(Action.NAME, model.macros.getRecording() ? "Stop Recording" : "Start Recording");
             };
@@ -98,8 +98,8 @@ public class MacroActions extends MenuActions {
     public class ApplyMacroAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-        public ApplyMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+        public ApplyMacroAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 this.setEnabled(model.hasImage());
             };

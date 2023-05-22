@@ -38,13 +38,13 @@ public class LanguageActions extends MenuActions {
      */
     public LanguageActions(AndieController controller, AndieModel model){
         super(msg("Language_Title"), controller, model);
-        actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, Language.ENGLISH));
-        actions.add(new LanguageAction(msg("Maori_Title"), null , msg("Maori_Desc"), null, Language.MAORI));
-        actions.add(new LanguageAction(msg("French_Title"), null , msg("French_Desc"), null, Language.FRENCH));
-        actions.add(new LanguageAction(msg("German_Title"), null , msg("German_Desc"), null, Language.GERMAN));
-        actions.add(new LanguageAction(msg("Spanish_Title"), null , msg("Spanish_Desc"), null, Language.SPANISH));
-        actions.add(new LanguageAction(msg("Turkish_Title"), null , msg("Turkish_Desc"), null, Language.TURKISH));
-        actions.add(new LanguageAction(msg("Italian_Title"), null , msg("Italian_Desc"), null, Language.ITALIAN));
+        actions.add(new LanguageAction(msg("English_Title"), null , msg("English_Desc"), null, null, Language.ENGLISH));
+        actions.add(new LanguageAction(msg("Maori_Title"), null , msg("Maori_Desc"), null, null, Language.MAORI));
+        actions.add(new LanguageAction(msg("French_Title"), null , msg("French_Desc"), null, null, Language.FRENCH));
+        actions.add(new LanguageAction(msg("German_Title"), null , msg("German_Desc"), null, null, Language.GERMAN));
+        actions.add(new LanguageAction(msg("Spanish_Title"), null , msg("Spanish_Desc"), null, null, Language.SPANISH));
+        actions.add(new LanguageAction(msg("Turkish_Title"), null , msg("Turkish_Desc"), null, null, Language.TURKISH));
+        actions.add(new LanguageAction(msg("Italian_Title"), null , msg("Italian_Desc"), null, null, Language.ITALIAN));
     }
 
     /**
@@ -66,8 +66,8 @@ public class LanguageActions extends MenuActions {
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          * @param language The key for the language to change to
          */
-       public LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, Language language){
-            super(name, icon, desc, mnemonic);
+       public LanguageAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut, Language language){
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             this.language = language;
             languageListener = ()->{
                 setEnabled(LanguageConfig.getLanguage() != language);

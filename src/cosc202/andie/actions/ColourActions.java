@@ -55,10 +55,10 @@ public class ColourActions extends MenuActions {
     public ColourActions(AndieController controller, AndieModel model) {
         super(msg("Colour_Title"), controller, model);
         actions.add(new ConvertToGreyAction(msg("ConvertToGrey_Title"), null, msg("ConvertToGrey_Desc"),
-                Integer.valueOf(KeyEvent.VK_G)));
+                Integer.valueOf(KeyEvent.VK_G), null));
         actions.add(new BrightnessAction(msg("Brightness_Title"), null, msg("Brightness_Desc"),
-                Integer.valueOf(KeyEvent.VK_B)));
-        actions.add(new ContrastAction(msg("Contrast_Title"), null, msg("Contrast_Desc"), null));
+                Integer.valueOf(KeyEvent.VK_B), null));
+        actions.add(new ContrastAction(msg("Contrast_Title"), null, msg("Contrast_Desc"), null, null));
 
         imageStatusListener = () -> {
             for (ImageAction action : actions) {
@@ -94,8 +94,8 @@ public class ColourActions extends MenuActions {
          * @param desc     A brief description of the action (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
-       public ConvertToGreyAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public ConvertToGreyAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -136,8 +136,8 @@ public class ColourActions extends MenuActions {
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
-       public BrightnessAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public BrightnessAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         /**
@@ -178,8 +178,8 @@ public class ColourActions extends MenuActions {
          * @param mnemonic A mnemonic key to use as a shortcut (ignored if null).
          */
 
-       public  ContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  ContrastAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
         }
 
         /**

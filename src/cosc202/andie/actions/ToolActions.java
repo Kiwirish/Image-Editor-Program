@@ -3,6 +3,7 @@ package cosc202.andie.actions;
 import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 
 import cosc202.andie.ImageAction;
 import cosc202.andie.controllers.AndieController;
@@ -19,10 +20,10 @@ public class ToolActions extends MenuActions {
 	public ToolActions(AndieController controller, AndieModel model) {
 		super("Tools", controller, model);
 
-		actions.add(new SelectToolAction("Select", null, "Select regions", null));
-		actions.add(new LineToolAction("Line", null, "Draw a line", null));
-		actions.add(new RectangleToolAction("Rectangle", null, "Draw a rectangle", null));
-		actions.add(new ElipseToolAction("Elipse", null, "Draw an elipse", null));
+		actions.add(new SelectToolAction("Select", null, "Select regions", null, null));
+		actions.add(new LineToolAction("Line", null, "Draw a line", null, null));
+		actions.add(new RectangleToolAction("Rectangle", null, "Draw a rectangle", null, null));
+		actions.add(new ElipseToolAction("Elipse", null, "Draw an elipse", null, null));
 	}
 
 
@@ -30,8 +31,8 @@ public class ToolActions extends MenuActions {
 
 		private ModelListener updateListener;
 
-		public ToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-			super(name, icon, desc, mnemonic);
+		public ToolAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+			super(name, icon, desc, mnemonic, keyboardShortcut);
 			updateListener = () -> {
 				setEnabled(model.hasImage() && (model.tool.getTool() == null || !model.tool.getTool().getClass().equals(getToolClass())));
 			};
@@ -52,8 +53,8 @@ public class ToolActions extends MenuActions {
 
 	public class SelectToolAction extends ToolAction {
 
-	public 	SelectToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-			super(name, icon, desc, mnemonic);
+	public 	SelectToolAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+			super(name, icon, desc, mnemonic, keyboardShortcut);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -66,8 +67,8 @@ public class ToolActions extends MenuActions {
 
 	public class LineToolAction extends ToolAction {
 
-	public 	LineToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-			super(name, icon, desc, mnemonic);
+	public 	LineToolAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+			super(name, icon, desc, mnemonic, keyboardShortcut);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -79,8 +80,8 @@ public class ToolActions extends MenuActions {
 	}
 	public class RectangleToolAction extends ToolAction {
 
-	public 	RectangleToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-			super(name, icon, desc, mnemonic);
+	public 	RectangleToolAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+			super(name, icon, desc, mnemonic, keyboardShortcut);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -92,8 +93,8 @@ public class ToolActions extends MenuActions {
 	}
 	public class ElipseToolAction extends ToolAction {
 
-	public 	ElipseToolAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-			super(name, icon, desc, mnemonic);
+	public 	ElipseToolAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+			super(name, icon, desc, mnemonic, keyboardShortcut);
 		}
 
 		public void actionPerformed(ActionEvent e) {

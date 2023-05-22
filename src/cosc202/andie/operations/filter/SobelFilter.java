@@ -9,9 +9,6 @@ import cosc202.andie.ImageOperation;
  * ImageOperation to apply an Sobel filter.
  * </p>
  * 
- * <p>
- * </p>
- * 
  * <p> 
  * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
  * </p>
@@ -61,6 +58,5 @@ public class SobelFilter implements ImageOperation  {
     public String operationDescription() {
         return String.format("Sobel Filter [%s]", horizontal ? "Horizontal" : "Vertical");
     }
-
 
 }

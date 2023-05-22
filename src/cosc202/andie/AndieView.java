@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -68,6 +67,7 @@ public class AndieView {
 				filepathListener.update();
 
         JPanel contentPane = new JPanel();
+				
         frame.setContentPane(contentPane);
         contentPane.setLayout(new BorderLayout());
 
@@ -102,16 +102,16 @@ public class AndieView {
 		Image img2 = crop.getImage();
         Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon crop2 = new ImageIcon(newimg2);    
-        JButton cropButton = new JButton(controller.actions.transformActions.new CropAction("", crop2 , "Crop", null));
+        JButton cropButton = new JButton(controller.actions.transformActions.new CropAction("", crop2 , "Crop", null, null));
         button.add(cropButton);
 		cropButton.addActionListener((e) -> System.out.println("Crop"));
-		//cropButton.addActionListener((e) -> );
+		// cropButton.addActionListener((e) -> );
 
 		ImageIcon select = new ImageIcon(Andie.class.getClassLoader().getResource("Select.png"));
 		Image selectimg = select.getImage();
         Image selectnewimg = selectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon select2 = new ImageIcon(selectnewimg);    
-        JButton selectButton = new JButton(controller.actions.toolActions.new SelectToolAction("", select2 , "select", null));
+        JButton selectButton = new JButton(controller.actions.toolActions.new SelectToolAction("", select2 , "select", null, null));
         button.add(selectButton);
 		selectButton.addActionListener((e) -> System.out.println("Select"));
 
@@ -119,7 +119,7 @@ public class AndieView {
 		Image rotateimg = rotate.getImage();
         Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon rotate2 = new ImageIcon(newrotateimg);    
-        JButton rotateButton = new JButton(controller.actions.transformActions.new RotateLeftAction("", rotate2 , "AC rotate", null));
+        JButton rotateButton = new JButton(controller.actions.transformActions.new RotateLeftAction("", rotate2 , "AC rotate", null, null));
         button.add(rotateButton);
 		rotateButton.addActionListener((e) -> System.out.println("Anti Clockwise Rotate"));
 
@@ -127,7 +127,7 @@ public class AndieView {
 		Image crotateimg = crotate.getImage();
         Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
-        JButton crotateButton = new JButton(controller.actions.transformActions.new RotateRightAction("", crotate2 , "C rotate", null));
+        JButton crotateButton = new JButton(controller.actions.transformActions.new RotateRightAction("", crotate2 , "C rotate", null, null));
         button.add(crotateButton);
 		crotateButton.addActionListener((e) -> System.out.println("Clockwise Rotate"));
 
@@ -135,7 +135,7 @@ public class AndieView {
 		Image Undoimg = Undo.getImage();
         Image Undonewimg = Undoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon Undo2 = new ImageIcon(Undonewimg);    
-        JButton UndoButton = new JButton(controller.actions.editActions.new UndoAction("", Undo2 , "Undo", KeyEvent.VK_Z));
+        JButton UndoButton = new JButton(controller.actions.editActions.new UndoAction("", Undo2 , "Undo", null, null));
         button.add(UndoButton);
 		selectButton.addActionListener((e) -> System.out.println("Undo"));
 
@@ -144,7 +144,7 @@ public class AndieView {
 		Image Redoimg = Redo.getImage();
         Image Redonewimg = Redoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon Redo2 = new ImageIcon(Redonewimg);    
-        JButton RedoButton = new JButton(controller.actions.editActions.new RedoAction("", Redo2 , "redo", KeyEvent.VK_W));
+        JButton RedoButton = new JButton(controller.actions.editActions.new RedoAction("", Redo2 , "redo", null, null));
         button.add(RedoButton);
 		selectButton.addActionListener((e) -> System.out.println("Redo"));
 

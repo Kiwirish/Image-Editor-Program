@@ -11,6 +11,7 @@ import cosc202.andie.models.EditableImage;
 import cosc202.andie.models.AndieModel.ModelListener;
 
 import static cosc202.andie.LanguageConfig.msg;
+import static cosc202.andie.models.AndieModel.COMTROL;
 
  /**
  * <p>
@@ -42,8 +43,8 @@ public class EditActions extends MenuActions{
      */
     public EditActions(AndieController controller, AndieModel model) {
         super(msg("Edit_Title"), controller, model);
-        actions.add(new UndoAction(msg("Undo_Title"), null, msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z)));
-        actions.add(new RedoAction(msg("Redo_Title"), null, msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y)));
+        actions.add(new UndoAction(msg("Undo_Title"), null, msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z), KeyStroke.getKeyStroke(KeyEvent.VK_Z, COMTROL)));
+        actions.add(new RedoAction(msg("Redo_Title"), null, msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y), KeyStroke.getKeyStroke(KeyEvent.VK_Y, COMTROL)));
     }
 
     /**
@@ -67,8 +68,8 @@ public class EditActions extends MenuActions{
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  UndoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  UndoAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().undoable());
             };
@@ -118,8 +119,8 @@ public class EditActions extends MenuActions{
          * @param desc A brief description of the action  (ignored if null).
          * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
          */
-       public  RedoAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  RedoAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageListener = () -> {
                 setEnabled(model.hasImage() && model.getImage().redoable());
             };

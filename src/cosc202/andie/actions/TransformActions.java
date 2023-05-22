@@ -46,21 +46,21 @@ public class TransformActions extends MenuActions {
 
     public TransformActions(AndieController controller, AndieModel model) {
         super(msg("Transform_Title"), controller, model);
-        actions.add(new ResizeAction(msg("TransformResize_Title"), null, msg("TransformResize_Desc"), Integer.valueOf(KeyEvent.VK_R)));
-        actions.add(new RotateRightAction(msg("TransformRotateClockwise_Title"), null, msg("TransformRotateClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
-        actions.add(new RotateLeftAction(msg("TransformRotateAntiClockwise_Title"), null, msg("TransformRotateAntiClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H)));
-        actions.add(new Rotate180Action(msg("TransformRotate180_Title"), null, msg("TransformRotate180_Desc"), Integer.valueOf(KeyEvent.VK_H)));
-        actions.add(new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), null, msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
-        actions.add(new FlipVerticalAction(msg("TransformFlipVertical_Title"), null, msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1)));
-        actions.add(new CropAction("Crop", null, "Crops the image", null));
+        actions.add(new ResizeAction(msg("TransformResize_Title"), null, msg("TransformResize_Desc"), Integer.valueOf(KeyEvent.VK_R), null));
+        actions.add(new RotateRightAction(msg("TransformRotateClockwise_Title"), null, msg("TransformRotateClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H), null));
+        actions.add(new RotateLeftAction(msg("TransformRotateAntiClockwise_Title"), null, msg("TransformRotateAntiClockwise_Desc"), Integer.valueOf(KeyEvent.VK_H), null));
+        actions.add(new Rotate180Action(msg("TransformRotate180_Title"), null, msg("TransformRotate180_Desc"), Integer.valueOf(KeyEvent.VK_H), null));
+        actions.add(new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), null, msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1), null));
+        actions.add(new FlipVerticalAction(msg("TransformFlipVertical_Title"), null, msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1), null));
+        actions.add(new CropAction("Crop", null, "Crops the image", null, null));
     }
 
     /** action to apply flip vertical */
     public class FlipVerticalAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-       public  FlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  FlipVerticalAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
@@ -83,8 +83,8 @@ public class TransformActions extends MenuActions {
     public class FlipHorizontalAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-       public  FlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  FlipHorizontalAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
@@ -107,8 +107,8 @@ public class TransformActions extends MenuActions {
     public class ResizeAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-       public  ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  ResizeAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
@@ -140,8 +140,8 @@ public class TransformActions extends MenuActions {
     public class RotateRightAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-       public  RotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  RotateRightAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
@@ -164,8 +164,8 @@ public class TransformActions extends MenuActions {
     public class RotateLeftAction extends ImageAction {
         private ModelListener imageStatusListener;
 
-       public  RotateLeftAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  RotateLeftAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
@@ -188,8 +188,8 @@ public class TransformActions extends MenuActions {
     public class Rotate180Action extends ImageAction {
         private ModelListener imageStatusListener;
 
-       public  Rotate180Action(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  Rotate180Action(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             imageStatusListener = () -> {
                 setEnabled(model.hasImage());
             };
@@ -211,8 +211,8 @@ public class TransformActions extends MenuActions {
     public class CropAction extends ImageAction {
         private ModelListener updateListener;
 
-       public  CropAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
-            super(name, icon, desc, mnemonic);
+       public  CropAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
+            super(name, icon, desc, mnemonic, keyboardShortcut);
             updateListener = () -> {
                 setEnabled(model.hasImage() && model.tool.getSelection() != null);
             };

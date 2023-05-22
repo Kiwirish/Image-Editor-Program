@@ -29,6 +29,12 @@ import javax.swing.*;
  * @version 2.0
  */
 public abstract class ImageAction extends AbstractAction {
+
+    private KeyStroke shortcut;
+
+    public KeyStroke getShortcut() {
+        return shortcut;
+    }
    
     /**
      * <p>
@@ -43,15 +49,19 @@ public abstract class ImageAction extends AbstractAction {
      * @param icon An icon to use to represent the action (ignored if null).
      * @param desc A brief description of the action  (ignored if null).
      * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
+     * @param keyboardShortcut A KeyStroke corrosponding to the keyboard shortcut to trigger the action (ignored if null)
      */
-    public ImageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+    public ImageAction(String name, ImageIcon icon, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
         super(name, icon);
-        if (desc != null) {
+        if (desc != null) 
            putValue(SHORT_DESCRIPTION, desc);
-        }
-        if (mnemonic != null) {
+        if (mnemonic != null) 
             putValue(MNEMONIC_KEY, mnemonic);
-        }
+        this.shortcut = keyboardShortcut;
+    }
+
+    public ImageAction(String name, ImageIcon icon, String desc, Integer mnemonic) {
+        this(name, icon, desc, mnemonic, null);
     }
 
     /** Called when the corrosponding menu item is removed */
