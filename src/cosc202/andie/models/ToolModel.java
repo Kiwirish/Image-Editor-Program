@@ -113,6 +113,8 @@ public class ToolModel {
 	}
 
 	private void init() {
+		if (this.tool != null)
+			this.tool.deactivateTool();
 		this.tool = null;
 		this.strokeColor = Color.BLACK;
 		this.fillColor = Color.WHITE;
