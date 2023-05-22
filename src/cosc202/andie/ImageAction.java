@@ -49,7 +49,6 @@ public abstract class ImageAction extends AbstractAction {
      * @param desc A brief description of the action  (ignored if null).
      * @param mnemonic A mnemonic key to use as a shortcut  (ignored if null).
      * @param keyboardShortcut A KeyStroke corrosponding to the keyboard shortcut to trigger the action (ignored if null)
-     * @param icon An icon to use to represent the action (ignored if null).
      */
     public ImageAction(String name, String desc, Integer mnemonic, KeyStroke keyboardShortcut) {
         super(name);
