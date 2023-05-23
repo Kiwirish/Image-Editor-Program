@@ -9,17 +9,17 @@ import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.MouseModel.MouseModelListener;
 import cosc202.andie.models.MouseModel.MouseStatus;
 
+import cosc202.andie.models.ToolModel;
+
 /**
  * <p>
  * Select tool. Sets the selection rectangle as the user drags the mouse.
  * </p>
  * 
  * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
- * </p>
  * 
  * @see Tool
  * @see ToolModel
- * 
  * @author Jeb Nicholson
  * @version 1.0
  */

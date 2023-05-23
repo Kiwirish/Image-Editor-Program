@@ -9,6 +9,7 @@ import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.MouseModel.MouseModelListener;
 import cosc202.andie.models.MouseModel.MouseStatus;
 import cosc202.andie.operations.shapes.Line;
+import cosc202.andie.models.ToolModel;
 
 /**
  * <p>
@@ -23,7 +24,7 @@ import cosc202.andie.operations.shapes.Line;
  * </p>
  * 
  * @see Tool
- * @see RectangleShape
+ * @see Line
  * @see ToolModel
  * 
  * @author Jeb Nicholson
