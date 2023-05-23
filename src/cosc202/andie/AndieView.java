@@ -132,9 +132,9 @@ public class AndieView {
 
 		// ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Exit.png"));
 		// Image img = icon.getImage();
-    //     Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-    //     ImageIcon icon2 = new ImageIcon(newimg);    
-    //     JButton exitButton = new JButton(icon2);
+        // Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        // ImageIcon icon2 = new ImageIcon(newimg);    
+        // JButton exitButton = new JButton(icon2);
 		// exitButton.addActionListener((e) -> controller.closeWindow());
 
 		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("assets/crop.png"));
@@ -264,19 +264,19 @@ public class AndieView {
 		
 
 		/* adding the buttons to toolbar  */
-		button.add(exitButton);
-		button.add(selectButton);
-		button.add(UndoButton);
-		button.add(RedoButton);
-		button.add(StrokeWidthButton);
-		button.add(FillColorButton);
-		//button.add(ColourButton);
-		//button.add(rotateButton);
-		button.add(crotateButton);
-		button.add(ovalButton);
-		button.add(RectButton);
-		button.add(LineButton);
-		button.add(cropButton);
+		//toolbar.add(exitButton);
+		toolbar.add(selectButton);
+		toolbar.add(UndoButton);
+		toolbar.add(RedoButton);
+		toolbar.add(StrokeWidthButton);
+		toolbar.add(FillColorButton);
+		//toolbar.add(ColourButton);
+		//toolbar.add(rotateButton);
+		toolbar.add(crotateButton);
+		toolbar.add(ovalButton);
+		toolbar.add(RectButton);
+		toolbar.add(LineButton);
+		toolbar.add(cropButton);
 
         frame.pack();
 
