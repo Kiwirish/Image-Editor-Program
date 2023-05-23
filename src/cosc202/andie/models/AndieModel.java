@@ -42,7 +42,7 @@ public class AndieModel {
 
 	/** True if running on Mac OS */
 	public static boolean IS_MAC = System.getProperty("os.name").toLowerCase().startsWith("mac");
-	public static int COMTROL = IS_MAC ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
+	public static int CONTROL = IS_MAC ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK;
 
 	private EditableImage image;
 	private BufferedImage previewImage;

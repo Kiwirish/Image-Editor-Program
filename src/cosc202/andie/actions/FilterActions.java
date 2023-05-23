@@ -70,8 +70,8 @@ public class FilterActions extends MenuActions {
         gaussianBlurFilterAction = new GaussianBlurFilterAction(msg("GaussianBlurFilter_Title"), msg("GaussianBlurFilter_Desc"), Integer.valueOf(KeyEvent.VK_G), null);
         medianFilterAction = new MedianFilterAction(msg("MedianFilter_Title"), msg("MedianFilter_Desc"), Integer.valueOf(KeyEvent.VK_D), null);
         meanFilterAction = new MeanFilterAction(msg("MeanFilter_Title"), msg("MeanFilter_Desc"), Integer.valueOf(KeyEvent.VK_M), null);
-        embossFilterAction = new EmbossFilterAction("Emboss Filter", "Apply an Emboss Filter", Integer.valueOf(KeyEvent.VK_E), null);
-        sobelFilterAction = new SobelFilterAction("Sobel Filter", "Apply a Sobel Filter", Integer.valueOf(KeyEvent.VK_B), null);
+        embossFilterAction = new EmbossFilterAction(msg("EmbossFilter_Title"), msg("EmbossFilter_Desc"), Integer.valueOf(KeyEvent.VK_E), null);
+        sobelFilterAction = new SobelFilterAction(msg("SobelFilter_Title"), msg("SobelFilter_Desc"), Integer.valueOf(KeyEvent.VK_B), null);
 
         actions.addAll(Arrays.asList(sharpenFilterAction, gaussianBlurFilterAction, medianFilterAction,
                 meanFilterAction, embossFilterAction, sobelFilterAction));
@@ -293,14 +293,14 @@ public class FilterActions extends MenuActions {
         }
 
         public void actionPerformed(ActionEvent e) {
-            PopupSlider slider = new PopupSlider("Emboss", 45, 360, 45, "˚", 45, 45, 45);
+            PopupSlider slider = new PopupSlider(msg("EmbossFilter_Popup_Msg"), 45, 360, 45, "˚", 45, 45, 45);
             ChangeListener listener = (ev) -> {
                 controller.operations.update(new EmbossFilter(slider.getValue()));
             };
             slider.addChangeListener(listener);
             listener.stateChanged(null);
 
-            OptionPopup popup = new OptionPopup(controller.getContentPane(), "Emboss Filter",
+            OptionPopup popup = new OptionPopup(controller.getContentPane(), msg("EmbossFilter_Popup_Title"),
                     new PopupSlider[] { slider });
             controller.operations.end(popup.show() == OptionPopup.OK);
         }
@@ -315,7 +315,7 @@ public class FilterActions extends MenuActions {
         }
 
         public void actionPerformed(ActionEvent e) {
-            JCheckBox checkBox = new JCheckBox("Horizontal");
+            JCheckBox checkBox = new JCheckBox(msg("SobelFilter_Popup_Msg"));
             ChangeListener listener = new ChangeListener() {
                 Boolean lastValue = null;
 
@@ -330,7 +330,7 @@ public class FilterActions extends MenuActions {
             checkBox.addChangeListener(listener);
             listener.stateChanged(null);
 
-            OptionPopup popup = new OptionPopup(controller.getContentPane(), "Sobel Filter",
+            OptionPopup popup = new OptionPopup(controller.getContentPane(), msg("SobelFilter_Popup_Title"),
                     new JComponent[] { checkBox });
             controller.operations.end(popup.show() == OptionPopup.OK);
         }

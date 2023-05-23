@@ -11,7 +11,7 @@ import cosc202.andie.models.EditableImage;
 import cosc202.andie.models.AndieModel.ModelListener;
 
 import static cosc202.andie.LanguageConfig.msg;
-import static cosc202.andie.models.AndieModel.COMTROL;
+import static cosc202.andie.models.AndieModel.CONTROL;
 
  /**
  * <p>
@@ -46,8 +46,8 @@ public class EditActions extends MenuActions{
      */
     public EditActions(AndieController controller, AndieModel model) {
         super(msg("Edit_Title"), controller, model);
-        undoAction = new UndoAction(msg("Undo_Title"), msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z), KeyStroke.getKeyStroke(KeyEvent.VK_Z, COMTROL));
-        redoAction = new RedoAction(msg("Redo_Title"), msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y), KeyStroke.getKeyStroke(KeyEvent.VK_Y, COMTROL));
+        undoAction = new UndoAction(msg("Undo_Title"), msg("Undo_Desc"), Integer.valueOf(KeyEvent.VK_Z), KeyStroke.getKeyStroke(KeyEvent.VK_Z, CONTROL));
+        redoAction = new RedoAction(msg("Redo_Title"), msg("Redo_Desc"), Integer.valueOf(KeyEvent.VK_Y), KeyStroke.getKeyStroke(KeyEvent.VK_Y, CONTROL));
 
         actions.add(undoAction); actions.add(redoAction);
     }

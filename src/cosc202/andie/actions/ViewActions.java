@@ -11,6 +11,7 @@ import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
 
 import static cosc202.andie.LanguageConfig.msg;
+import static cosc202.andie.models.AndieModel.CONTROL;
 
 /**
  * <p>
@@ -48,9 +49,9 @@ public class ViewActions extends MenuActions {
     public ViewActions(AndieController controller, AndieModel model) {
         super(msg("View_Title"), controller, model);
 
-        zoomInAction = new ZoomInAction(msg("ZoomIn_Title"), msg("ZoomIn_Desc"), Integer.valueOf(KeyEvent.VK_PLUS), null);
-        zoomOutAction = new ZoomOutAction(msg("ZoomOut_Title"), msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS), null);
-        resetZoomAction = new ResetZoomAction(msg("ZoomReset_Title"), msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2), null);
+        zoomInAction = new ZoomInAction(msg("ZoomIn_Title"), msg("ZoomIn_Desc"), Integer.valueOf(KeyEvent.VK_PLUS), KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, CONTROL));
+        zoomOutAction = new ZoomOutAction(msg("ZoomOut_Title"), msg("ZoomOut_Desc"), Integer.valueOf(KeyEvent.VK_MINUS), KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, CONTROL));
+        resetZoomAction = new ResetZoomAction(msg("ZoomReset_Title"), msg("ZoomReset_Desc"), Integer.valueOf(KeyEvent.VK_2), KeyStroke.getKeyStroke(KeyEvent.VK_R, CONTROL));
 
         actions.addAll(Arrays.asList(zoomInAction, zoomOutAction, resetZoomAction));
 

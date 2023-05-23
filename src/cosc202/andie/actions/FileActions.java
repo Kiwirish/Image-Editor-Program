@@ -13,9 +13,11 @@ import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
 
+
 import javax.imageio.*;
 
 import static cosc202.andie.LanguageConfig.msg;
+import static cosc202.andie.models.AndieModel.CONTROL;
 
 /**
  * <p>
@@ -49,12 +51,12 @@ public class FileActions extends MenuActions {
     public FileActions(AndieController controller, AndieModel model) {
         super(msg("File_Title"), controller, model);
 
-        fileOpenAction = new FileOpenAction(msg("File_Open"), msg("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O), null);
-        fileSaveAction = new FileSaveAction(msg("File_Save"), msg("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S), null);
+        fileOpenAction = new FileOpenAction(msg("File_Open"), msg("File_Open_Desc"), Integer.valueOf(KeyEvent.VK_O), KeyStroke.getKeyStroke(KeyEvent.VK_O, CONTROL));
+        fileSaveAction = new FileSaveAction(msg("File_Save"), msg("File_Save_Desc"), Integer.valueOf(KeyEvent.VK_S), KeyStroke.getKeyStroke(KeyEvent.VK_S, CONTROL));
         fileSaveAsAction = new FileSaveAsAction(msg("File_Save_As"), msg("File_Save_As_Desc"), Integer.valueOf(KeyEvent.VK_A), null);
         fileExportAction = new FileExportAction(msg("File_Export"), msg("File_Export_Desc"), Integer.valueOf(KeyEvent.VK_E), null);
         fileCloseImageAction = new FileCloseImageAction(msg("File_Close_Image"), msg("File_Close_Image_Desc"), Integer.valueOf(0), null);
-        fileExitAction = new FileExitAction(msg("File_Exit"), msg("File_Exit_Desc"), Integer.valueOf(0), null);
+        fileExitAction = new FileExitAction(msg("File_Exit"), msg("File_Exit_Desc"), Integer.valueOf(0), KeyStroke.getKeyStroke(KeyEvent.VK_Q, CONTROL));
 
         actions.addAll(Arrays.asList(fileOpenAction, fileSaveAction, fileSaveAsAction, fileExportAction, fileCloseImageAction, fileExitAction));
     }

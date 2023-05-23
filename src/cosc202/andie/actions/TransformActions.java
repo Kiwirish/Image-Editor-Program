@@ -63,7 +63,7 @@ public class TransformActions extends MenuActions {
         rotate180Action = new Rotate180Action(msg("TransformRotate180_Title"), msg("TransformRotate180_Desc"), Integer.valueOf(KeyEvent.VK_H), null);
         flipHorizontalAction = new FlipHorizontalAction(msg("TransformFlipHorizontal_Title"), msg("TransformFlipHorizontal_Desc"), Integer.valueOf(KeyEvent.VK_F1), null);
         flipVerticalAction = new FlipVerticalAction(msg("TransformFlipVertical_Title"), msg("TransformFlipVertical_Desc"), Integer.valueOf(KeyEvent.VK_F1), null);
-        cropAction = new CropAction("Crop", "Crops the image", null, null);
+        cropAction = new CropAction(msg("Crop_Title"), msg("Crop_Desc"), null, null);
 
         actions.addAll(Arrays.asList(resizeAction, rotateRightAction, rotateLeftAction, rotate180Action, flipHorizontalAction, flipVerticalAction, cropAction));
     }
