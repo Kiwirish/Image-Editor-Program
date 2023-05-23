@@ -132,9 +132,9 @@ public class AndieView {
 
 		// ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Exit.png"));
 		// Image img = icon.getImage();
-    //     Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-    //     ImageIcon icon2 = new ImageIcon(newimg);    
-    //     JButton exitButton = new JButton(icon2);
+        // Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        // ImageIcon icon2 = new ImageIcon(newimg);    
+        // JButton exitButton = new JButton(icon2);
 		// exitButton.addActionListener((e) -> controller.closeWindow());
 
 		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("assets/crop.png"));
@@ -177,12 +177,12 @@ public class AndieView {
 
 		ImageIcon oval = new ImageIcon(Andie.class.getClassLoader().getResource("assets/oval.png"));
 		Image ovalimg = oval.getImage();
-		Image ovalnewimg = ovalimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		ImageIcon oval2 = new ImageIcon(ovalnewimg);    
-		JButton ovalButton = new JButton(controller.actions.toolActions.rectangleToolAction);
-		ovalButton.setText(null);
-		ovalButton.setIcon(oval2);
-
+        Image ovalnewimg = ovalimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon oval2 = new ImageIcon(ovalnewimg);    
+        JButton ovalButton = new JButton(controller.actions.toolActions.elipseToolAction);
+				ovalButton.setText(null);
+				ovalButton.setIcon(oval2);
+        
 		ovalButton.addActionListener((e) -> System.out.println("oval"));
 
 		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/acRotate.png"));
@@ -264,15 +264,15 @@ public class AndieView {
 		
 
 		/* adding the buttons to toolbar  */
-		// button.add(exitButton);
+		//toolbar.add(exitButton);
 		toolbar.add(selectButton);
 		toolbar.add(UndoButton);
 		toolbar.add(RedoButton);
 		toolbar.add(StrokeWidthButton);
 		toolbar.add(FillColorButton);
-		//button.add(ColourButton);
-		//button.add(rotateButton);
-		toolbar.add(crotateButton);
+		toolbar.add(ColourButton);
+		//toolbar.add(rotateButton);
+		//toolbar.add(crotateButton);
 		toolbar.add(ovalButton);
 		toolbar.add(RectButton);
 		toolbar.add(LineButton);
@@ -310,8 +310,8 @@ public class AndieView {
 	}
 	public void widthPicker() {
 		
-			PopupSlider slider = new PopupSlider("Stroke Width label", 1, 100, 5, "px", 10, 50, 1);
-			OptionPopup popup = new OptionPopup(frame.getContentPane(),"Resize_Popup_Title", new PopupSlider[] { slider });
+			PopupSlider slider = new PopupSlider("Stroke Width", 1, 100, 5, "px", 10, 50, 1);
+			OptionPopup popup = new OptionPopup(frame.getContentPane(),"", new PopupSlider[] { slider });
 			
 
 			if(popup.show() == OptionPopup.OK){model.tool.setStrokeWidth(slider.getValue());};

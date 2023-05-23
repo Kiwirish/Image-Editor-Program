@@ -15,7 +15,6 @@ import javax.swing.*;
 import cosc202.andie.components.WelcomeBlank;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
-import cosc202.andie.models.EditableImage;
 import cosc202.andie.models.AndieModel.ModelListener;
 
 import static cosc202.andie.LanguageConfig.msg;
