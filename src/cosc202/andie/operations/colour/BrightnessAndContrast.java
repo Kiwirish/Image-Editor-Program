@@ -47,7 +47,7 @@ public class BrightnessAndContrast implements ImageOperation  {
      * </p>
      * 
      * @param input The image to be adjusted
-     * @return The resulting adjsuted image.
+     * @return The resulting adjusted image.
      */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
@@ -67,7 +67,7 @@ public class BrightnessAndContrast implements ImageOperation  {
                 int red = (int)((1 + (contrast / 100.0)) * (r - 127.5) + 127.5 * (1 + (brightness/100.0)));   
                 int green = (int)((1 + (contrast / 100.0 )) * (g - 127.5) + 127.5 * (1 + (brightness/100.0)));
                 int blue = (int)((1 + (contrast / 100.0 )) * (b - 127.5) + 127.5 * (1 + (brightness/100.0)));
-                //need it to be witin 0-255 for red,green,blue. (hence code below)
+                //need it to be within 0-255 for red,green,blue. (hence code below)
                 red = (int)Math.max(0, Math.min(255, red));
                 green = (int)Math.max(0, Math.min(255, green));
                 blue = (int)Math.max(0, Math.min(255, blue));
@@ -81,10 +81,17 @@ public class BrightnessAndContrast implements ImageOperation  {
         
     }
 
+    /**
+     * drawPreview, previews the BrightnessAndContrast action before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         String brightness = (this.brightness >= 0 ? "+" + this.brightness : "" + this.brightness) + "%";

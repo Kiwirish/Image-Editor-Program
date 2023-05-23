@@ -19,14 +19,27 @@ import cosc202.andie.ImageOperation;
  */
 
 public class SobelFilter implements ImageOperation  {
-    
-    boolean horizontal;; 
+    /**
+     * horizontal data field, whether its applied
+     * horizontally or vertically.
+     */
+    boolean horizontal; 
 
+    /**
+     * SobelFilter constructor, sets the inputted horizontal
+     * to this horizontal data field.
+     * @param horizontal
+     */
     public SobelFilter(boolean horizontal){
         this.horizontal = horizontal; 
     }
 
 
+    /**
+     *  The draw method, figures out which angle is inputted and selects the kernel for that
+     *  then applies the SobelFilter to the image.
+     *
+     */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
         //Figure out the kernel
         float[] kernel = new float[9];
@@ -50,10 +63,17 @@ public class SobelFilter implements ImageOperation  {
 
     }// end draw method 
 
+    /**
+     * drawPreview, previews the SobelFilter before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return String.format("Sobel Filter [%s]", horizontal ? "Horizontal" : "Vertical");

@@ -22,8 +22,7 @@ import cosc202.andie.ImageOperation;
 */
 public class Rotate180 implements ImageOperation{
 
-    public Rotate180(){
-    }
+    public Rotate180(){}
 
     /** Applys the Rotate to the image 
      * runs method twice for two 90 degree turns 
@@ -33,10 +32,17 @@ public class Rotate180 implements ImageOperation{
         return new RotateLeft().draw(new RotateLeft().draw(input));
     }
 
+    /**
+     * drawPreview, previews the 180 Rotation before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return "180 Degree Rotation";

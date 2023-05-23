@@ -25,7 +25,7 @@ public class RotateLeft implements ImageOperation{
     public RotateLeft(){
     }
 
-    /** Applys the Rotate to the image 
+    /** Applys the Rotation to the image 
      * @param input Image to be rotated 
     */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
@@ -50,11 +50,16 @@ public class RotateLeft implements ImageOperation{
 
         return output;
     }
-
+    /**
+     * drawPreview, previews the Left Rotation before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
-
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return "90 Degree Anticlockwise Rotation";

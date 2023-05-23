@@ -69,7 +69,7 @@ public class GaussianBlur implements ImageOperation {
      * <p>
      * As with many filters, the Gaussian filter is implemented via convolution.
      * The size of the convolution kernel is specified by the {@link radius}.  
-     * Larger radii lead to stronger blurring.
+     * Larger radius' lead to stronger blurring.
      * </p>
      * 
      * @param input The image to apply the Gaussian filter to.
@@ -135,11 +135,17 @@ public class GaussianBlur implements ImageOperation {
         double result = oneOverTwoPiSigmaSquared * Math.exp(exponent);
         return result;
     }
-
+    /**
+     * drawPreview, previews the GaussianBlur before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
-
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     * 
+     */
     @Override
     public String operationDescription() {
         return String.format("Mean Filter [Radius: %dpx]", radius);

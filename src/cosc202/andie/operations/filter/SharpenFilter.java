@@ -66,12 +66,20 @@ public class SharpenFilter implements ImageOperation  {
 
         return output; 
     }
-    
+
+    /**
+     * drawPreview, previews the SharpenFilter before it is actually applied to the image
+     */
     @Override
     public String operationDescription() {
         return "Sharpen Filter";
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     * 
+     */
     @Override
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);

@@ -102,11 +102,18 @@ public class MeanFilter implements ImageOperation {
         return output; 
 
     }
-
+    /**
+     * drawPreview, previews the MeanFilter before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     * 
+     */
     @Override
     public String operationDescription() {
         return String.format("Mean Filter [Radius: %dpx]", radius);

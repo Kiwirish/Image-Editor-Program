@@ -24,10 +24,13 @@ import cosc202.andie.ImageOperation;
 
 public class FlipVertical implements ImageOperation{
 
-    public FlipVertical(){
-    }
+    public FlipVertical(){}
 
-    /** Applys the Flip vertical to the image */
+    /** 
+     * The draw method
+     * applies the Vertical flip to the image
+     * 
+     *  */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
     int pixels [][] = new int [input.getWidth()][input.getHeight()];
         for(int i = 0; i < input.getWidth(); i++){
@@ -48,10 +51,17 @@ public class FlipVertical implements ImageOperation{
         return input;
     }
 
+    /**
+     * drawPreview, previews the Vertical Flip before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return "Vertical Flip";

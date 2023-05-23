@@ -10,7 +10,7 @@ import cosc202.andie.ImageOperation;
  * </p>
  * 
  * <p>
- *  Emboss filter creates the effect ofthe image being pressced into or rasied 
+ *  Emboss filter creates the effect of the image being pressed into or rasied 
  *  out of a sheet of paper, there are eight possible filter kernels to 
  *  work with depending on the direction of embossing they simulate. 
  *  It is implemented using the kernel  as an input parameter 
@@ -37,11 +37,14 @@ public class EmbossFilter implements ImageOperation  {
         this.angle = angle; 
     }
 
-
+    /**
+     *  draw, figures out which angle is inputted and selects the kernel for that
+     *  then applies the EmbossFilter to the image.
+     */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
         //check for illegal argument 
         if (input == null){
-            throw new IllegalArgumentException("Image to apply Median filter to does not exist");
+            throw new IllegalArgumentException("Image to apply Emboss filter to does not exist");
         }
 
         //Figure out the kernel
@@ -77,10 +80,17 @@ public class EmbossFilter implements ImageOperation  {
 
     }// end draw method 
 
+    /**
+     * drawPreview, previews the EmbossFilter before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return String.format("Emboss Filter [Angle: %ddeg]", angle);

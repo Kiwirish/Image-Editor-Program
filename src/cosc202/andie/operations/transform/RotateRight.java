@@ -24,9 +24,11 @@ public class RotateRight implements ImageOperation{
 
     public RotateRight(){
     }
-    /** Applys the rotate right filter 
+    /** the draw method, applies the rotate right filter
+     *  to the inputted image.
+     * 
      * @param input Image to be rotated 
-    */
+     */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 
     int pixels [][] = new int [input.getWidth()][input.getHeight()];
@@ -50,11 +52,17 @@ public class RotateRight implements ImageOperation{
 
         return output;
     }
-
+    /**
+     * drawPreview, previews the Right Rotation before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return "90 Degree Clockwise Rotation";
