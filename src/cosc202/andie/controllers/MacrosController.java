@@ -78,7 +78,7 @@ public class MacrosController {
 		macroFilepath = Utils.withFileExtension(macroFilepath, "macro");
 
 		try {
-			Files.writeString(new File(macroFilepath).toPath(), macroOpsString);
+			Utils.writeString(new File(macroFilepath), macroOpsString, Charset.defaultCharset());
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(controller.getContentPane(), msg("Macro_IO_Save_Error"));
 			return;
@@ -102,7 +102,7 @@ public class MacrosController {
 		try {
 			if (!macroFile.exists())
 				throw new IOException();
-			String macroString = Files.readString(macroFile.toPath(), Charset.defaultCharset());
+			String macroString = Utils.readString(macroFile, Charset.defaultCharset());
 			if (model.macros.applyMacroString(macroString)) {
 				JOptionPane.showMessageDialog(controller.getContentPane(), msg("Macro_Applied_Success"));
 			} else {
