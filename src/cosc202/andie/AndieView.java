@@ -2,12 +2,9 @@ package cosc202.andie;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -17,7 +14,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
-import javax.sound.midi.ControllerEventListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -26,7 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
-import javax.swing.event.ChangeListener;
 
 import cosc202.andie.components.OptionPopup;
 import cosc202.andie.components.PopupSlider;
@@ -92,23 +87,21 @@ public class AndieView {
         frame.setJMenuBar(menuBar);
 		
 		
-
-
-				// ----------- Macros Panel -------------
+				// ----------- Macros Panel -----------------
 				MacrosPanel macrosPanel = new MacrosPanel(controller, model);
 				frame.add(macrosPanel, BorderLayout.EAST);
 				// ----------- End Macros Panel -------------
 
-		JToolBar button = new JToolBar("Button" + 10);
 
-		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Exit.png"));
+		JToolBar button = new JToolBar("Button" + 10);
+		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/exit.png"));
 		Image img = icon.getImage();
         Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon icon2 = new ImageIcon(newimg);    
         JButton exitButton = new JButton(icon2);
 		exitButton.addActionListener((e) -> controller.closeWindow());
 
-		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Crop.png"));
+		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("assets/crop.png"));
 		Image img2 = crop.getImage();
         Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon crop2 = new ImageIcon(newimg2);    
@@ -116,7 +109,6 @@ public class AndieView {
 				cropButton.setText(null);
 				cropButton.setIcon(crop2);
 		cropButton.addActionListener((e) -> System.out.println("Crop"));
-		// cropButton.addActionListener((e) -> );
 
 		ImageIcon select = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Select.png"));
 		Image selectimg = select.getImage();
@@ -127,7 +119,7 @@ public class AndieView {
 				selectButton.setIcon(select2);
 		selectButton.addActionListener((e) -> System.out.println("Select"));
 
-		ImageIcon Line = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Line.png"));
+		ImageIcon Line = new ImageIcon(Andie.class.getClassLoader().getResource("assets/line.png"));
 		Image Lineimg = Line.getImage();
         Image Linenewimg = Lineimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon Line2 = new ImageIcon(Linenewimg);    
@@ -210,7 +202,7 @@ public class AndieView {
 		ColourButton.addActionListener((e) -> colourPicker());
 		frame.add(button, BorderLayout.SOUTH);
 
-		ImageIcon FillColor = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Fill.png"));
+		ImageIcon FillColor = new ImageIcon(Andie.class.getClassLoader().getResource("assets/fill.png"));
 		Image FillColorimg = FillColor.getImage();
         Image FillColornewimg = FillColorimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon FillColor2 = new ImageIcon(FillColornewimg);    
@@ -234,22 +226,21 @@ public class AndieView {
 		StrokeWidthButton.addActionListener((e) -> widthPicker());
 		frame.add(button, BorderLayout.SOUTH);
 		
+
+		/* adding the buttons to toolbar  */
 		button.add(exitButton);
 		button.add(selectButton);
 		button.add(UndoButton);
 		button.add(RedoButton);
 		button.add(StrokeWidthButton);
 		button.add(FillColorButton);
-		button.add(ColourButton);
-		button.add(rotateButton);
+		//button.add(ColourButton);
+		//button.add(rotateButton);
 		button.add(crotateButton);
 		button.add(ovalButton);
 		button.add(RectButton);
 		button.add(LineButton);
-		
 		button.add(cropButton);
-
-
 
         frame.pack();
 
