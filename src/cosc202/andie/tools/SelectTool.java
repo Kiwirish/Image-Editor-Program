@@ -9,14 +9,38 @@ import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.MouseModel.MouseModelListener;
 import cosc202.andie.models.MouseModel.MouseStatus;
 
+/**
+ * <p>
+ * Select tool. Sets the selection rectangle as the user drags the mouse.
+ * </p>
+ * 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @see Tool
+ * @see ToolModel
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class SelectTool extends Tool {
 
 	private MouseModelListener listener;
 
+	/**
+	 * Create a new SelectTool
+	 * @param model The base AndieModel
+	 * @param controller The base AndieController
+	 */
 	public SelectTool(AndieModel model, AndieController controller) {
 		super(model, controller);
 	}
 
+	/**
+	 * Activate the tool.
+	 * <p> This method will register a MouseModelListener that will listen for mouse events and set the selection rectangle as the user drags the mouse. </p>
+	 * <p> The selection will be restricted to the image bounds when the user releases the mouse </p>
+	 */
 	@Override
 	public void activateTool() {
 		super.activateTool();
@@ -46,6 +70,9 @@ public class SelectTool extends Tool {
 	}
 
 
+	/**
+	 * Deactivate the tool (Removes listeners)
+	 */
 	@Override
 	public void deactivateTool() {
 		super.deactivateTool();

@@ -29,9 +29,28 @@ import java.awt.image.BufferedImage;
  */
 public interface ImageOperation extends java.io.Serializable {
 
+    /**
+     * Processes the "good" version of the operation on the input image.
+     * <p> Called when the user "applies" the operation. </p>
+     * @param input The image to be processed
+     * @return The processed image
+     * @throws ImageOperationException If the operation fails
+     */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException;
+
+    /**
+     * Processes the "preview" version of the operation on the input image.
+     * <p> Called when the user "previews" the operation. </p>
+     * @param input The image to be processed
+     * @return The processed image
+     * @throws ImageOperationException If the operation fails
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException;
 
+    /**
+     * Get a description of the operation, including any parameters.
+     * @return A description of the operation
+     */
     public String operationDescription();
 
     /**

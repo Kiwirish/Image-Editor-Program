@@ -32,6 +32,10 @@ public abstract class ImageAction extends AbstractAction {
 
     private KeyStroke shortcut;
 
+    /**
+     * Get the imageaction's keyboard shortcut
+     * @return The keyboard shortcut
+     */
     public KeyStroke getShortcut() {
         return shortcut;
     }

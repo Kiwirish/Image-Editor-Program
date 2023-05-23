@@ -13,7 +13,25 @@ import cosc202.andie.actions.TransformActions;
 import cosc202.andie.actions.ViewActions;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
+import cosc202.andie.actions.MenuActions;
 
+import cosc202.andie.controllers.ActionsController;
+
+/**
+ * <p>
+ * The Menubar for Andie. Contains all of the menus for the actions.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @see ActionsController
+ * @see MenuActions
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class MenuBar extends JMenuBar {
 	AndieController controller;
 	AndieModel model;
@@ -22,23 +40,14 @@ public class MenuBar extends JMenuBar {
 		this.controller = controller;
 		this.model = model;
 
-		controller.actions.fileActions = new FileActions(controller, model);
 		this.add(controller.actions.fileActions.createMenu());
-		controller.actions.editActions = new EditActions(controller, model);
 		this.add(controller.actions.editActions.createMenu());
-		controller.actions.viewActions = new ViewActions(controller, model);
 		this.add(controller.actions.viewActions.createMenu());
-		controller.actions.transformActions = new TransformActions(controller, model);
 		this.add(controller.actions.transformActions.createMenu());
-		controller.actions.filterActions = new FilterActions(controller, model);
 		this.add(controller.actions.filterActions.createMenu());
-		controller.actions.colourActions = new ColourActions(controller, model);
 		this.add(controller.actions.colourActions.createMenu());
-		controller.actions.toolActions = new ToolActions(controller, model);
 		this.add(controller.actions.toolActions.createMenu());
-		controller.actions.macroActions =	new MacroActions(controller, model);
 		this.add(controller.actions.macroActions.createMenu());
-		controller.actions.languageActions = new LanguageActions(controller, model);
 		this.add(controller.actions.languageActions.createMenu());
 
 	}

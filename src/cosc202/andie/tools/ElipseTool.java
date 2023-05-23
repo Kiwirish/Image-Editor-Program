@@ -12,18 +12,49 @@ import cosc202.andie.models.MouseModel.MouseModelListener;
 import cosc202.andie.models.MouseModel.MouseStatus;
 import cosc202.andie.operations.shapes.Elipse;
 
+/**
+ * <p>
+ * Elipse tool. Draws an elipse as the user drags the mouse. 
+ * </p>
+ * 
+ * <p>
+ * Holding shift while dragging will force the elipse to be a circle. Holding control while dragging will force the elipse to be drawn from the center.
+ * <p> 
+ * 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @see Tool
+ * @see Elipse
+ * @see ToolModel
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class ElipseTool extends Tool {
 
 	private MouseModelListener listener;
 
+	/**
+	 * Create a new ElipseTool
+	 * @param model The base AndieModel
+	 * @param controller The base AndieController
+	 */
 	public ElipseTool(AndieModel model, AndieController controller) {
 		super(model, controller);
 	}
 
+	/**
+	 * Get the cursor that this tool would like to use when hovering the image panel (Crosshair)
+	 */
 	public Cursor getCursor() {
 		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	}
 
+	/**
+	 * Activate the tool.
+	 * <p> This method will register a MouseModelListener that will listen for mouse events and draw the elipse as the user drags the mouse. </p>
+	 */
 	@Override
 	public void activateTool() {
 		super.activateTool();
@@ -49,6 +80,14 @@ public class ElipseTool extends Tool {
 				
 	}
 
+	/**
+	 * Gets the elipse operation that would be applied if the user dragged from p1 to p2, given whether the user wants to fix the ratio as 1:1, and whether the user wants to draw from the center
+	 * @param p1 The first point
+	 * @param p2 The second point
+	 * @param fixRatio Whether the user wants to fix the ratio as 1:1
+	 * @param centerp1 Whether the user wants to draw from the center of p1
+	 * @return The elipse operation.
+	 */
 	private ImageOperation getOp(Point p1, Point p2, boolean fixRatio, boolean centerp1) {
 		Point np1 = new Point(p1);
 		Point np2 = new Point(p2);
@@ -72,6 +111,9 @@ public class ElipseTool extends Tool {
 		return new Elipse(new Rectangle(p, d), model.tool.getStrokeColor(), model.tool.getFillColor(), model.tool.getStrokeWidth());
 	}
 
+	/**
+	 * Deactivate the tool (Removes listeners)
+	 */
 	@Override
 	public void deactivateTool() {
 		super.deactivateTool();

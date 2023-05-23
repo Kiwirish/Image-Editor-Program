@@ -2,12 +2,9 @@ package cosc202.andie;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -30,17 +27,46 @@ import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
 
+/**
+ * <p>
+ * View class for the ANDIE program.
+ * </p>
+ * 
+ * <p>
+ * Handles the creation of the Swing GUI for the program, including the main JFrame (window).
+ * </p>
+ * 
+ * <p>
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @see AndieModel
+ * @see AndieController
+ * @see ContentPanel
+ * @see MenuBar
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class AndieView {
 	private AndieController controller;
 	private AndieModel model;
 	private JFrame frame;
 	private ModelListener filepathListener;
 
+	/**
+	 * Creates a new AndieView object.
+	 * @param controller The base controller for the program.
+	 * @param model The base model for the program.
+	 */
 	public AndieView(AndieController controller, AndieModel model) {
 		this.controller = controller;
 		this.model = model;
 	}
 
+	/**
+	 * Creates the main JFrame for the program, and adds all of the necessary components.
+	 */
 	public void createAndieView() {
         frame = new JFrame("ANDIE");
 				Dimension frameSize = model.getFrameSize();
@@ -96,6 +122,7 @@ public class AndieView {
 				// ----------- End Macros Panel -------------
 
 		JToolBar button = new JToolBar("Button" + 10);
+		button.setOrientation(JToolBar.VERTICAL);
 
 		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Exit.png"));
 		Image img = icon.getImage();
@@ -189,7 +216,7 @@ public class AndieView {
         button.add(FillColorButton);
 		FillColorButton.addActionListener((e) -> System.out.println("fill colour wheel"));
 		FillColorButton.addActionListener((e) -> fillPicker());
-		frame.add(button, BorderLayout.SOUTH);
+		frame.add(button, BorderLayout.WEST);
 
         frame.pack();
 
