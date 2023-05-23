@@ -13,6 +13,8 @@ import cosc202.andie.ImageOperation;
 import cosc202.andie.Utils;
 import cosc202.andie.models.AndieModel;
 
+import static cosc202.andie.LanguageConfig.msg;
+
 /**
  * <p>
  * The controller for Macros
@@ -65,7 +67,7 @@ public class MacrosController {
 		String macroOpsString = model.macros.getMacroOpsString();
 
 		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Andie Macro files", "macro");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(msg("Macro_Filename_Desc"), "macro");
 		fileChooser.setFileFilter(filter);
 		fileChooser.setSelectedFile(new File(Utils.withFileExtension(model.getImageFilepath(), "macro")));
 		int result = fileChooser.showSaveDialog(controller.getContentPane());
@@ -78,17 +80,17 @@ public class MacrosController {
 		try {
 			Files.writeString(new File(macroFilepath).toPath(), macroOpsString);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(controller.getContentPane(), "IO Error saving macro file.");
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("Macro_IO_Save_Error"));
 			return;
 		}
-		JOptionPane.showMessageDialog(controller.getContentPane(), "Successfully saved macro file.");
+		JOptionPane.showMessageDialog(controller.getContentPane(), msg("Macro_Success_Save"));
 	}
 
 	/** Apply an existing macro. Will prompt the user to pick a .macro file from their system */
 	public void applyExistingMacro() {
 		JFileChooser fileChooser = new JFileChooser();
 
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Andie Macro files", "macro");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(msg("Macro_Filename_Desc"), "macro");
 		fileChooser.setFileFilter(filter);
 		int result = fileChooser.showOpenDialog(controller.getContentPane());
 
@@ -102,14 +104,14 @@ public class MacrosController {
 				throw new IOException();
 			String macroString = Files.readString(macroFile.toPath(), Charset.defaultCharset());
 			if (model.macros.applyMacroString(macroString)) {
-				JOptionPane.showMessageDialog(controller.getContentPane(), "Macro applied successfully.");
+				JOptionPane.showMessageDialog(controller.getContentPane(), msg("Macro_Applied_Success"));
 			} else {
-				JOptionPane.showMessageDialog(controller.getContentPane(), "There was an issue applying an operation in this macro.");
+				JOptionPane.showMessageDialog(controller.getContentPane(), msg("Macro_Issue_Applying"));
 			}
 
 
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(controller.getContentPane(), "IO Error reading macro file.");
+			JOptionPane.showMessageDialog(controller.getContentPane(), msg("Macro_IO_Read_Error"));
 		}
 	}
 }

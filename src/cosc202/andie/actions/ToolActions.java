@@ -15,6 +15,8 @@ import cosc202.andie.tools.RectangleTool;
 import cosc202.andie.tools.SelectTool;
 import cosc202.andie.tools.Tool;
 
+import static cosc202.andie.LanguageConfig.msg;
+
 public class ToolActions extends MenuActions {
 
 	public ToolAction selectToolAction;
@@ -23,12 +25,12 @@ public class ToolActions extends MenuActions {
 	public ToolAction elipseToolAction;
 
 	public ToolActions(AndieController controller, AndieModel model) {
-		super("Tools", controller, model);
+		super(msg("Tool_Title"), controller, model);
 
-		selectToolAction = new ToolAction("Select", "Select regions", null, null, SelectTool.class);
-		lineToolAction = new ToolAction("Line", "Draw a line", null, null, LineTool.class);
-		rectangleToolAction = new ToolAction("Rectangle", "Draw a rectangle", null, null, RectangleTool.class);
-		elipseToolAction = new ToolAction("Elipse", "Draw an elipse", null, null, ElipseTool.class);
+		selectToolAction = new ToolAction(msg("Select_Title"), msg("Select_Desc"), null, null, SelectTool.class);
+		lineToolAction = new ToolAction(msg("Line_Title"), msg("Line_Desc"), null, null, LineTool.class);
+		rectangleToolAction = new ToolAction(msg("Rectangle_Title"), msg("Rectangle_Desc"), null, null, RectangleTool.class);
+		elipseToolAction = new ToolAction(msg("Elipse_Title"), msg("Elipse_Desc"), null, null, ElipseTool.class);
 
 		actions.addAll(Arrays.asList(selectToolAction, lineToolAction, rectangleToolAction, elipseToolAction));
 

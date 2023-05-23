@@ -16,11 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
-import cosc202.andie.actions.MacroActions.ApplyMacroAction;
-import cosc202.andie.actions.MacroActions.RecordMacroAction;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
+
+import static cosc202.andie.LanguageConfig.msg;
 
 public class MacrosPanel extends JPanel {
 	private AndieModel model;
@@ -43,7 +43,7 @@ public class MacrosPanel extends JPanel {
 		macrosUpdateListener = () -> {
 			this.setVisible(model.macros.getMacrosViewOpen());
 			recalculateOperationsList(model.macros.getMacroOperations());
-			this.controlsPanelLabel.setText(model.macros.getRecording() ? "Recording" : "Not Recording");
+			this.controlsPanelLabel.setText(model.macros.getRecording() ? msg("Macros_Recording") : msg("Macros_NotRecording"));
 		};
 
 		model.macros.registerMacrosUpdateListener(macrosUpdateListener);
@@ -59,7 +59,7 @@ public class MacrosPanel extends JPanel {
 		JPanel titlePanel = new JPanel();
 		titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
 		titlePanel.setOpaque(false);
-		JLabel title = new JLabel("Macros");
+		JLabel title = new JLabel(msg("Macros_Title"));
 		title.setFont(title.getFont().deriveFont(15f).deriveFont(Font.BOLD));
 		title.setAlignmentX(CENTER_ALIGNMENT);
 		title.setForeground(Color.WHITE);
@@ -80,7 +80,7 @@ public class MacrosPanel extends JPanel {
 		//Add vertical space
 		controlsPanel.add(new JLabel(" "));
 
-		controlsPanelLabel = new JLabel("Not currently recording");
+		controlsPanelLabel = new JLabel(msg("Macros_NotCurrRecording"));
 		controlsPanelLabel.setForeground(Color.WHITE);
 		controlsPanelLabel.setAlignmentX(CENTER_ALIGNMENT);
 		controlsPanel.add(controlsPanelLabel);
