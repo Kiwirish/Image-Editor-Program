@@ -270,9 +270,9 @@ public class AndieView {
 		toolbar.add(RedoButton);
 		toolbar.add(StrokeWidthButton);
 		toolbar.add(FillColorButton);
-		//toolbar.add(ColourButton);
+		toolbar.add(ColourButton);
 		//toolbar.add(rotateButton);
-		toolbar.add(crotateButton);
+		//toolbar.add(crotateButton);
 		toolbar.add(ovalButton);
 		toolbar.add(RectButton);
 		toolbar.add(LineButton);
