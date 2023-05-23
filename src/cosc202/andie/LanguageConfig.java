@@ -21,7 +21,6 @@ import java.util.prefs.Preferences;
  * </p>
  * 
  * @author Jeb Nicholson
- * @author Oliver Peyroux
  * @version 2.0
  */
 public class LanguageConfig {

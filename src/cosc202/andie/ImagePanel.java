@@ -18,6 +18,18 @@ import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
 
+/**
+ * <p>
+ * This class is responsible for displaying the image, overlay image, the zooming, and handling the mouse.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @version 2.0
+ */
 public class ImagePanel extends JLayeredPane {
 	private ImagePanView ipv;
 	private JPanel overlayPanel;
@@ -30,6 +42,12 @@ public class ImagePanel extends JLayeredPane {
 	private AndieModel model;
 	private AndieController controller;
 
+	/**
+	 * Create a new ImagePanel.
+	 * <p>Handles mouse events, and listens for changes to the working image and overlay image.</p>
+	 * @param controller The base controller
+	 * @param model The base model
+	 */
 	public ImagePanel(AndieController controller, AndieModel model) {
 		super();
 		SpringLayout layout = new SpringLayout();
@@ -109,6 +127,10 @@ public class ImagePanel extends JLayeredPane {
 
 	}
 
+	/**
+	 * Notify the ImagePanel that it is being removed from the GUI.
+	 * <p> Removes the listeners from the model and controller.</p>
+	 */
 	public void removeNotify() {
 		super.removeNotify();
 		model.unregisterWorkingImageListener(workingImageListener);
