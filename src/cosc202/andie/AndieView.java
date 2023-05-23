@@ -130,6 +130,36 @@ public class AndieView {
         button.add(selectButton);
 		selectButton.addActionListener((e) -> System.out.println("Select"));
 
+		ImageIcon Line = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Line.png"));
+		Image Lineimg = Line.getImage();
+        Image Linenewimg = Lineimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon Line2 = new ImageIcon(Linenewimg);    
+        JButton LineButton = new JButton(controller.actions.toolActions.lineToolAction);
+				LineButton.setText(null);
+				LineButton.setIcon(Line2);
+        button.add(LineButton);
+		LineButton.addActionListener((e) -> System.out.println("Line"));
+
+		ImageIcon Rect = new ImageIcon(Andie.class.getClassLoader().getResource("assets/rect.png"));
+		Image Rectimg = Rect.getImage();
+        Image Rectnewimg = Rectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon Rect2 = new ImageIcon(Rectnewimg);    
+        JButton RectButton = new JButton(controller.actions.toolActions.rectangleToolAction);
+				RectButton.setText(null);
+				RectButton.setIcon(Rect2);
+        button.add(RectButton);
+		RectButton.addActionListener((e) -> System.out.println("Rectangle"));
+
+		ImageIcon oval = new ImageIcon(Andie.class.getClassLoader().getResource("assets/oval.png"));
+		Image ovalimg = oval.getImage();
+        Image ovalnewimg = ovalimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon oval2 = new ImageIcon(ovalnewimg);    
+        JButton ovalButton = new JButton(controller.actions.toolActions.rectangleToolAction);
+				ovalButton.setText(null);
+				ovalButton.setIcon(oval2);
+        button.add(ovalButton);
+		ovalButton.addActionListener((e) -> System.out.println("oval"));
+
 		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/acRotate.png"));
 		Image rotateimg = rotate.getImage();
         Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
