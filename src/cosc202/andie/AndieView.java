@@ -178,7 +178,7 @@ public class AndieView {
 		Image ovalimg = oval.getImage();
         Image ovalnewimg = ovalimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon oval2 = new ImageIcon(ovalnewimg);    
-        JButton ovalButton = new JButton(controller.actions.toolActions.rectangleToolAction);
+        JButton ovalButton = new JButton(controller.actions.toolActions.elipseToolAction);
 				ovalButton.setText(null);
 				ovalButton.setIcon(oval2);
         
@@ -269,9 +269,9 @@ public class AndieView {
 		button.add(RedoButton);
 		button.add(StrokeWidthButton);
 		button.add(FillColorButton);
-		//button.add(ColourButton);
+		button.add(ColourButton);
 		//button.add(rotateButton);
-		button.add(crotateButton);
+		//button.add(crotateButton);
 		button.add(ovalButton);
 		button.add(RectButton);
 		button.add(LineButton);
@@ -309,8 +309,8 @@ public class AndieView {
 	}
 	public void widthPicker() {
 		
-			PopupSlider slider = new PopupSlider("Stroke Width label", 1, 100, 5, "px", 10, 50, 1);
-			OptionPopup popup = new OptionPopup(frame.getContentPane(),"Resize_Popup_Title", new PopupSlider[] { slider });
+			PopupSlider slider = new PopupSlider("Stroke Width", 1, 100, 5, "px", 10, 50, 1);
+			OptionPopup popup = new OptionPopup(frame.getContentPane(),"", new PopupSlider[] { slider });
 			
 
 			if(popup.show() == OptionPopup.OK){model.tool.setStrokeWidth(slider.getValue());};

@@ -2,15 +2,7 @@ package cosc202.andie;
 
 import javax.swing.JMenuBar;
 
-import cosc202.andie.actions.ColourActions;
-import cosc202.andie.actions.EditActions;
-import cosc202.andie.actions.FileActions;
-import cosc202.andie.actions.FilterActions;
-import cosc202.andie.actions.LanguageActions;
-import cosc202.andie.actions.MacroActions;
-import cosc202.andie.actions.ToolActions;
-import cosc202.andie.actions.TransformActions;
-import cosc202.andie.actions.ViewActions;
+
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.actions.MenuActions;
