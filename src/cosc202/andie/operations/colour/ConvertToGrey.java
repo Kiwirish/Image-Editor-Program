@@ -67,11 +67,18 @@ public class ConvertToGrey implements ImageOperation {
         
         return input;
     }
-
+    
+    /**
+     * drawPreview, previews the ConvertToGrey action before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
 
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return "Greyscale filter";

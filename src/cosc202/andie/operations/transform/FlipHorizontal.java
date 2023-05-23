@@ -28,7 +28,7 @@ public class FlipHorizontal implements ImageOperation {
     public FlipHorizontal(){}
             
     /** Applys the Flip to the image 
-     * @param input the image to be maniupuated 
+     * @param input the image to be flipped.
      */
     public BufferedImage draw(BufferedImage input) throws ImageOperationException {
     
@@ -51,10 +51,16 @@ public class FlipHorizontal implements ImageOperation {
         return input;
     }
 
+    /**
+     * drawPreview, previews the Horizontal Flip before it is actually applied to the image
+     */
     public BufferedImage drawPreview(BufferedImage input) throws ImageOperationException {
         return draw(input);
     }
-
+    /**
+     * operationDescription, gets a description of the operation
+     * and returns it. This is used in the macro panel
+     */
     @Override
     public String operationDescription() {
         return "Horizontal Flip";

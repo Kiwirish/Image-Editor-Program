@@ -4,7 +4,32 @@ import java.awt.image.*;
 
 import cosc202.andie.Utils;
 
+/**
+ * <p>
+ * CustomConvolution, applies a custom convolution that allows for negative results in pixels
+ * </p>
+ * 
+ * <p>
+ *  CustomConvolution has an applyKernel method that creates a custom convolution, 
+ *  by iterating over each pixel. This method allows "negative results", by
+ *  adding the mid-value to the raw result of the filters. The image is also enlarged
+ *  in the process.
+ * </p>
+ * 
+ * 
+ * @author Oliver Peyroux
+ * @version 1.0
+ */
 public class CustomConvolution {
+    /**
+     * <p>
+     * applyKernel, applies the custom convolution to the image
+     * </p>
+     * 
+     * @param input
+     * @param kernel
+     * @return the resulting Custom Convolution
+     */
     
     public static BufferedImage applyKernel(BufferedImage input, float[] kernel) {
         //set radius
@@ -13,19 +38,6 @@ public class CustomConvolution {
     
         //create enlarged image with all existing argb pixel values of old image set to the new images values 
         BufferedImage enlargedImage = Utils.expandEdges(input, r);
-
-        // Implement convolution on new enlargedImage using input kernel 
-        // Do so by creating the enlarged output image, iterate over each pixel 
-        // in the enlarged input image (excluding the padded border), and then perform a convolution operation on each pixel
-        // It iterates over each value in the kernel and matches each one to a corresponding 
-        // pixel in the input image, then sums the product of the kernel value and pixel value 
-        // Bitwise operations are used to extract the ARGB values. After the convolution, 
-        // the ARGB values are adjusted then combined into a single integer again and sets the pixel in the output 
-        // image to this ARGB combined integer value
-        // OR 
-        // simply use ConvolveOp built in class with input kernel? 
-        // Issue with this is that the 'edge pixels' are not handled, therefore 
-        // manual convolution must be done. 
 
         BufferedImage output = new BufferedImage(input.getColorModel(), input.copyData(null), input.isAlphaPremultiplied(), null);
 
@@ -50,9 +62,8 @@ public class CustomConvolution {
                     gResult += kernel[k] * gValue; 
                     bResult += kernel[k] * bValue; 
                 }
-                // calculate output pixel color values 
-                int outputA = a;
 
+                int outputA = a;
                 int outputR = Math.min(Math.max((rResult+128), 0), 255);
                 int outputG = Math.min(Math.max((gResult+128), 0), 255);
                 int outputB = Math.min(Math.max((bResult+128), 0), 255);
