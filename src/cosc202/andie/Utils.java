@@ -11,7 +11,27 @@ import java.nio.file.Files;
 
 import javax.imageio.ImageIO;
 
+
+/**
+ * <p>
+ * Various utility methods used throughout the program.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @author Steven Mills (Deepcopy)
+ * @version 1.0
+ */
 public class Utils {
+
+	/**
+	 * Does a given filepath end in a valid image writer file extension?
+	 * @param filepath The filepath to check
+	 * @return True if the filepath ends in a valid image writer file extension
+	 */
 	public static boolean hasValidFileExtension(String filepath) {
 		String fileExtension = getFileExtension(filepath);
 		for (String ext : ImageIO.getWriterFileSuffixes()) {
@@ -21,6 +41,11 @@ public class Utils {
 		return false;
 	}
 
+	/**
+	 * Get the file extension of a given filepath.
+	 * @param filepath The filepath to check
+	 * @return The file extension of the filepath, or null if there is no file extension
+	 */
 	public static String getFileExtension(String filepath) {
 		int lastIndexOfDot = filepath.lastIndexOf('.');
 		if (lastIndexOfDot == -1)
@@ -28,6 +53,12 @@ public class Utils {
 		return filepath.substring(lastIndexOfDot + 1);
 	}
 
+	/**
+	 * Get a filepath with a given extension appended. If the filepath already has the given extension, return the filepath unchanged.
+	 * @param filepath The filepath to check
+	 * @param extension The extension to add
+	 * @return The filepath with the given extension
+	 */
 	public static String withFileExtension(String filepath, String extension) {
 		String currentExt = getFileExtension(filepath);
 		if (currentExt != null && currentExt.equals(extension))
@@ -35,8 +66,16 @@ public class Utils {
 		return filepath + "." + extension;
 	}
 
+	/**
+	 * Get a filepath with a given extension replacing the current extension. If the filepath has no extension, it is appended.
+	 * @param filepath The filepath to check
+	 * @param newExtension The extension to add
+	 * @return The filepath with the given extension
+	 */
 	public static String withUpdatedFileExtension(String filepath, String newExtension) {
 		String currentExt = getFileExtension(filepath);
+		if (currentExt == null)
+			return filepath + "." + newExtension;
 		String modifiedFilepath = filepath.substring(0, filepath.length() - currentExt.length() - 1);
 		return modifiedFilepath + "." + newExtension;
 	}
@@ -90,11 +129,25 @@ public class Utils {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
+	/**
+	 * Read a file as string
+	 * @param file The file to read
+	 * @param encoding The character encoding to use
+	 * @return The contents of the file as a string
+	 * @throws IOException If there is an error reading the file
+	 */
 	public static String readString(File file, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(file.toPath());
 		return new String(encoded, encoding);
 	}
 
+	/**
+	 * Write a string to a file
+	 * @param file The file to write to
+	 * @param content The string to write
+	 * @param encoding The character encoding to use
+	 * @throws IOException If there is an error writing the file
+	 */
 	public static void writeString(File file, String content, Charset encoding) throws IOException {
 		byte[] encoded = content.getBytes(encoding);
 		Files.write(file.toPath(), encoded);

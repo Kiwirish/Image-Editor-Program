@@ -15,6 +15,21 @@ import cosc202.andie.models.AndieModel.ModelListener;
 import cosc202.andie.models.OverlayModel.OverlayDrawer;
 import cosc202.andie.tools.Tool;
 
+/**
+ * <p>
+ * The tool model for ANDIE. Handles the current tool, stroke width, stroke and fill colors, the selection rectangle, and drawing the selection rectangle on the overlay.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @see AndieModel
+ * @see Tool
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class ToolModel {
 	private AndieModel model;
 	private Tool tool;
@@ -37,6 +52,10 @@ public class ToolModel {
 
 	private Timer timer;
 
+	/**
+	 * Creates a new ToolModel
+	 * @param model The base AndieModel
+	 */
 	public ToolModel(AndieModel model) {
 		this.model = model;
 		this.timer = new Timer();
@@ -112,6 +131,7 @@ public class ToolModel {
 
 	}
 
+	/** Initializes the values to their defaults, and deactivates the current tool if it is active. */ 
 	private void init() {
 		if (this.tool != null)
 			this.tool.deactivateTool();
@@ -123,10 +143,18 @@ public class ToolModel {
 		this.lastImageSize = null;
 	}
 
+	 /**
+		* Get the currently selected tool
+		* @return The currently selected tool
+		*/
 	public Tool getTool() {
 		return tool;
 	}
 
+	/**
+	 * Sets the current tool
+	 * @param tool The tool to set
+	 */
 	public void setTool(Tool tool) {
 		if (this.tool != null) this.tool.deactivateTool();
 		this.tool = tool;
@@ -134,42 +162,74 @@ public class ToolModel {
 		notifyActiveToolListeners();
 	}
 
+	/**
+	 * Unsets the current tool (So that no tool is selected)
+	 */
 	public void unsetTool() {
 		tool.deactivateTool();
 		tool = null;
 		notifyActiveToolListeners();
 	}
 
+	/**
+	 * Get the current stroke color
+	 * @return The current stroke color
+	 */
 	public Color getStrokeColor() {
 		return strokeColor;
 	}
 
+	/**
+	 * Set the current stroke color
+	 * @param strokeColor The color to set
+	 */
 	public void setStrokeColor(Color strokeColor) {
 		this.strokeColor = strokeColor;
 	}
 
+	/**
+	 * Get the current fill color
+	 * @return The current fill color
+	 */
 	public Color getFillColor() {
 		return fillColor;
 	}
 
+	/**
+	 * Set the current fill color
+	 * @param fillColor The color to set
+	 */
 	public void setFillColor(Color fillColor) {
 		this.fillColor = fillColor;
 	}
 
+	/**
+	 * Get the current stroke width
+	 * @return
+	 */
 	public int getStrokeWidth() {
 		return strokeWidth;
 	}
 
+	/**
+	 * Set the current stroke width
+	 * @param strokeWidth The width to set
+	 */
 	public void setStrokeWidth(int strokeWidth) {
 		this.strokeWidth = strokeWidth;
 	}
 
+	/** Unselect the current selection */
 	public void unsetSelection() {
 		this.selection = null;
 		model.overlay.repaint();
 		notifySelectionListeners();
 	}
 
+	/**
+	 * Set the current selection
+	 * @param rectangle The selection to set (given as a rectangle relative to the image)
+	 */
 	public void setSelection(Rectangle rectangle) {
 		if (rectangle.width == 0 || rectangle.height == 0) {
 			unsetSelection();
@@ -180,10 +240,17 @@ public class ToolModel {
 		notifySelectionListeners();
 	}
 
+	/**
+	 * Get the current selection
+	 * @return The current selection
+	 */
 	public Rectangle getSelection() {
 		return selection;
 	}
 	
+	/**
+	 * Restrict the current selection to be within the image bounds
+	 */
 	public void restrictSelection() {
 		//Restricts the selection to be within the image bounds
 		if (!model.hasImage() || selection == null) return;
@@ -196,34 +263,57 @@ public class ToolModel {
 		model.overlay.repaint();
 	}
 
+	/**
+	 * Register a listener to be notified when the active tool changes
+	 * @param listener The listener to register
+	 */
 	public void registerActiveToolListener(ModelListener listener) {
 		activeToolListeners.add(listener);
 	}
 	
+	/**
+	 * Unregister a listener to be notified when the active tool changes
+	 * @param listener The listener to unregister
+	 */
 	public void unregisterActiveToolListener(ModelListener listener) {
 		activeToolListeners.remove(listener);
 	}
 
+	/**
+	 * Register a listener to be notified when the selection changes
+	 * @param listener The listener to register
+	 */
 	public void registerSelectionListener(ModelListener listener) {
 		selectionListeners.add(listener);
 	}
 
+	/**
+	 * Unregister a listener to be notified when the selection changes
+	 * @param listener The listener to unregister
+	 */
 	public void unregisterSelectionListener(ModelListener listener) {
 		selectionListeners.remove(listener);
 	}
 
+	/**
+	 * Notify all active tool listeners that the active tool has changed
+	 */
 	public void notifyActiveToolListeners() {
 		for (ModelListener listener : activeToolListeners) {
 			listener.update();
 		}
 	}
 
+	/**
+	 * Notify all selection listeners that the selection has changed
+	 */
 	public void notifySelectionListeners() {
 		for (ModelListener listener : selectionListeners) {
 			listener.update();
 		}
 	}
 
+	/** List the listeners. Used for debugging purposes */
 	public void listListeners() {
 		for (ModelListener listener : activeToolListeners) {
 			System.out.println("Active Tool Listener: " + listener);
@@ -233,6 +323,7 @@ public class ToolModel {
 		}
 	}
 
+	/** Notify the ToolModel that it has been removed */
 	public void notifyRemove() {
 		model.overlay.unregisterOverlayDrawer(overlayDrawer);
 		model.unregisterWorkingImageListener(workingImageListener);

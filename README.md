@@ -12,11 +12,11 @@ __Welcome to ANDIE__
 
 To get started with ANDIE, drag and drop an image that you'd like to edit, or open an image by going to `File` > `Open`.
 
-Image operations, like filters, colour adjustments, and transformations can be applied to your image, by clicking them in the menu bar. You can undo and redo your changes by click the buttons in the `Edit` menu.
+Use scrolling and the shift key to pan around the image, or if you're using a trackpad, you can use two-finger panning. You can zoom in and out by holding `CTRL` and scrolling.
 
-Use the scrollbars, or if you're using a touchpad, use two-finger scrolling, to pan around the image. You can zoom in and out by holding `Control` on Windows, or `Command` on Mac, and scrolling up or down.
+Image operations, like filters, colour adjustments, and transformations can be applied to your image, by clicking them in the menu bar. You can undo and redo operations by clicking the corosponding buttons in the toolbar, or by using `CTRL`+`Z` and `CTRL`+`Y` respectively.
 
-The program's language can be changed by clicking the language menu in the menu bar.
+Change Andie's language by selecting `Language`
 
 ---
 ## Docs

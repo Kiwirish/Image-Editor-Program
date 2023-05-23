@@ -22,6 +22,18 @@ import cosc202.andie.models.AndieModel.ModelListener;
 
 import static cosc202.andie.LanguageConfig.msg;
 
+/**
+ * <p>
+ * The MacrosPanel displays the current macro operations and allows the user to start and stop recording macros.
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
 public class MacrosPanel extends JPanel {
 	private AndieModel model;
 	private AndieController controller;
@@ -30,6 +42,11 @@ public class MacrosPanel extends JPanel {
 	private JPanel operationsList;
 	private JLabel controlsPanelLabel;
 
+	/**
+	 * Create a new MacrosPanel. Registers a listener for changes to the macros.
+	 * @param controller The base controller
+	 * @param model The base model
+	 */
 	public MacrosPanel(AndieController controller, AndieModel model) {
 		super();
 		this.model = model;
@@ -38,7 +55,6 @@ public class MacrosPanel extends JPanel {
 		this.setPreferredSize(this.getMinimumSize());
 
 		initComponents();
-		//BUG: MacrosPanel operations persist after closing the file
 
 		macrosUpdateListener = () -> {
 			this.setVisible(model.macros.getMacrosViewOpen());
@@ -51,6 +67,7 @@ public class MacrosPanel extends JPanel {
 		macrosUpdateListener.update();
 	}
 
+	/** Initialize the components of the panel. */
 	private void initComponents() {
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		this.setBackground(new Color(0x202020));
@@ -100,6 +117,10 @@ public class MacrosPanel extends JPanel {
 		this.add(controlsPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Recalculate the list of operations to display. Called when the list of operations changes.
+	 * @param macroOperations The list of operations to display
+	 */
 	private void recalculateOperationsList(ArrayList<ImageOperation> macroOperations) {
 		operationsList.removeAll();
 		if (macroOperations.isEmpty()) {
@@ -130,6 +151,9 @@ public class MacrosPanel extends JPanel {
 		operationsList.repaint();
 	}
 
+	/**
+	 * Notifies the panel that it has been orphaned. Unregisters the model listeners
+	 */
 	@Override
 	public void removeNotify() {
 		super.removeNotify();
@@ -137,6 +161,10 @@ public class MacrosPanel extends JPanel {
 		model.unregisterImageStatusListener(macrosUpdateListener);
 	}
 
+	/**
+	 * Paints the panel. Draws a line on the left side.
+	 * @param g The graphics object to paint with
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

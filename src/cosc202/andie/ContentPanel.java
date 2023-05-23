@@ -22,19 +22,13 @@ import static cosc202.andie.LanguageConfig.msg;
 
 /**
  * <p>
- * UI display element for {@link EditableImage}s.
- * </p>
- * 
- * <p>
- * This class extends {@link JPanel} to allow for rendering of an image, as well as zooming
- * in and out. 
+ * Displays the image or welcome screen in the main window.
  * </p>
  * 
  * <p> 
  * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
  * </p>
  * 
- * @author Steven Mills
  * @author Jeb Nicholson
  * @version 2.0
  */
@@ -44,6 +38,12 @@ public class ContentPanel extends JPanel {
 	private ModelListener imageStatusListener;
 	private AndieModel model;
 
+	/**
+	 * Create a new ContentPanel
+	 * <p> Listens for image status updates, displaying the {@link ImagePanel} or welcome screen as appropriate. </p>  
+	 * @param controller The base controller
+	 * @param model The base model
+	 */
 	public ContentPanel(AndieController controller, AndieModel model) {
 		super();
 		this.hasImage = false;
@@ -90,6 +90,9 @@ public class ContentPanel extends JPanel {
 		});
 	}
 
+	/**
+	 * Notifies the ContentPanel that it is being removed from the main window. This removes the registered listeners
+	 */
 	@Override
 	public void removeNotify() {
 		super.removeNotify();
