@@ -127,90 +127,91 @@ public class AndieView {
 				// ----------- End Macros Panel -------------
 
 
-		JToolBar button = new JToolBar("Button" + 10);
+		JToolBar toolbar = new JToolBar("Button" + 10);
+		toolbar.setOrientation(JToolBar.VERTICAL);
 
-		ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Exit.png"));
-		Image img = icon.getImage();
-        Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon icon2 = new ImageIcon(newimg);    
-        JButton exitButton = new JButton(icon2);
-		exitButton.addActionListener((e) -> controller.closeWindow());
+		// ImageIcon icon = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Exit.png"));
+		// Image img = icon.getImage();
+    //     Image newimg = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+    //     ImageIcon icon2 = new ImageIcon(newimg);    
+    //     JButton exitButton = new JButton(icon2);
+		// exitButton.addActionListener((e) -> controller.closeWindow());
 
 		ImageIcon crop = new ImageIcon(Andie.class.getClassLoader().getResource("assets/crop.png"));
 		Image img2 = crop.getImage();
-        Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon crop2 = new ImageIcon(newimg2);    
-        JButton cropButton = new JButton(controller.actions.transformActions.cropAction);
-				cropButton.setText(null);
-				cropButton.setIcon(crop2);
+		Image newimg2 = img2.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon crop2 = new ImageIcon(newimg2);    
+		JButton cropButton = new JButton(controller.actions.transformActions.cropAction);
+		cropButton.setText(null);
+		cropButton.setIcon(crop2);
 		cropButton.addActionListener((e) -> System.out.println("Crop"));
 
 		ImageIcon select = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Select.png"));
 		Image selectimg = select.getImage();
-        Image selectnewimg = selectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon select2 = new ImageIcon(selectnewimg);    
-        JButton selectButton = new JButton(controller.actions.toolActions.selectToolAction);
-				selectButton.setText(null);
-				selectButton.setIcon(select2);
+		Image selectnewimg = selectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon select2 = new ImageIcon(selectnewimg);    
+		JButton selectButton = new JButton(controller.actions.toolActions.selectToolAction);
+		selectButton.setText(null);
+		selectButton.setIcon(select2);
 		selectButton.addActionListener((e) -> System.out.println("Select"));
 
 		ImageIcon Line = new ImageIcon(Andie.class.getClassLoader().getResource("assets/line.png"));
 		Image Lineimg = Line.getImage();
-        Image Linenewimg = Lineimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon Line2 = new ImageIcon(Linenewimg);    
-        JButton LineButton = new JButton(controller.actions.toolActions.lineToolAction);
-				LineButton.setText(null);
-				LineButton.setIcon(Line2);
-        
+		Image Linenewimg = Lineimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon Line2 = new ImageIcon(Linenewimg);    
+		JButton LineButton = new JButton(controller.actions.toolActions.lineToolAction);
+		LineButton.setText(null);
+		LineButton.setIcon(Line2);
+
 		LineButton.addActionListener((e) -> System.out.println("Line"));
 
 		ImageIcon Rect = new ImageIcon(Andie.class.getClassLoader().getResource("assets/rect.png"));
 		Image Rectimg = Rect.getImage();
-        Image Rectnewimg = Rectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon Rect2 = new ImageIcon(Rectnewimg);    
-        JButton RectButton = new JButton(controller.actions.toolActions.rectangleToolAction);
-				RectButton.setText(null);
-				RectButton.setIcon(Rect2);
-        
+		Image Rectnewimg = Rectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon Rect2 = new ImageIcon(Rectnewimg);    
+		JButton RectButton = new JButton(controller.actions.toolActions.rectangleToolAction);
+		RectButton.setText(null);
+		RectButton.setIcon(Rect2);
+
 		RectButton.addActionListener((e) -> System.out.println("Rectangle"));
 
 		ImageIcon oval = new ImageIcon(Andie.class.getClassLoader().getResource("assets/oval.png"));
 		Image ovalimg = oval.getImage();
-        Image ovalnewimg = ovalimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon oval2 = new ImageIcon(ovalnewimg);    
-        JButton ovalButton = new JButton(controller.actions.toolActions.rectangleToolAction);
-				ovalButton.setText(null);
-				ovalButton.setIcon(oval2);
-        
+		Image ovalnewimg = ovalimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon oval2 = new ImageIcon(ovalnewimg);    
+		JButton ovalButton = new JButton(controller.actions.toolActions.rectangleToolAction);
+		ovalButton.setText(null);
+		ovalButton.setIcon(oval2);
+
 		ovalButton.addActionListener((e) -> System.out.println("oval"));
 
 		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/acRotate.png"));
 		Image rotateimg = rotate.getImage();
-        Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon rotate2 = new ImageIcon(newrotateimg);    
-        JButton rotateButton = new JButton(controller.actions.transformActions.rotateLeftAction);
-				rotateButton.setText(null);
-				rotateButton.setIcon(rotate2);
-        
+		Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon rotate2 = new ImageIcon(newrotateimg);    
+		JButton rotateButton = new JButton(controller.actions.transformActions.rotateLeftAction);
+		rotateButton.setText(null);
+		rotateButton.setIcon(rotate2);
+
 		rotateButton.addActionListener((e) -> System.out.println("Anti Clockwise Rotate"));
 
 		ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/cRotate.png"));
 		Image crotateimg = crotate.getImage();
-        Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
-        JButton crotateButton = new JButton(controller.actions.transformActions.rotateRightAction);
-				crotateButton.setText(null);
-				crotateButton.setIcon(crotate2);
-        
+		Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
+		JButton crotateButton = new JButton(controller.actions.transformActions.rotateRightAction);
+		crotateButton.setText(null);
+		crotateButton.setIcon(crotate2);
+
 		crotateButton.addActionListener((e) -> System.out.println("Clockwise Rotate"));
 
 		ImageIcon Undo = new ImageIcon(Andie.class.getClassLoader().getResource("assets/undo.png"));
 		Image Undoimg = Undo.getImage();
-        Image Undonewimg = Undoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        ImageIcon Undo2 = new ImageIcon(Undonewimg);    
-        JButton UndoButton = new JButton(controller.actions.editActions.undoAction);
-				UndoButton.setText(null);
-				UndoButton.setIcon(Undo2);
+		Image Undonewimg = Undoimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		ImageIcon Undo2 = new ImageIcon(Undonewimg);    
+		JButton UndoButton = new JButton(controller.actions.editActions.undoAction);
+		UndoButton.setText(null);
+		UndoButton.setIcon(Undo2);
 
 		selectButton.addActionListener((e) -> System.out.println("Undo"));
 
@@ -235,7 +236,7 @@ public class AndieView {
         
 		ColourButton.addActionListener((e) -> System.out.println("Colour wheel"));
 		ColourButton.addActionListener((e) -> colourPicker());
-		frame.add(button, BorderLayout.SOUTH);
+		frame.add(toolbar, BorderLayout.SOUTH);
 
 		ImageIcon FillColor = new ImageIcon(Andie.class.getClassLoader().getResource("assets/fill.png"));
 		Image FillColorimg = FillColor.getImage();
@@ -247,7 +248,7 @@ public class AndieView {
         
 		FillColorButton.addActionListener((e) -> System.out.println("fill colour wheel"));
 		FillColorButton.addActionListener((e) -> fillPicker());
-		frame.add(button, BorderLayout.WEST);
+		frame.add(toolbar, BorderLayout.WEST);
 
 		ImageIcon StrokeWidth = new ImageIcon(Andie.class.getClassLoader().getResource("assets/BWidth.png"));
 		Image StrokeWidthimg = StrokeWidth.getImage();
@@ -259,23 +260,23 @@ public class AndieView {
         
 		StrokeWidthButton.addActionListener((e) -> System.out.println("Set Brush Width"));
 		StrokeWidthButton.addActionListener((e) -> widthPicker());
-		frame.add(button, BorderLayout.SOUTH);
+		frame.add(toolbar, BorderLayout.WEST);
 		
 
 		/* adding the buttons to toolbar  */
-		button.add(exitButton);
-		button.add(selectButton);
-		button.add(UndoButton);
-		button.add(RedoButton);
-		button.add(StrokeWidthButton);
-		button.add(FillColorButton);
+		// button.add(exitButton);
+		toolbar.add(selectButton);
+		toolbar.add(UndoButton);
+		toolbar.add(RedoButton);
+		toolbar.add(StrokeWidthButton);
+		toolbar.add(FillColorButton);
 		//button.add(ColourButton);
 		//button.add(rotateButton);
-		button.add(crotateButton);
-		button.add(ovalButton);
-		button.add(RectButton);
-		button.add(LineButton);
-		button.add(cropButton);
+		toolbar.add(crotateButton);
+		toolbar.add(ovalButton);
+		toolbar.add(RectButton);
+		toolbar.add(LineButton);
+		toolbar.add(cropButton);
 
         frame.pack();
 
