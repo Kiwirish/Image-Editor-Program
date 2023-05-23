@@ -29,6 +29,26 @@ import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
 
+/**
+ * <p>
+ * 
+ * </p>
+ * 
+ * <p>
+ * Contains Toolbar and View manager
+ * </p>
+ * 
+ * <p>
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @author Bernard Pieters 
+ * @version 2.0
+ *
+ * 
+ */
+
 public class AndieView {
 	private AndieController controller;
 	private AndieModel model;
