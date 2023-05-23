@@ -9,6 +9,19 @@ import java.awt.image.BufferedImage;
 
 import cosc202.andie.ImageOperation;
 
+/**
+ * <p>
+ * Class to draw an elipse 
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
+
 public class Elipse implements ImageOperation {
 
 	private Rectangle rect;
@@ -16,6 +29,8 @@ public class Elipse implements ImageOperation {
 	private Color fillColor;
 	private int strokeWidth;
 
+
+	/** contructor for the ELipse */
 	public Elipse(Rectangle rect, Color strokeColor, Color fillColor, int strokeWidth) {
 		this.rect = rect;
 		this.strokeColor = strokeColor;

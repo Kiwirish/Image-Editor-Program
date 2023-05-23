@@ -8,6 +8,19 @@ import java.awt.image.BufferedImage;
 
 import cosc202.andie.ImageOperation;
 
+/**
+ * <p>
+ * Class to draw a Rectangle shape 
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
+
 public class RectangleShape implements ImageOperation  {
 
 	private Rectangle rect;
@@ -15,6 +28,7 @@ public class RectangleShape implements ImageOperation  {
 	private Color fillColor;
 	private int strokeWidth;
 
+	/** Constructor for Rectangle Shape */
 	public RectangleShape(Rectangle rectangle, Color strokeColor, Color fillColor, int strokeWidth) {
 		this.rect = rectangle;
 		this.strokeColor = strokeColor;

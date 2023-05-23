@@ -9,6 +9,19 @@ import java.awt.image.BufferedImage;
 
 import cosc202.andie.ImageOperation;
 
+/**
+ * <p>
+ * Class to draw a Line 
+ * </p>
+ * 
+ * <p> 
+ * <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">cc by-nc-sa 4.0</a>
+ * </p>
+ * 
+ * @author Jeb Nicholson
+ * @version 1.0
+ */
+
 public class Line implements ImageOperation  {
 
 	private Point p1;
@@ -16,6 +29,7 @@ public class Line implements ImageOperation  {
 	private Color color;
 	private int width;
 
+	/** Constuctor for the line */
 	public Line(Point p1, Point p2, Color color, int width) {
 		this.p1 = p1;
 		this.p2 = p2;
