@@ -1,9 +1,13 @@
 package cosc202.andie;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -15,9 +19,12 @@ import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
@@ -119,7 +126,7 @@ public class AndieView {
         button.add(selectButton);
 		selectButton.addActionListener((e) -> System.out.println("Select"));
 
-		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/cRotate.png"));
+		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/acRotate.png"));
 		Image rotateimg = rotate.getImage();
         Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon rotate2 = new ImageIcon(newrotateimg);    
@@ -160,6 +167,28 @@ public class AndieView {
         button.add(RedoButton);
 		selectButton.addActionListener((e) -> System.out.println("Redo"));
 
+		ImageIcon Colour = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Cwheel.png"));
+		Image Colourimg = Colour.getImage();
+        Image Colournewimg = Colourimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon Colour2 = new ImageIcon(Colournewimg);    
+        JButton ColourButton = new JButton();
+				ColourButton.setText(null);
+				ColourButton.setIcon(Colour2);
+        button.add(ColourButton);
+		ColourButton.addActionListener((e) -> System.out.println("Colour wheel"));
+		ColourButton.addActionListener((e) -> colourPicker());
+		frame.add(button, BorderLayout.SOUTH);
+
+		ImageIcon FillColor = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Fill.png"));
+		Image FillColorimg = FillColor.getImage();
+        Image FillColornewimg = FillColorimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon FillColor2 = new ImageIcon(FillColornewimg);    
+        JButton FillColorButton = new JButton();
+				FillColorButton.setText(null);
+				FillColorButton.setIcon(FillColor2);
+        button.add(FillColorButton);
+		FillColorButton.addActionListener((e) -> System.out.println("fill colour wheel"));
+		FillColorButton.addActionListener((e) -> fillPicker());
 		frame.add(button, BorderLayout.SOUTH);
 
         frame.pack();
@@ -192,6 +221,37 @@ public class AndieView {
         };
         frame.addWindowListener(exitListener);
 	}
+	public void fillPicker() {
+
+		Color initialcolor = Color.RED;
+		JColorChooser jC = new JColorChooser(initialcolor);
+		jC.setPreviewPanel(new JPanel());
+		for(AbstractColorChooserPanel panel : jC.getChooserPanels()){
+			if(!panel.getDisplayName().equals("HSL")){
+					jC.removeChooserPanel(panel);
+			}
+		}
+		JDialog dialog = JColorChooser.createDialog(this.frame,"Choose Fill color", true, jC, (ofdk)->{ model.tool.setFillColor(jC.getColor());}, null);
+		dialog.setVisible(true);
+		
+
+	}
+
+	public void colourPicker () {
+		
+
+		Color initialcolor = Color.RED;
+		JColorChooser jC = new JColorChooser(initialcolor);
+		jC.setPreviewPanel(new JPanel());
+		for(AbstractColorChooserPanel panel : jC.getChooserPanels()){
+			if(!panel.getDisplayName().equals("HSL")){
+					jC.removeChooserPanel(panel);
+			}
+		}
+		JDialog dialog = JColorChooser.createDialog(this.frame,"Choose stroke color", true, jC, (ofdk)->{ model.tool.setStrokeColor(jC.getColor());}, null);
+		dialog.setVisible(true);
+	}
+
 	public void closeView() {
 		frame.dispose();
 	}	
