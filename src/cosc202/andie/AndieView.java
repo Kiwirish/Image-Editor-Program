@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
+import javax.sound.midi.ControllerEventListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -25,7 +26,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.event.ChangeListener;
 
+import cosc202.andie.components.OptionPopup;
+import cosc202.andie.components.PopupSlider;
 import cosc202.andie.controllers.AndieController;
 import cosc202.andie.models.AndieModel;
 import cosc202.andie.models.AndieModel.ModelListener;
@@ -191,6 +195,19 @@ public class AndieView {
 		FillColorButton.addActionListener((e) -> fillPicker());
 		frame.add(button, BorderLayout.SOUTH);
 
+		ImageIcon StrokeWidth = new ImageIcon(Andie.class.getClassLoader().getResource("assets/BWidth.png"));
+		Image StrokeWidthimg = StrokeWidth.getImage();
+		Image StrokeWidthnewimg = StrokeWidthimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        ImageIcon StrokeWidth2 = new ImageIcon(StrokeWidthnewimg);    
+        JButton StrokeWidthButton = new JButton();
+		StrokeWidthButton.setText(null);
+		StrokeWidthButton.setIcon(StrokeWidth2);
+        button.add(StrokeWidthButton);
+		StrokeWidthButton.addActionListener((e) -> System.out.println("Set Brush Width"));
+		StrokeWidthButton.addActionListener((e) -> widthPicker());
+		frame.add(button, BorderLayout.SOUTH);
+		
+
         frame.pack();
 
 				Point framePosition = model.getFrameLocation();
@@ -221,6 +238,19 @@ public class AndieView {
         };
         frame.addWindowListener(exitListener);
 	}
+	public void widthPicker() {
+		
+			PopupSlider slider = new PopupSlider("Stroke Width label", 1, 100, 5, "px", 10, 50, 1);
+			OptionPopup popup = new OptionPopup(frame.getContentPane(),"Resize_Popup_Title", new PopupSlider[] { slider });
+			
+
+			if(popup.show() == OptionPopup.OK){model.tool.setStrokeWidth(slider.getValue());};
+			
+
+			
+		}
+	
+
 	public void fillPicker() {
 
 		Color initialcolor = Color.RED;

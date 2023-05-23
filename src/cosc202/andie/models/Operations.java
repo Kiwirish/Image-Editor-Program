@@ -79,7 +79,7 @@ public class Operations {
 				return;
 			}
 
-			OperationRunnable.OperationRunnableListener listener = (result) -> {
+			OperationRunnableListener listener = (result) -> {
 				model.setPreviewImage(result);
 			};
 
@@ -139,7 +139,6 @@ public class Operations {
 		public void run() {
 			try {
 			BufferedImage result = operation.apply(baseImage);
-
 			if (Thread.interrupted()) return;
 			listener.filterThreadFinished(result);
 			} catch (RuntimeException e) {
@@ -148,10 +147,12 @@ public class Operations {
 			}
 		}
 
-		/** A listener for when OperationRunnables finish */
-		public interface OperationRunnableListener {
-			public void filterThreadFinished(BufferedImage result);
-		}
+
+	}
+
+	/** A listener for when OperationRunnables finish */
+	public interface OperationRunnableListener {
+		public void filterThreadFinished(BufferedImage result);
 	}
 
 }
