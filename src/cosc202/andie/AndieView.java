@@ -146,7 +146,7 @@ public class AndieView {
 		cropButton.setIcon(crop2);
 		cropButton.addActionListener((e) -> System.out.println("Crop"));
 
-		ImageIcon select = new ImageIcon(Andie.class.getClassLoader().getResource("assets/Select.png"));
+		ImageIcon select = new ImageIcon(Andie.class.getClassLoader().getResource("assets/select.png"));
 		Image selectimg = select.getImage();
 		Image selectnewimg = selectimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		ImageIcon select2 = new ImageIcon(selectnewimg);    
@@ -185,25 +185,25 @@ public class AndieView {
         
 		ovalButton.addActionListener((e) -> System.out.println("oval"));
 
-		ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/acRotate.png"));
-		Image rotateimg = rotate.getImage();
-		Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		ImageIcon rotate2 = new ImageIcon(newrotateimg);    
-		JButton rotateButton = new JButton(controller.actions.transformActions.rotateLeftAction);
-		rotateButton.setText(null);
-		rotateButton.setIcon(rotate2);
+		// ImageIcon rotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/acRotate.png"));
+		// Image rotateimg = rotate.getImage();
+		// Image newrotateimg = rotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		// ImageIcon rotate2 = new ImageIcon(newrotateimg);    
+		// JButton rotateButton = new JButton(controller.actions.transformActions.rotateLeftAction);
+		// rotateButton.setText(null);
+		// rotateButton.setIcon(rotate2);
 
-		rotateButton.addActionListener((e) -> System.out.println("Anti Clockwise Rotate"));
+		// rotateButton.addActionListener((e) -> System.out.println("Anti Clockwise Rotate"));
 
-		ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/cRotate.png"));
-		Image crotateimg = crotate.getImage();
-		Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-		ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
-		JButton crotateButton = new JButton(controller.actions.transformActions.rotateRightAction);
-		crotateButton.setText(null);
-		crotateButton.setIcon(crotate2);
+		// ImageIcon crotate = new ImageIcon(Andie.class.getClassLoader().getResource("assets/cRotate.png"));
+		// Image crotateimg = crotate.getImage();
+		// Image cnewrotateimg = crotateimg.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		// ImageIcon crotate2 = new ImageIcon(cnewrotateimg);    
+		// JButton crotateButton = new JButton(controller.actions.transformActions.rotateRightAction);
+		// crotateButton.setText(null);
+		// crotateButton.setIcon(crotate2);
 
-		crotateButton.addActionListener((e) -> System.out.println("Clockwise Rotate"));
+		// crotateButton.addActionListener((e) -> System.out.println("Clockwise Rotate"));
 
 		ImageIcon Undo = new ImageIcon(Andie.class.getClassLoader().getResource("assets/undo.png"));
 		Image Undoimg = Undo.getImage();
