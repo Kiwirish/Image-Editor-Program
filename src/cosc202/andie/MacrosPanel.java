@@ -97,7 +97,7 @@ public class MacrosPanel extends JPanel {
 		//Add vertical space
 		controlsPanel.add(new JLabel(" "));
 
-		controlsPanelLabel = new JLabel(msg("Macros_NotCurrRecording"));
+		controlsPanelLabel = new JLabel(msg("Macros_NotRecording"));
 		controlsPanelLabel.setForeground(Color.WHITE);
 		controlsPanelLabel.setAlignmentX(CENTER_ALIGNMENT);
 		controlsPanel.add(controlsPanelLabel);
