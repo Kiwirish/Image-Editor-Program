@@ -6,6 +6,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 
@@ -152,6 +153,19 @@ public class Utils {
 		byte[] encoded = content.getBytes(encoding);
 		Files.write(file.toPath(), encoded);
 	}
+
+	// /**
+	//  * Load an image from a file, or null if there is an error.
+	//  * @param file The file to load from
+	//  * @return The image, or null if there is an error
+	//  */
+	// public static BufferedImage loadResourceRelative(String relativeResource) {
+	// 	try {
+	// 		return ImageIO.read(Andie.class.getClassLoader().getResourceAsStream(relativeResource));
+	// 	} catch (IOException e) {
+	// 		return null;
+	// 	}
+	// }
 
 	/**
 	 * A checked Exception for when a file extension is not supported.

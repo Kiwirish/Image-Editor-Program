@@ -2,9 +2,10 @@
 
 ![Andie: A Non-Destructive Image Editor](.ReadmeAssets/Andie_Title.png)
 
-## Download [ANDIE.jar](https://cosc202-m.cspages.otago.ac.nz/andie/Andie.jar)
+<!-- ## Download [ANDIE.jar](https://cosc202-m.cspages.otago.ac.nz/andie/Andie.jar)
 
----
+--- -->
+<!-- Noticed last minute that JAR would compile, but couldn't locate resources, so I cannot include it -->
 
 ## User guide 
 
