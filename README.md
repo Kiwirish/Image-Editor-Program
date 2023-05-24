@@ -28,8 +28,10 @@ Andie is a **Non-Destructive** image editor, so any operations you make will be 
 
 Change Andie's language by selecting `Language`
 
+*A note about keyboard shortcuts: While the above guide mentions keyboard shortcuts involving `CTRL`, these shortcuts will instead be mapped to `COMMAND` if Andie is running on MacOS, as this is generally what Mac users would expect*
 
-__A note about keyboard shortcuts: While the above guide mentions keyboard shortcuts involving `CTRL`, these shortcuts will instead be mapped to `COMMAND` if Andie is running on MacOS, as this is generally what Mac users would expect__
+
+*Toolbar icons from [Google Material Symbols and Icons](https://fonts.google.com/icons), licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)*
 
 ---
 ## Docs
@@ -82,6 +84,7 @@ We've decided to leave this quirk in, rather than coerce images with limited col
 
 It did cause us some issues though; the "Line" shape in Andie is antialised, which did not play well with the limited color pallete of the image, leading to lines not functioning as expected. We fixed this by only enabling antialiasing when the image stores color with at least 5 bits.
 
+---
 
 ## Changes from the original ANDIE
 We've refactored ANDIE in a number of ways, to make it easier to work with, and to add new features. 
@@ -89,11 +92,12 @@ We've refactored ANDIE in a number of ways, to make it easier to work with, and 
 As detailed in **Folder Structure**, we've restructured the code to be more modular, putting actions, components, and operations into their own packages.
 
 We've added new support classes, including `LanguageConfig.java` for handling the language bundles.
-- `Andie.java` has been refactored such that the UI is created in a separate method, `setup()`. This allows the UI to be reloaded when the language changes, without having to restart the program and lose any unsaved changes.
-- `ImagePanel.java` has been heavily modified, with the current image now drawn in the center of the panel, and the panel being zoomable by scroll. A welcome message and ability to drag and drop an image have also been added.
-- `EditableImage.java` has been added to, with support for saving and exporting images, as well as being able to test if an image has been modified since it was last saved.
-- `ImageAction.java` has had an `updateState()` method added, which is to be called when the menu item becomes visible. This allows actions to be disabled depending on the current state of the image.
-- We added `MenuActions.java`, a new superclass of our actions, which handles the creation of JMenuItem's for the menu bar, using the list of actions, and handles calling `updateState()` when the menu item becomes visible.
+ANDIE has be refactored to (loosely) follow the [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) design pattern, with business logic, including the `EditableImage`, image previewing, overlays, active tools, operations and macros, as well as any other "state" being handled by the Model classes in `models/`. Controllers, which bridge the view to the model are defined in `controllers/`, and the view is defined in `AndieView.java`.
+
+The reason behind this change was to make ANDIE more extendable, and to keep areas of the code less tightly coupled with each other. Given the few features we were required to add, this was not strictly necessary, but I felt it was a good idea to make the code more maintainable.
+
+Refactoring ANDIE to MVC means ANDIE relies heavily on the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern), with listeners being used all over the code to notify ui components, controllers, and even other models of updates to the model.
+Given the large number of listeners, we initially had a severe memory leak caused by listeners not being removed when the image was closed, and the images they referenced not being garbage collected. See: [The lapsed listener problem](https://en.wikipedia.org/wiki/Lapsed_listener_problem). This had to be fixed by adding unsubscribe methods for every type of listener, and making sure that controllers, models and swing components were notified of their removal, and could unsubscribe themselves to clean up.
 
 ---
 
@@ -102,16 +106,17 @@ We've added new support classes, including `LanguageConfig.java` for handling th
 ## Who Did What (Second Deliverable)
 
 ### Bernard
-- The Toolbar (*Defined within `AndieView`*)
+- Toolbar (*Defined within `AndieView`*)
 - Code commenting
 ### Blake
-- Emboss Filter
+- Emboss Filter (With all 8 directions)
 - Sobel Filter
 ### Oliver
 - Helped with Emboss & Sobel filters
 - Added further translations for new strings
 - Code commenting
 ### Jeb
+- Refactoring
 - Added operation live previewing (with threading)
 - Macros
   - Including a Macros panel, showing a list of operations as they are recorded
