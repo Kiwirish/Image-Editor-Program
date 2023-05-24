@@ -14,9 +14,22 @@ To get started with ANDIE, drag and drop an image that you'd like to edit, or op
 
 Use scrolling and the shift key to pan around the image, or if you're using a trackpad, you can use two-finger panning. You can zoom in and out by holding `CTRL` and scrolling.
 
-Image operations, like filters, colour adjustments, and transformations can be applied to your image, by clicking them in the menu bar. You can undo and redo operations by clicking the corosponding buttons in the toolbar, or by using `CTRL`+`Z` and `CTRL`+`Y` respectively.
+Image operations like filters, colour adjustments, and transformations can be applied to your image, by clicking them in the menu bar. You can undo and redo operations by clicking the corosponding buttons in the toolbar, or by using `CTRL`+`Z` and `CTRL`+`Y`.
+
+You can draw shapes onto images in Andie by using the shapes tools. Click to select the line, rectangle or elipse tool in the toolbar, and drag to draw onto your image. You can hold `SHIFT` to have these shapes maintain their ratios, and `CTRL` to have them scale from the start of your drag.
+
+To change the active fill color, stroke color, or stroke width, just click the corrosponding button in the toolbar.
+
+Switch to the select tool to select regions of the image, also by dragging. Once a region has been selected, press the crop button to crop your image.
+
+If you want to save a sequence of operations for later use, use the macros menu to record a macro, apply the desired operations, finish your recording, and save the resulting macro file to your computer. To reapply the recorded operations, use `Macros` > `Apply a Macro`.
+
+Andie is a **Non-Destructive** image editor, so any operations you make will be stored alongside the image when you saved, and the image itself will be left untouched. If you want to export your modifications to a new image, use the export menu by going to `File` > `Export`. Select a format, and save your new image.
 
 Change Andie's language by selecting `Language`
+
+
+__A note about keyboard shortcuts: While the above guide mentions keyboard shortcuts involving `CTRL`, these shortcuts will instead be mapped to `COMMAND` if Andie is running on MacOS, as this is generally what Mac users would expect__
 
 ---
 ## Docs
@@ -38,10 +51,13 @@ Within `src` there is:
 
 Within `src/cosc202/andie` there is:
 
-- The main class, `Andie.java`, and other supporting classes core to the operation of Andie
-- `actions`, containing the classes providing the actions for the menu bar 
-- `components`, containing custom reusable swing components
+- The main class, `Andie.java`, and other supporting classes core to the operation of Andie.
+- `actions`, containing the classes defining the "actions" Andie can perform. (displayed in the menu bar)
+- `components`, containing custom reusable swing components.
 - `operations`, containing grouped imageOperations to be used within actions.
+- `tools`, containing different tools that can be activated and used on the image. 
+- `models` containing the "business logic" of the program, including the `EditableImage` class, which stores the image and operations applied to it.
+- `controllers` containing classes that glue the UI and models together, responsible for handling IO & Threading among other things.
 
 ---
 ## Testing
@@ -59,6 +75,14 @@ We also used Unit Testing to further verify that the Transform operations specif
 
 In testing the filters, we had to verify that their output looked as expected. An example of how we tested our Median Filter was to apply it to a "salt and pepper" image, and verify that the noise was removed.
 
+
+In our testing, we found one interesting quirk of how our operations were applied: In "palletised" `png` images, the limited color pallete is maintained by ANDIE, such that no colors not already in the images's pallete may be added. This leads to some unexpected results from filters, and unexpected hatching/dithering done by the Graphics2D API when approximating a custom color, while painting onto a png with a severely limited color pallete.
+
+We've decided to leave this quirk in, rather than coerce images with limited color palletes into a different format while they are edited.
+
+It did cause us some issues though; the "Line" shape in Andie is antialised, which did not play well with the limited color pallete of the image, leading to lines not functioning as expected. We fixed this by only enabling antialiasing when the image stores color with at least 5 bits.
+
+
 ## Changes from the original ANDIE
 We've refactored ANDIE in a number of ways, to make it easier to work with, and to add new features. 
 
@@ -73,8 +97,40 @@ We've added new support classes, including `LanguageConfig.java` for handling th
 
 ---
 
+![Andie](.ReadmeAssets/Andie_demo_images.png)
+
+## Who Did What (Second Deliverable)
+
+### Bernard
+- The Toolbar (*Defined within `AndieView`*)
+- Code commenting
+### Blake
+- Emboss Filter
+- Sobel Filter
+### Oliver
+- Helped with Emboss & Sobel filters
+- Added further translations for new strings
+- Code commenting
+### Jeb
+- Added operation live previewing (with threading)
+- Macros
+  - Including a Macros panel, showing a list of operations as they are recorded
+  - Ability to record, save and load macros
+- Shape operations
+	- Line, Rectangle, Ellipse
+- Added new `ImagePanView` for proper image panel zooming and panning 
+- Added support for tools
+	- Added Line, Rectangle, and Ellipse tools
+- Select tool
+  - Created an overlay system for overlaying graphics onto the panel, allowing for the select tool to be implemented
+  - Created select tool with animation
+- Crop operation
+- Gitlab pipeline
+---
+
 ![Andie](.ReadmeAssets/Andie_Example_Image.png)
-## Who Did What
+
+## Who Did What (First Deliverable)
 ### Bernard
 - Image transform operations
 	- Flip (Horizontal, Vertical)
