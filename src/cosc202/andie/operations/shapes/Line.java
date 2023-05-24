@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 
 import cosc202.andie.ImageOperation;
@@ -40,7 +41,9 @@ public class Line implements ImageOperation  {
 	@Override
 	public BufferedImage draw(BufferedImage input) throws ImageOperationException {
 		Graphics2D g = input.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		// Enable anti-aliasing only if the input has a png color palette with enough colors
+		if (input.getColorModel().getPixelSize() > 4)
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(color);
 		g.setStroke(new BasicStroke(width));
 		g.drawLine(p1.x, p1.y, p2.x, p2.y);

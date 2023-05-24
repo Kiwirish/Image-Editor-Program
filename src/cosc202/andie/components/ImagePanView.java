@@ -146,7 +146,7 @@ public class ImagePanView extends JPanel implements MouseWheelListener, MouseMot
 
 			moveViewport(pan);
 		} else if (scrollType == SCROLL_TYPE_ZOOM) {
-			zoomByLinear(rotation * (IS_MAC ? 0.02 : 0.1), mousePosition);
+			zoomByLinear(rotation * (IS_MAC ? -0.02 : -0.1), mousePosition);
 		}
 	}
 

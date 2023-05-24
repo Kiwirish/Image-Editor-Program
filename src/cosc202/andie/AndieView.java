@@ -310,7 +310,8 @@ public class AndieView {
 	}
 	public void widthPicker() {
 		
-			PopupSlider slider = new PopupSlider("Stroke Width", 1, 100, 5, "px", 10, 50, 1);
+			int currentWidth = model.tool.getStrokeWidth();
+			PopupSlider slider = new PopupSlider("Stroke Width", 1, 100, currentWidth, "px", 10, 50, 1);
 			OptionPopup popup = new OptionPopup(frame.getContentPane(),"", new PopupSlider[] { slider });
 			
 
@@ -323,7 +324,7 @@ public class AndieView {
 
 	public void fillPicker() {
 
-		Color initialcolor = Color.RED;
+		Color initialcolor = model.tool.getFillColor();
 		JColorChooser jC = new JColorChooser(initialcolor);
 		jC.setPreviewPanel(new JPanel());
 		for(AbstractColorChooserPanel panel : jC.getChooserPanels()){
@@ -338,9 +339,7 @@ public class AndieView {
 	}
 
 	public void colourPicker () {
-		
-
-		Color initialcolor = Color.RED;
+		Color initialcolor = model.tool.getStrokeColor();
 		JColorChooser jC = new JColorChooser(initialcolor);
 		jC.setPreviewPanel(new JPanel());
 		for(AbstractColorChooserPanel panel : jC.getChooserPanels()){
